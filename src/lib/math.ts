@@ -119,10 +119,10 @@ const swapAmountDown = (startSqrtPrice: string, endSqrtPrice: string, liquidity:
 const getAmountXY = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, liquidity: string): [string, string] => {
   let amountX = '0'
   let amountY = '0'
-  if ((new Decimal(currentSqrtPrice)).cmp(new Decimal(lowSqrtPrice)) == 0) {
+  if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(lowSqrtPrice)) === 0) {
     const [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
     amountX = amountX_.toFixed(0, Decimal.ROUND_UP)
-  } else if ((new Decimal(currentSqrtPrice)).cmp(new Decimal(highSqrtPrice)) == 0) {
+  } else if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(highSqrtPrice)) === 0) {
     const [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
     amountY = amountY_.toFixed(0, Decimal.ROUND_UP)
   } else {

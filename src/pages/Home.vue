@@ -10,7 +10,7 @@ import ethereumLib from 'everpay/esm/lib/ethereum'
 import hashPersonalMessage from 'everpay/esm/lib/hashPersonalMessage'
 import { toBN } from '@/lib/util'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
-// import { swapX, swapY } from '@/lib/math'
+import { swapX, swapY } from '@/lib/math'
 
 const privateKey = ref('')
 const lowPrice = ref('500')
@@ -35,7 +35,7 @@ const tokenYSelectMask = ref(false)
 const tokenXAmount = ref('')
 const tokenYAmount = ref('')
 let jsonConfig = null as any
-const jsonConfigArr = []
+const jsonConfigArr: any[] = []
 
 const getTokenXs = (tokenList: any, poolList: any) => {
   const poolListValues = Object.values(poolList)
@@ -60,12 +60,14 @@ const getTokenYs = (tokenList: any, poolList: any, tokenX: any) => {
 
 const getLpId = (poolId: string, jsonConfig: any) => {
   const msg = 'PoolID:' + poolId + '\n' +
-    'Address:' + wallet.address.toLowerCase() + '\n' +
+  // 需要 checksum 地址
+    'Address:' + wallet.address + '\n' +
     'LowSqrtPrice:' + jsonConfig.lowSqrtPrice.toString() + '\n' +
     'HighSqrtPrice:' + jsonConfig.highSqrtPrice.toString() + '\n' +
     'PriceDirection:' + jsonConfig.priceDirection
   console.log('msg', msg)
   const lpId = uint8ArrayToHex(hashPersonalMessage(Buffer.from(msg)))
+  console.log('lpId', lpId)
   return lpId
 }
 
@@ -207,6 +209,57 @@ const handleRegister = () => {
       })
     },
     async handleOrder (data: any) {
+      const validatePathsData = (paths: any): boolean => {
+        const stack = {}
+        let result: boolean = true
+        paths.forEach((pathData) => {
+          if (!stack[pathData.lpId]) {
+            stack[pathData.lpId] = {}
+          }
+          if (pathData.to.toLowerCase() === wallet.address.toLowerCase()) {
+            stack[pathData.lpId].amountIn = pathData.amount
+            stack[pathData.lpId].tokenTagIn = pathData.tokenTag
+          }
+          if (pathData.from.toLowerCase() === wallet.address.toLowerCase()) {
+            stack[pathData.lpId].amountOut = pathData.amount
+            stack[pathData.lpId].tokenTagOut = pathData.tokenTag
+          }
+        })
+        console.log('stack', stack)
+        Object.entries(stack).forEach(([lpId, amountData]) => {
+          const jsonConfig = jsonConfigArr.find(jsonConfig => {
+            return jsonConfig.lpId === lpId
+          })
+          console.log('jsonConfig', jsonConfig)
+          if (jsonConfig) {
+            if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
+              try {
+                const [newCurrentSqrtPrice, amountOutY] = swapX(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                console.log('amountOutY', amountOutY)
+                if (toBN(amountOutY).gte(amountData.amountOut)) {
+                  jsonConfig.currentSqrtPrice = newCurrentSqrtPrice
+                } else {
+                  result = false
+                }
+              } catch (e) { console.log('errr', e) }
+            } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
+              try {
+                const [newCurrentSqrtPrice, amountOutX] = swapY(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                console.log('amountOutY', amountOutX)
+                console.log('amountOutPath', amountOutX)
+                if (toBN(amountOutX).gte(amountData.amountOut)) {
+                  jsonConfig.currentSqrtPrice = newCurrentSqrtPrice
+                } else {
+                  result = false
+                }
+              } catch (e) {
+                console.log('errr', e)
+              }
+            }
+          }
+        })
+        return result
+      }
       // const validate = (lpId: string, paths: any[]) => {
       //   const amountInPath = paths.find((pa: any) => {
       //     return pa.lpId === lpId && pa.to.toLowerCase() === wallet.address.toLowerCase()
@@ -238,21 +291,24 @@ const handleRegister = () => {
       // }
 
       console.log('order', data)
-      // console.log('validate', validate(lpId, data.paths))
-      const provider = new ethers.providers.InfuraProvider('kovan')
-      const signer = new ethers.Wallet(privateKey.value, provider)
-      const everpayWithAccount = new Everpay({
-        account: signer.address,
-        ethConnectedSigner: signer,
-        chainType: 'ethereum' as any,
-        debug: true
-      })
+      const validate = validatePathsData(data.paths)
+      console.log('validate', validate)
+      if (validate) {
+        const provider = new ethers.providers.InfuraProvider('kovan')
+        const signer = new ethers.Wallet(privateKey.value, provider)
+        const everpayWithAccount = new Everpay({
+          account: signer.address,
+          ethConnectedSigner: signer,
+          chainType: 'ethereum' as any,
+          debug: true
+        })
 
-      const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
-      sendSign({
-        address: wallet.address,
-        bundle: bundleDataWithSigs
-      })
+        const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
+        sendSign({
+          address: wallet.address,
+          bundle: bundleDataWithSigs
+        })
+      }
     }
   })
 }

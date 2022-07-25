@@ -315,6 +315,7 @@ const handleRegister = () => {
 </script>
 
 <template>
+  <a href="https://www.baidu.com" target="_blank">baidu</a>
   <div class="bg-white">
     <div>
       <input v-model="privateKey" type="text" placeholder="请输入私钥">

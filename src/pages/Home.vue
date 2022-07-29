@@ -6,6 +6,7 @@ import Footer from '@/components/Footer.vue'
 <template>
   <div class="bg-black text-white">
     <Header />
+    <div style="height:700px;" />
     <Footer />
   </div>
 </template>

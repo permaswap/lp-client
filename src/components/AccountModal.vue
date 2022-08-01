@@ -36,12 +36,17 @@ export default defineComponent({
       }
     ]
     const hidenAccountModal = () => store.commit('updateAccountModalVisible', false)
+    const showRegisterModal = () => {
+      store.commit('updateAccountModalVisible', false)
+      store.commit('updateRegisterModalVisible', true)
+    }
     return {
       account,
       links1,
       links2,
       accountModalVisible,
-      hidenAccountModal
+      hidenAccountModal,
+      showRegisterModal
     }
   }
 })
@@ -102,7 +107,8 @@ export default defineComponent({
     <div v-else style="background:rgba(24, 59, 33, 0.3)" class="p-6">
       <div
         class="h-12 text-center rounded-lg text-black cursor-pointer"
-        style="background: #79D483;border: 1px solid rgba(121, 212, 131, 0.08);line-height: 48px;">
+        style="background: #79D483;border: 1px solid rgba(121, 212, 131, 0.08);line-height: 48px;"
+        @click="showRegisterModal">
         Sign Up
       </div>
     </div>

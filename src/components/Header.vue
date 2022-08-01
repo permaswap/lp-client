@@ -1,17 +1,19 @@
 <script lang="ts">
 import { useStore } from '@/store'
 import { computed, defineComponent } from 'vue'
-import AccountModal from './AccountModal.vue'
 
 export default defineComponent({
-  components: { AccountModal },
   setup () {
     const store = useStore()
     const account = computed(() => {
       return store.state.account
     })
+    const showAccountModal = () => {
+      store.commit('updateAccountModalVisible', true)
+    }
     return {
-      account
+      account,
+      showAccountModal
     }
   }
 })
@@ -27,7 +29,8 @@ export default defineComponent({
     </div>
     <div
       class="flex flex-row items-center py-2 px-5 rounded-lg cursor-pointer"
-      style="background: #183B21;border: 1px solid rgba(121, 212, 131, 0.25);">
+      style="background: #183B21;border: 1px solid rgba(121, 212, 131, 0.25);"
+      @click="showAccountModal">
       <img v-if="!account" class="h-4" src="@/images/person.png">
       <img v-else class="h-5" src="@/images/ethereum.png">
       <span class="px-2" style="color: rgba(255, 255, 255, 0.85);">
@@ -36,6 +39,5 @@ export default defineComponent({
       <span class="block mr-2" style="width:1px;height:12px;background:rgba(255, 255, 255, 0.25);" />
       <img style="height:10.5px;" src="@/images/more.png">
     </div>
-    <AccountModal />
   </div>
 </template>

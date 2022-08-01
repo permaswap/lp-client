@@ -11,7 +11,15 @@ export default createStore<State>({
   state: defaultState,
 
   mutations: {
-
+    updateAccount (state, account) {
+      state.account = account
+    },
+    updatePrivateKey (state, privateKey) {
+      state.privateKey = privateKey
+    },
+    updateAccountModalVisible (state, visible) {
+      state.accountModalVisible = visible
+    }
   },
 
   getters: {

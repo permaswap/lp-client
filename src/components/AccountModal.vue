@@ -6,6 +6,7 @@ export default defineComponent({
   setup () {
     const store = useStore()
     const account = computed(() => store.state.account)
+    const accountModalVisible = computed(() => store.state.accountModalVisible)
     const links1 = [
       {
         name: 'github',
@@ -34,22 +35,28 @@ export default defineComponent({
         url: 'https://ever.finance'
       }
     ]
+    const hidenAccountModal = () => store.commit('updateAccountModalVisible', false)
     return {
       account,
       links1,
-      links2
+      links2,
+      accountModalVisible,
+      hidenAccountModal
     }
   }
 })
 </script>
 
 <template>
-  <div style="background: #161E1B;border-radius: 12px;right:64px;top: 76px;width:440px;" class="absolute">
+  <div
+    :class="accountModalVisible ? 'block' : 'hidden'"
+    style="background: #161E1B;border-radius: 12px;right:64px;top: 76px;width:440px;"
+    class="absolute">
     <div class="flex flex-row items-center justify-between pt-6 px-6 pb-4">
       <div style="font-size:20px;">
         Balance on everPay
       </div>
-      <img class="cursor-pointer" src="@/images/close.png">
+      <img class="cursor-pointer" src="@/images/close.png" @click="hidenAccountModal">
     </div>
     <div v-if="account" style="background:rgba(24, 59, 33, 0.3)" class="py-6 px-5">
       <div class="flex flex-row mb-4" style="background: #161E1B;height:126px;border-radius: 12px;">

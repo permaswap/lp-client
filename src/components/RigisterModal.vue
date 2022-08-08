@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
+import { initSocket, sendRegister } from '@/lib/swap'
 import { useStore } from '@/store'
+import ethereumLib from 'everpay/esm/lib/ethereum'
 import { computed, defineComponent, ref } from 'vue'
+import { ethers, Wallet } from 'ethers'
 
 export default defineComponent({
   setup () {
@@ -11,10 +14,37 @@ export default defineComponent({
       return /[a-zA-Z0-9]{64}/gi.test(privateKey.value)
     })
     const hidenRegisterModal = () => store.commit('updateRegisterModalVisible', false)
+    const handleRegister = () => {
+      if (!isPrivateKeyValid.value) {
+        return
+      }
+      const wallet = new Wallet(privateKey.value)
+      initSocket({
+        handleError (error: any) {
+          console.log('error', error)
+        },
+        handleOpen (data: any) {
+          console.log('open', data)
+        },
+        async handleSalt (data: any) {
+          const signer = new ethers.Wallet(wallet.privateKey)
+          console.log('salt', data.salt)
+          const sig = await ethereumLib.signMessageAsync(signer, wallet.address, data.salt)
+          sendRegister({
+            address: wallet.address,
+            sig
+          })
+          store.commit('updateAccount', wallet.address)
+          store.commit('updatePrivateKey', privateKey.value)
+          store.commit('updateRegisterModalVisible', false)
+        }
+      })
+    }
     return {
       registerModalVisible,
       privateKey,
       hidenRegisterModal,
+      handleRegister,
       isPrivateKeyValid
     }
   }
@@ -77,7 +107,8 @@ border-radius: 24px;">
       </div>
       <div
         :class="isPrivateKeyValid ? 'primary-btn' : 'disable-btn'"
-        style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;">
+        style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
+        @click="handleRegister">
         Sign Up
       </div>
     </div>

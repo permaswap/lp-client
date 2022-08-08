@@ -3,6 +3,7 @@ export interface State {
   privateKey: string
   accountModalVisible: boolean
   registerModalVisible: boolean
+  addPoolModalVisible: boolean
 }
 
 export const defaultState = {
@@ -10,5 +11,6 @@ export const defaultState = {
   account: '',
   privateKey: '',
   accountModalVisible: false,
-  registerModalVisible: false
+  registerModalVisible: false,
+  addPoolModalVisible: true
 }

@@ -19,16 +19,24 @@ export interface InitSocketParams {
 }
 
 export const initSocket = (params: InitSocketParams): void => {
-  socket = new WebSocket('wss://router0-dev.permaswap.network/wslp')
+  if (socket == null) {
+    socket = new WebSocket('wss://router0-dev.permaswap.network/wslp')
+  }
   socket.addEventListener('message', (message: any) => {
     console.log(11111, message.data)
     const data = JSON.parse(message.data)
     if (data.event === 'order') {
-      params.handleOrder(data)
+      if (params.handleOrder != null) {
+        params.handleOrder(data)
+      }
     } else if (data.event === 'salt') {
-      params.handleSalt(data)
+      if (params.handleSalt != null) {
+        params.handleSalt(data)
+      }
     } else if (data.event === 'error') {
-      params.handleError(data)
+      if (params.handleError != null) {
+        params.handleError(data)
+      }
     }
   })
   socket.addEventListener('open', params.handleOpen)

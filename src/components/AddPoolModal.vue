@@ -1,20 +1,24 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import Everpay from 'everpay'
-import { getSwapInfo, sendAdd } from '@/lib/swap'
+import { getLpId, getSwapInfo, sendAdd } from '@/lib/swap'
 import { useStore } from '@/store'
 import { toBN } from '@/lib/util'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
 import PairModal from './PairModal.vue'
+import PreviewModal from './PreviewModal.vue'
 
 export default defineComponent({
-  components: { PairModal },
+  components: { PairModal, PreviewModal },
   setup () {
     const store = useStore()
     const lowPrice = ref('0')
     const highPrice = ref('∞')
     const currentPrice = ref('1450')
     const pairModalVisible = ref(false)
+    const hideAddPoolModal = () => {
+      store.commit('updateAddPoolModalVisible', false)
+    }
     const setFullRange = () => {
       lowPrice.value = '0'
       highPrice.value = '∞'
@@ -32,6 +36,7 @@ export default defineComponent({
     const tokenXAmount = ref('')
     const tokenYAmount = ref('')
     const account = computed(() => store.state.account)
+    const previewModalVisible = ref(false)
     const btnMessage = computed(() => {
       if (!+tokenXAmount.value || !+tokenYAmount.value || +tokenXAmount.value <= 0 || +tokenYAmount.value <= 0) {
         return 'Enter an Amount'
@@ -172,14 +177,25 @@ export default defineComponent({
       setFullRange()
       updateBalances()
     }
+    const showPreviewModal = () => {
+      if (btnMessage.value === 'Preview') {
+        previewModalVisible.value = true
+      }
+    }
     const handleAdd = async () => {
       sendAdd(jsonConfig as any)
-      // const { poolId } = getPoolData(swapInfo.poolList)
-      // jsonConfigArr.push({
-      //   poolId,
-      //   lpId: getLpId(poolId, jsonConfig),
-      //   ...jsonConfig
-      // })
+      previewModalVisible.value = false
+      const { poolId } = getPoolData(swapInfo.poolList)
+      const lpId = getLpId(poolId, account.value, jsonConfig)
+      store.commit('addLp', {
+        ...jsonConfig,
+        lpId,
+        poolId,
+        tokenXSymbol: tokenX.value.symbol,
+        tokenYSymbol: tokenY.value.symbol,
+        lowPrice: lowPrice.value,
+        highPrice: highPrice.value
+      })
     }
     return {
       tokenX,
@@ -199,8 +215,11 @@ export default defineComponent({
       handleAmountXInput,
       handleAmountYInput,
       handleAdd,
+      previewModalVisible,
       setMaxTokenXAmount,
-      setMaxTokenYAmount
+      setMaxTokenYAmount,
+      showPreviewModal,
+      hideAddPoolModal
     }
   }
 })
@@ -211,7 +230,11 @@ export default defineComponent({
     <div
       class="flex flex-row items-center justify-between pb-4 mb-6"
       style="border-bottom:1px solid rgba(255, 255, 255, 0.08);">
-      <img src="@/images/back.png" style="width:14px;">
+      <img
+        src="@/images/back.png"
+        style="width:14px;"
+        class="cursor-pointer"
+        @click="hideAddPoolModal">
       <span style="font-size: 20px;">Add Liquidity</span>
       <span style="color: #79D483;" class="text-sm cursor-pointer" @click="setFullRange">Clear All</span>
     </div>
@@ -353,7 +376,9 @@ export default defineComponent({
           style="border-radius: 8px;"
           :style="btnMessage === 'Preview' ?
             'background: #79D483;color:#000;cursor:pointer' :
-            'background: rgba(255, 255, 255, 0.12);color: rgba(255, 255, 255, 0.3);cursor:not-allowed'">
+            'background: rgba(255, 255, 255, 0.12);color: rgba(255, 255, 255, 0.3);cursor:not-allowed'"
+          @click="showPreviewModal"
+        >
           {{ btnMessage }}
         </div>
       </div>
@@ -363,5 +388,17 @@ export default defineComponent({
       :pairs="pairs"
       @selectPair="selectPair"
       @closePairModal="pairModalVisible = false" />
+    <PreviewModal
+      :class="previewModalVisible ? 'block' : 'hidden'"
+      :low-price="lowPrice"
+      :high-price="highPrice"
+      :token-x="tokenX"
+      :token-y="tokenY"
+      :token-x-amount="tokenXAmount"
+      :token-y-amount="tokenYAmount"
+      :current-price="currentPrice"
+      @confirm="handleAdd"
+      @closeModal="previewModalVisible = false"
+    />
   </div>
 </template>

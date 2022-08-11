@@ -25,6 +25,20 @@ export default createStore<State>({
     },
     updateAddPoolModalVisible (state, visible) {
       state.addPoolModalVisible = visible
+    },
+    addLp (state, lp) {
+      state.lps.push(lp)
+    },
+    updateLp (state, lp) {
+      const found = state.lps.find(l => l.lpId === lp.lpId)
+      Object.assign(found, lp)
+    },
+    removeLp (state, lp) {
+      const foundIndex = state.lps.findIndex(l => l.lpId === lp.lpId)
+      state.lps.splice(foundIndex, 1)
+    },
+    clearLps (state) {
+      state.lps = []
     }
   },
 

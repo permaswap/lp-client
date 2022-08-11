@@ -1,9 +1,12 @@
 <script lang="ts">
-import { initSocket, sendRegister } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign } from '@/lib/swap'
 import { useStore } from '@/store'
 import ethereumLib from 'everpay/esm/lib/ethereum'
 import { computed, defineComponent, ref } from 'vue'
 import { ethers, Wallet } from 'ethers'
+import { toBN } from '@/lib/util'
+import { swapX, swapY } from '@/lib/math'
+import Everpay from 'everpay'
 
 export default defineComponent({
   setup () {
@@ -37,6 +40,84 @@ export default defineComponent({
           store.commit('updateAccount', wallet.address)
           store.commit('updatePrivateKey', privateKey.value)
           store.commit('updateRegisterModalVisible', false)
+        },
+        async handleOrder (data: any) {
+          const validatePathsData = (paths: any): boolean => {
+            const stack = {}
+            let result: boolean = true
+            paths.forEach((pathData) => {
+              if (!stack[pathData.lpId]) {
+                stack[pathData.lpId] = {}
+              }
+              if (pathData.to.toLowerCase() === wallet.address.toLowerCase()) {
+                stack[pathData.lpId].amountIn = pathData.amount
+                stack[pathData.lpId].tokenTagIn = pathData.tokenTag
+              }
+              if (pathData.from.toLowerCase() === wallet.address.toLowerCase()) {
+                stack[pathData.lpId].amountOut = pathData.amount
+                stack[pathData.lpId].tokenTagOut = pathData.tokenTag
+              }
+            })
+            console.log('stack', stack)
+            Object.entries(stack).forEach(([lpId, amountData]) => {
+              const jsonConfig = store.state.lps.find(jsonConfig => {
+                return jsonConfig.lpId === lpId
+              })
+              console.log('jsonConfig', jsonConfig)
+              if (jsonConfig) {
+                if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
+                  try {
+                    const [newCurrentSqrtPrice, amountOutY] = swapX(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                    console.log('amountOutY', amountOutY)
+                    if (toBN(amountOutY).gte(amountData.amountOut)) {
+                      store.commit('updateLp', {
+                        ...jsonConfig,
+                        currentSqrtPrice: newCurrentSqrtPrice
+                      })
+                    } else {
+                      result = false
+                    }
+                  } catch (e) { console.log('errr', e) }
+                } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
+                  try {
+                    const [newCurrentSqrtPrice, amountOutX] = swapY(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                    console.log('amountOutY', amountOutX)
+                    console.log('amountOutPath', amountOutX)
+                    if (toBN(amountOutX).gte(amountData.amountOut)) {
+                      store.commit('updateLp', {
+                        ...jsonConfig,
+                        currentSqrtPrice: newCurrentSqrtPrice
+                      })
+                    } else {
+                      result = false
+                    }
+                  } catch (e) {
+                    console.log('errr', e)
+                  }
+                }
+              }
+            })
+            return result
+          }
+
+          console.log('order', data)
+          const validate = validatePathsData(data.paths)
+          console.log('validate', validate)
+          if (validate) {
+            const signer = new ethers.Wallet(privateKey.value)
+            const everpayWithAccount = new Everpay({
+              account: signer.address,
+              ethConnectedSigner: signer,
+              chainType: 'ethereum' as any,
+              debug: true
+            })
+
+            const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
+            sendSign({
+              address: wallet.address,
+              bundle: bundleDataWithSigs
+            })
+          }
         }
       })
     }

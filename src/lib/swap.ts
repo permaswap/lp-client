@@ -1,4 +1,6 @@
 import { sendRequest } from 'everpay/esm/api'
+import { ethers } from 'ethers'
+import hashPersonalMessage from 'everpay/esm/lib/hashPersonalMessage'
 
 let socket = null as any
 
@@ -108,4 +110,24 @@ export const sendSign = (params: SendSignParams): void => {
   }
   console.log('data', data)
   socket.send(JSON.stringify(data))
+}
+
+const uint8ArrayToHex = (uint8Array: Uint8Array): string => {
+  return '0x' + [...uint8Array].map((b) => {
+    return b.toString(16).padStart(2, '0')
+  }).join('')
+}
+
+export const getLpId = (poolId: string, address: string, jsonConfig: any): string => {
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  const msg = 'PoolID:' + poolId + '\n' +
+  // 需要 checksum 地址
+    'Address:' + ethers.utils.getAddress(address) + '\n' +
+    'LowSqrtPrice:' + jsonConfig.lowSqrtPrice.toString() + '\n' +
+    'HighSqrtPrice:' + jsonConfig.highSqrtPrice.toString() + '\n' +
+    'PriceDirection:' + jsonConfig.priceDirection
+  console.log('msg', msg)
+  const lpId = uint8ArrayToHex(hashPersonalMessage(Buffer.from(msg)))
+  console.log('lpId', lpId)
+  return lpId
 }

@@ -43,9 +43,9 @@ export default defineComponent({
         },
         async handleOrder (data: any) {
           const validatePathsData = (paths: any): boolean => {
-            const stack = {}
+            const stack = {} as any
             let result: boolean = true
-            paths.forEach((pathData) => {
+            paths.forEach((pathData: any) => {
               if (!stack[pathData.lpId]) {
                 stack[pathData.lpId] = {}
               }
@@ -67,9 +67,9 @@ export default defineComponent({
               if (jsonConfig) {
                 if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
                   try {
-                    const [newCurrentSqrtPrice, amountOutY] = swapX(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                    const [newCurrentSqrtPrice, amountOutY] = swapX((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
                     console.log('amountOutY', amountOutY)
-                    if (toBN(amountOutY).gte(amountData.amountOut)) {
+                    if (toBN(amountOutY).gte((amountData as any).amountOut)) {
                       store.commit('updateLp', {
                         ...jsonConfig,
                         currentSqrtPrice: newCurrentSqrtPrice
@@ -80,10 +80,10 @@ export default defineComponent({
                   } catch (e) { console.log('errr', e) }
                 } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
                   try {
-                    const [newCurrentSqrtPrice, amountOutX] = swapY(amountData.amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                    const [newCurrentSqrtPrice, amountOutX] = swapY((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
                     console.log('amountOutY', amountOutX)
                     console.log('amountOutPath', amountOutX)
-                    if (toBN(amountOutX).gte(amountData.amountOut)) {
+                    if (toBN(amountOutX).gte((amountData as any).amountOut)) {
                       store.commit('updateLp', {
                         ...jsonConfig,
                         currentSqrtPrice: newCurrentSqrtPrice

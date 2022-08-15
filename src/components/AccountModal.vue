@@ -1,12 +1,15 @@
-<script>
+<script lang="ts">
+import { closeSocket } from '@/lib/swap'
 import { useStore } from '@/store'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
+import ClipboardJS from 'clipboard'
 
 export default defineComponent({
   setup () {
     const store = useStore()
     const account = computed(() => store.state.account)
     const accountModalVisible = computed(() => store.state.accountModalVisible)
+    const copyedNoticeVisible = ref(false)
     const links1 = [
       {
         name: 'github',
@@ -40,10 +43,43 @@ export default defineComponent({
       store.commit('updateAccountModalVisible', false)
       store.commit('updateRegisterModalVisible', true)
     }
+    const disconnect = () => {
+      const lps = [...store.state.lps]
+      lps.forEach((lp) => {
+        store.commit('removeLp', lp)
+      })
+      store.commit('updateAccount', '')
+      store.commit('updateAccountModalVisible', false)
+      closeSocket()
+    }
+
+    let clipboard = null as any
+    let timer = null as any
+
+    onMounted(() => {
+      clipboard = new ClipboardJS('.clipboard-modal-account')
+      clipboard.on('success', (e: any) => {
+        e.clearSelection()
+        copyedNoticeVisible.value = true
+        if (timer != null) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+          copyedNoticeVisible.value = false
+        }, 2000)
+      })
+    })
+
+    onUnmounted(() => {
+      clipboard && clipboard.destroy()
+    })
+
     return {
       account,
       links1,
       links2,
+      disconnect,
+      copyedNoticeVisible,
       accountModalVisible,
       hidenAccountModal,
       showRegisterModal
@@ -91,9 +127,16 @@ export default defineComponent({
       </div>
       <div class="flex flex-row items-center justify-between">
         <div
-          class="rounded-lg h-8 text-center text-sm border-box leading-8 cursor-pointer"
+          class="rounded-lg h-8 text-center text-sm border-box leading-8 cursor-pointer relative clipboard-modal-account"
+          :data-clipboard-text="account"
           style="width:188px; border: 1px solid #183B21;">
           Copy
+          <div
+            v-if="copyedNoticeVisible"
+            class="absolute py-1 px-4 text-sm"
+            style="left:50%;top:-48px;transform: translateX(-50%);color: #52C763;background: rgba(54, 63, 59, 0.65);border-radius: 6px;">
+            Replicated！
+          </div>
         </div>
         <a
           href="https://app.everpay.io/deposit"
@@ -126,7 +169,7 @@ export default defineComponent({
           <span>Whitepaper</span>
         </a>
       </li>
-      <li v-if="account" class="flex flex-row items-center cursor-pointer">
+      <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="disconnect">
         <img class="w-4 mr-3" src="@/images/disconnect.png">
         <span>Disconnect</span>
       </li>

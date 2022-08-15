@@ -1,7 +1,7 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
-import { getLpId, getSwapInfo, sendAdd } from '@/lib/swap'
+import { getLpId, getPoolPrice, getSwapInfo, sendAdd } from '@/lib/swap'
 import { useStore } from '@/store'
 import { toBN } from '@/lib/util'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
@@ -25,9 +25,9 @@ export default defineComponent({
       tokenXAmount.value = ''
       tokenYAmount.value = ''
     }
-    let jsonConfig = null
-    const tokenX = ref(null)
-    const tokenY = ref(null)
+    let jsonConfig = null as any
+    const tokenX = ref(null) as Ref<any>
+    const tokenY = ref(null) as Ref<any>
     const tokenXs = ref([])
     const tokenYs = ref([])
     const pairs = ref([])
@@ -84,18 +84,20 @@ export default defineComponent({
       })
     }
     const updateBalances = async () => {
-      tokenXBalance.value = await everpay.balance({ account: account.value, symbol: tokenX.value.symbol })
-      tokenYBalance.value = await everpay.balance({ account: account.value, symbol: tokenY.value.symbol })
+      tokenXBalance.value = await everpay.balance({ account: account.value, symbol: (tokenX.value as any).symbol })
+      tokenYBalance.value = await everpay.balance({ account: account.value, symbol: (tokenY.value as any).symbol })
     }
     onMounted(async () => {
       info = await everpay.info()
       swapInfo = await getSwapInfo()
-      pairs.value = getPairs(info.tokenList, swapInfo.poolList)
+      pairs.value = getPairs(info.tokenList, swapInfo.poolList) as any
       tokenXs.value = getTokenXs(info.tokenList, swapInfo.poolList)
       tokenX.value = tokenXs.value[0]
       tokenYs.value = getTokenYs(info.tokenList, swapInfo.poolList, tokenX.value)
       tokenY.value = tokenYs.value[0]
       updateBalances()
+      const { poolId } = getPoolData(swapInfo.poolList)
+      currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
     })
     const getPoolData = (poolList: any) => {
       const poolListEntires = Object.entries(poolList)
@@ -103,7 +105,7 @@ export default defineComponent({
       let feeRatio = ''
       poolListEntires.forEach(entry => {
         const [pid, poolListValue] = entry as any
-        if (poolListValue.tokenXTag === tokenX.value.tag && poolListValue.tokenYTag === tokenY.value.tag) {
+        if (poolListValue.tokenXTag === (tokenX as any).value.tag && poolListValue.tokenYTag === (tokenY as any).value.tag) {
           feeRatio = poolListValue.feeRatio
           poolId = pid
         }
@@ -113,11 +115,11 @@ export default defineComponent({
     const getSqrtPrice = () => {
       const lowSqrtPrice = +lowPrice.value === 0
         ? toBN(2).pow(-64).toString()
-        : getLowSqrtPrice(toBN(lowPrice.value).times(toBN(10).pow(tokenY.value?.decimals)).dividedBy(toBN(10).pow(tokenX.value?.decimals)))
+        : getLowSqrtPrice(toBN(lowPrice.value).times(toBN(10).pow((tokenY as any).value?.decimals)).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)))
       const highSqrtPrice = highPrice.value === '∞'
         ? toBN(2).pow(64).toString()
-        : getHighSqrtPrice(toBN(highPrice.value).times(toBN(10).pow(tokenY.value?.decimals)).dividedBy(toBN(10).pow(tokenX.value?.decimals)))
-      const currentSqrtPrice = getHighSqrtPrice(toBN(currentPrice.value).times(toBN(10).pow(tokenY.value?.decimals)).dividedBy(toBN(10).pow(tokenX.value?.decimals)))
+        : getHighSqrtPrice(toBN(highPrice.value).times(toBN(10).pow((tokenY as any).value?.decimals)).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)))
+      const currentSqrtPrice = getHighSqrtPrice(toBN(currentPrice.value).times(toBN(10).pow((tokenY as any).value?.decimals)).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)))
       return {
         lowSqrtPrice,
         highSqrtPrice,
@@ -126,13 +128,13 @@ export default defineComponent({
     }
     const handleAmountXInput = () => {
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
-      const tokenXAmountDecimal = toBN(tokenXAmount.value).times(toBN(10).pow(tokenX.value?.decimals))
+      const tokenXAmountDecimal = toBN(tokenXAmount.value).times(toBN(10).pow((tokenX as any).value?.decimals))
       const { amountY, liquidity } = getAmountYAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenXAmountDecimal as any)
-      tokenYAmount.value = toBN(amountY).dividedBy(toBN(10).pow(tokenY.value?.decimals)).toString()
+      tokenYAmount.value = toBN(amountY).dividedBy(toBN(10).pow((tokenY as any).value?.decimals)).toString()
       const { feeRatio } = getPoolData(swapInfo.poolList)
       jsonConfig = {
-        tokenX: tokenX.value?.tag,
-        tokenY: tokenY.value?.tag,
+        tokenX: (tokenX as any).value?.tag,
+        tokenY: (tokenY as any).value?.tag,
         feeRatio: feeRatio,
         currentSqrtPrice: currentSqrtPrice.toString(),
         lowSqrtPrice: lowSqrtPrice.toString(),
@@ -143,9 +145,9 @@ export default defineComponent({
     }
     const handleAmountYInput = () => {
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
-      const tokenYAmountDecimal = toBN(tokenYAmount.value).times(toBN(10).pow(tokenY.value?.decimals))
+      const tokenYAmountDecimal = toBN(tokenYAmount.value).times(toBN(10).pow((tokenY as any).value?.decimals))
       const { amountX, liquidity } = getAmountXAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenYAmountDecimal as any)
-      tokenXAmount.value = toBN(amountX).dividedBy(toBN(10).pow(tokenX.value?.decimals)).toString()
+      tokenXAmount.value = toBN(amountX).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)).toString()
       const { feeRatio } = getPoolData(swapInfo.poolList)
       jsonConfig = {
         tokenX: tokenX.value?.tag,
@@ -170,12 +172,14 @@ export default defineComponent({
       updateBalances()
     })
 
-    const selectPair = (pair: any) => {
+    const selectPair = async (pair: any) => {
       tokenX.value = pair.tokenX
       tokenY.value = pair.tokenY
       pairModalVisible.value = false
       setFullRange()
       updateBalances()
+      const { poolId } = getPoolData(swapInfo.poolList)
+      currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
     }
     const showPreviewModal = () => {
       if (btnMessage.value === 'Preview') {

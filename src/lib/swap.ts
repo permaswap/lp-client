@@ -1,6 +1,7 @@
 import { sendRequest } from 'everpay/esm/api'
 import { ethers } from 'ethers'
 import hashPersonalMessage from 'everpay/esm/lib/hashPersonalMessage'
+import { toBN } from './util'
 
 let socket = null as any
 
@@ -13,6 +14,15 @@ export const getSwapInfo = async (): Promise<string[]> => {
   return result.data
 }
 
+export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenYDecimal: number): Promise<string> => {
+  const url = `https://router0-dev.permaswap.network/pool/${poolId}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString()
+}
+
 export interface InitSocketParams {
   handleError: any
   handleSalt: any
@@ -21,9 +31,7 @@ export interface InitSocketParams {
 }
 
 export const initSocket = (params: InitSocketParams): void => {
-  if (socket == null) {
-    socket = new WebSocket('wss://router0-dev.permaswap.network/wslp')
-  }
+  socket = new WebSocket('wss://router0-dev.permaswap.network/wslp')
   socket.addEventListener('message', (message: any) => {
     console.log(11111, message.data)
     const data = JSON.parse(message.data)
@@ -47,6 +55,12 @@ export const initSocket = (params: InitSocketParams): void => {
 interface SendRegisterParams {
   address: string
   sig: string
+}
+
+export const closeSocket = (): void => {
+  if (socket != null) {
+    socket.close()
+  }
 }
 
 export const sendRegister = (params: SendRegisterParams): void => {

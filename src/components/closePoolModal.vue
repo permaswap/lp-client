@@ -1,11 +1,13 @@
 <script>
 import { getPoolPrice, sendRemove } from '@/lib/swap'
+import { isInRange } from '@/lib/util'
 import { useStore } from '@/store'
 import { defineComponent, onMounted, ref } from 'vue'
 import CloseConfirmModal from './closeConfirmModal.vue'
+import Range from './Range.vue'
 
 export default defineComponent({
-  components: { CloseConfirmModal },
+  components: { CloseConfirmModal, Range },
   props: {
     lp: {
       type: Object,
@@ -23,12 +25,15 @@ export default defineComponent({
       store.commit('removeLp', props.lp)
       context.emit('back')
     }
+    const inRange = ref(true)
 
     onMounted(async () => {
       currentPrice.value = await getPoolPrice(props.lp.poolId, props.lp.tokenXDecimal, props.lp.tokenYDecimal)
+      inRange.value = isInRange(currentPrice.value, props.lp.lowPrice, props.lp.highPrice)
     })
 
     return {
+      inRange,
       confirmClose,
       closeConfirmModalVisible,
       currentPrice
@@ -50,9 +55,7 @@ export default defineComponent({
         <div style="font-size:20px;">
           {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
         </div>
-        <div style="color: rgba(255, 255, 255, 0.85);" class="text-sm">
-          in Range
-        </div>
+        <Range :in-range="inRange" />
       </div>
       <div
         class="text-sm py-1 px-4 cursor-pointer"

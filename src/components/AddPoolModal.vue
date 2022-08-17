@@ -171,6 +171,10 @@ export default defineComponent({
     watch(account, () => {
       updateBalances()
     })
+    watch([lowPrice, highPrice], () => {
+      tokenXAmount.value = ''
+      tokenYAmount.value = ''
+    })
 
     const selectPair = async (pair: any) => {
       tokenX.value = pair.tokenX

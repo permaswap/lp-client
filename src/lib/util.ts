@@ -33,3 +33,15 @@ export const fromDecimalToUnit = (x: number | string | BN, decimals: number): st
 }
 
 export const getTimestamp = (): number => Math.round(Date.now() / 1000)
+
+export const isInRange = (currentPrice: string, lowPrice: string, highPrice: string): boolean => {
+  let lowInRange = false
+  let highInRange = false
+  if (lowPrice === '0' || toBN(currentPrice).gte(lowPrice)) {
+    lowInRange = true
+  }
+  if (highPrice === '∞' || toBN(currentPrice).lte(highPrice)) {
+    highInRange = true
+  }
+  return lowInRange && highInRange
+}

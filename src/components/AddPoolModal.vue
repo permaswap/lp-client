@@ -197,6 +197,8 @@ export default defineComponent({
         poolId,
         tokenXSymbol: tokenX.value.symbol,
         tokenYSymbol: tokenY.value.symbol,
+        tokenXDecimal: tokenX.value.decimals,
+        tokenYDecimal: tokenY.value.decimals,
         lowPrice: lowPrice.value,
         highPrice: highPrice.value
       })

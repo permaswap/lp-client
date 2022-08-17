@@ -1,7 +1,7 @@
 <script>
-import { sendRemove } from '@/lib/swap'
+import { getPoolPrice, sendRemove } from '@/lib/swap'
 import { useStore } from '@/store'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import CloseConfirmModal from './closeConfirmModal.vue'
 
 export default defineComponent({
@@ -14,7 +14,7 @@ export default defineComponent({
   },
   emits: ['back'],
   setup (props, context) {
-    const currentPrice = ref(1450)
+    const currentPrice = ref('')
     const closeConfirmModalVisible = ref(false)
     const store = useStore()
     const confirmClose = () => {
@@ -23,6 +23,11 @@ export default defineComponent({
       store.commit('removeLp', props.lp)
       context.emit('back')
     }
+
+    onMounted(async () => {
+      currentPrice.value = await getPoolPrice(props.lp.poolId, props.lp.tokenXDecimal, props.lp.tokenYDecimal)
+    })
+
     return {
       confirmClose,
       closeConfirmModalVisible,

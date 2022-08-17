@@ -48,8 +48,8 @@ export default defineComponent({
       lps.forEach((lp) => {
         store.commit('removeLp', lp)
       })
-      store.commit('updateAccount', '')
       store.commit('updateAccountModalVisible', false)
+      store.commit('updateAccount', '')
       closeSocket()
     }
 

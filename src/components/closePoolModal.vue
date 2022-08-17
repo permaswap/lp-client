@@ -5,9 +5,10 @@ import { useStore } from '@/store'
 import { defineComponent, onMounted, ref } from 'vue'
 import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
+import TokenLogo from './TokenLogo.vue'
 
 export default defineComponent({
-  components: { CloseConfirmModal, Range },
+  components: { CloseConfirmModal, Range, TokenLogo },
   props: {
     lp: {
       type: Object,
@@ -52,6 +53,8 @@ export default defineComponent({
     </div>
     <div class="flex flex-row items-center justify-between mb-4">
       <div class="flex flex-row items-center">
+        <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6 -mr-2" />
+        <TokenLogo :symbol="lp.tokenYSymbol" class="w-6 h-6 mr-2" />
         <div style="font-size:20px;">
           {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
         </div>
@@ -82,11 +85,17 @@ export default defineComponent({
             <span>-</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
-            <span>Pooled {{ lp.tokenXSymbol }}</span>
+            <div class="flex flex-row items-center">
+              <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" />
+              <span>Pooled {{ lp.tokenXSymbol }}</span>
+            </div>
             <span>-</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
-            <span>Pooled {{ lp.tokenYSymbol }}</span>
+            <div class="flex flex-row items-center">
+              <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" />
+              <span>Pooled {{ lp.tokenYSymbol }}</span>
+            </div>
             <span>-</span>
           </div>
         </div>

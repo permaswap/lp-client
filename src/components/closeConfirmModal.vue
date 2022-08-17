@@ -1,7 +1,9 @@
 <script>
 import { defineComponent } from 'vue'
+import TokenLogo from './TokenLogo.vue'
 
 export default defineComponent({
+  components: { TokenLogo },
   props: {
     lp: {
       type: Object,
@@ -35,11 +37,17 @@ export default defineComponent({
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">
       </div>
       <div class="flex flex-row items-center justify-between mb-4 text-sm" style="color: rgba(255, 255, 255, 0.85);">
-        <span>Pooled {{ lp.tokenXSymbol }}</span>
+        <div class="flex flex-row items-center">
+          <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" />
+          <span>Pooled {{ lp.tokenXSymbol }}</span>
+        </div>
         <span>-</span>
       </div>
       <div class="flex flex-row items-center justify-between text-sm mb-6" style="color: rgba(255, 255, 255, 0.85);">
-        <span>Pooled {{ lp.tokenYSymbol }}</span>
+        <div class="flex flex-row items-center">
+          <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" />
+          <span>Pooled {{ lp.tokenYSymbol }}</span>
+        </div>
         <span>-</span>
       </div>
       <div class="text-sm mb-8" style="color: #FFC53D;">

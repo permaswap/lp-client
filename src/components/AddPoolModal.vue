@@ -285,8 +285,8 @@ export default defineComponent({
             class="px-4 pt-4 pb-3 flex flex-row items-center justify-between mb-2"
             style="background: #000A06;border-radius: 12px;">
             <div>
-              <div class="px-2 py-1 mb-2 flex flex-row items-center" style="background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-1" :symbol="tokenX ? tokenX.symbol : ''" />
+              <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
+                <TokenLogo class="w-4 h-4 mr-1 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
                 {{ tokenX && tokenX.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenXAmount">
@@ -304,8 +304,8 @@ export default defineComponent({
             class="px-4 pt-4 pb-3 flex flex-row items-center justify-between"
             style="background: #000A06;border-radius: 12px;">
             <div>
-              <div class="px-2 py-1 mb-2 flex flex-row items-center" style="background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-1" :symbol="tokenY ? tokenY.symbol : ''" />
+              <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
+                <TokenLogo class="w-4 h-4 mr-1 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
                 {{ tokenY && tokenY.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenYAmount">

@@ -1,7 +1,11 @@
 <script>
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import TokenLogo from './TokenLogo.vue'
+import Range from './Range.vue'
+import { isInRange } from '@/lib/util'
 
 export default defineComponent({
+  components: { TokenLogo, Range },
   props: {
     tokenX: {
       type: Object,
@@ -35,6 +39,12 @@ export default defineComponent({
   emits: ['confirm', 'closeModal'],
   setup (props) {
     console.log(props.pairs)
+    const inRange = computed(() => {
+      return isInRange(props.currentPrice, props.lowPrice, props.highPrice)
+    })
+    return {
+      inRange
+    }
   }
 })
 </script>
@@ -58,16 +68,27 @@ export default defineComponent({
         <span style="font-size:20px;">Add Liquidity</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">
       </div>
-      <div class="mb-4" style="font-size:20px;">
-        {{ tokenX && tokenX.symbol }}/{{ tokenY && tokenY.symbol }}
+      <div class="mb-4 flex flex-row items-center justify-between" style="font-size:20px;">
+        <div class="flex flex-row items-center">
+          <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-6 h-6 -mr-2" />
+          <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-6 h-6 mr-2" />
+          {{ tokenX && tokenX.symbol }}/{{ tokenY && tokenY.symbol }}
+        </div>
+        <Range :in-range="inRange" />
       </div>
       <div class="p-4 mb-6" style="background: rgba(22, 30, 27, 0.85);border-radius: 12px;">
         <div class="flex flex-row items-center justify-between">
-          <span>Pooled {{ tokenX && tokenX.symbol }}</span>
+          <div class="flex flex-row items-center">
+            <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-4 h-4 mr-2" />
+            <span>Pooled {{ tokenX && tokenX.symbol }}</span>
+          </div>
           <span>{{ tokenXAmount }}</span>
         </div>
         <div class="flex flex-row items-center justify-between">
-          <span>Pooled {{ tokenY && tokenY.symbol }}</span>
+          <div class="flex flex-row items-center">
+            <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-4 h-4 mr-2" />
+            <span>Pooled {{ tokenY && tokenY.symbol }}</span>
+          </div>
           <span>{{ tokenYAmount }}</span>
         </div>
       </div>

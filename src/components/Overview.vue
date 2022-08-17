@@ -27,7 +27,7 @@ export default defineComponent({
     </div>
     <div style="background: #161E1B;border-radius: 24px;" class="p-4">
       <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-        <span>My Pool</span>
+        <span>My Pool {{ lps.length ? `(${lps.length})` : '' }}</span>
         <div v-if="account" class="flex flex-row items-center">
           <a
             class="text-sm px-4 py-1 border-box"

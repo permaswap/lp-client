@@ -12,6 +12,7 @@ export default defineComponent({
   setup () {
     const store = useStore()
     const privateKey = ref(store.state.privateKey)
+    const importNoticeVisible = ref(false)
     const registerModalVisible = computed(() => store.state.registerModalVisible)
     const isPrivateKeyValid = computed(() => {
       return /[a-zA-Z0-9]{64}/gi.test(privateKey.value)
@@ -126,7 +127,8 @@ export default defineComponent({
       privateKey,
       hidenRegisterModal,
       handleRegister,
-      isPrivateKeyValid
+      isPrivateKeyValid,
+      importNoticeVisible
     }
   }
 })
@@ -169,8 +171,30 @@ border-radius: 24px;">
       </div>
     </div>
     <div class="mb-8">
-      <div class="mb-4">
-        Import Private Key
+      <div class="mb-4 flex flex-row items-center">
+        <div>Import Private Key</div>
+        <div class="ml-2 relative" @mouseover="importNoticeVisible = true" @mouseleave="importNoticeVisible = false">
+          <img src="@/images/warning.png" class="cursor-pointer">
+          <div
+            v-if="importNoticeVisible"
+            class="absolute border-box p-3 text-xs cursor-pointer"
+            style="
+              width:320px;
+              background: #363F3B;
+              box-shadow: 0px 1px 2px -2px rgba(0, 10, 6, 0.16), 0px 3px 6px rgba(0, 10, 6, 0.12), 0px 5px 12px 4px rgba(0, 10, 6, 0.09);
+              border-radius: 12px;
+              left: -30px;
+              top: -150px;
+            "
+          >
+            Imported Accounts are accounts you import using a private key string or a private key JSON file, and were not created with the same Secret Recovery Phrase as your wallet and accounts.
+            Therefore, it is important that you keep the information you use to access Imported Accounts separately and safe to ensure the recovery of these accounts in the future.
+            <img
+              src="@/images/arrow.png"
+              class="absolute"
+              style="bottom:-27px;">
+          </div>
+        </div>
       </div>
       <textarea
         v-model="privateKey"

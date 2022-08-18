@@ -19,6 +19,7 @@ interface GetAmountXYResult {
 }
 
 export const getAmountXY = (liquidity: string, lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string): GetAmountXYResult => {
+  console.log(liquidity, lowSqrtPrice, currentSqrtPrice, highSqrtPrice)
   let amountX, amountY
   if (lowSqrtPrice === currentSqrtPrice) {
     amountX = toBN(liquidity).times(

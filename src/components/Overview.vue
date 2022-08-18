@@ -1,8 +1,12 @@
 <script>
 import { useStore } from '@/store'
 import { computed, defineComponent } from 'vue'
+import TokenLogo from './TokenLogo.vue'
+import Range from './Range.vue'
+import { isInRange } from '@/lib/util'
 
 export default defineComponent({
+  components: { TokenLogo, Range },
   emits: ['selectLp'],
   setup () {
     const store = useStore()
@@ -12,6 +16,7 @@ export default defineComponent({
     const lps = computed(() => store.state.lps)
     return {
       lps,
+      isInRange,
       account,
       showAddPoolModal,
       showRegisterModal
@@ -28,8 +33,9 @@ export default defineComponent({
     <div style="background: #161E1B;border-radius: 24px;" class="p-4">
       <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span>My Pool {{ lps.length ? `(${lps.length})` : '' }}</span>
-        <div v-if="account" class="flex flex-row items-center">
+        <div class="flex flex-row items-center">
           <a
+            v-if="account"
             class="text-sm px-4 py-1 border-box"
             style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
             href="https://permaswap.network/#/nft"
@@ -65,11 +71,16 @@ export default defineComponent({
             style="border-radius: 12px;"
             @click="$emit('selectLp', lp)"
           >
-            <div class="text-white" style="width: 160px;margin-right:35px;">
+            <div class="text-white flex flex-row items-center" style="width: 160px;margin-right:35px;">
+              <div style="width:40px;height:40px;" class="relative mr-2">
+                <TokenLogo :symbol="lp.tokenXSymbol" class="w-8 h-8" />
+                <TokenLogo :symbol="lp.tokenYSymbol" class="w-5 h-5 absolute bottom-0 right-0" />
+              </div>
               {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
             </div>
             <div class="mr-8 text-xs" style="width:160px;">
               <div>Min:{{ lp.lowPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
+              <img src="@/images/arrow-both.png">
               <div>Max:{{ lp.highPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
             </div>
             <div class="text-right mr-8 text-white" style="width:100px;">
@@ -79,7 +90,7 @@ export default defineComponent({
               -
             </div>
             <div class="flex flex-row items-center justify-end flex-1">
-              In Range
+              <Range :in-range="isInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />
             </div>
           </li>
         </ul>

@@ -8,6 +8,14 @@ export default defineComponent({
     lp: {
       type: Object,
       default: () => ({})
+    },
+    amountX: {
+      type: String,
+      default: ''
+    },
+    amountY: {
+      type: String,
+      default: ''
     }
   },
   emits: ['closeModal', 'confirmClose'],
@@ -41,14 +49,14 @@ export default defineComponent({
           <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" />
           <span>Pooled {{ lp.tokenXSymbol }}</span>
         </div>
-        <span>-</span>
+        <span>{{ amountX ? amountX : '-' }}</span>
       </div>
       <div class="flex flex-row items-center justify-between text-sm mb-6" style="color: rgba(255, 255, 255, 0.85);">
         <div class="flex flex-row items-center">
           <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" />
           <span>Pooled {{ lp.tokenYSymbol }}</span>
         </div>
-        <span>-</span>
+        <span>{{ amountY ? amountY : '-' }}</span>
       </div>
       <div class="text-sm mb-8" style="color: #FFC53D;">
         You won't get PSN bonus, After Closing the ETH/USDC LP node! But you could add new position next time.

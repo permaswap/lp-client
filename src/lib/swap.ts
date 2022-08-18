@@ -1,7 +1,23 @@
 import { sendRequest } from 'everpay/esm/api'
 import { ethers } from 'ethers'
+import redstone from 'redstone-api'
 import hashPersonalMessage from 'everpay/esm/lib/hashPersonalMessage'
 import { toBN } from './util'
+
+export interface CurrencyPriceItem {
+  symbol: string
+  price: string
+}
+
+export const getMarketPrices = async (currency: string, symbols: string[]): Promise<CurrencyPriceItem[]> => {
+  const priceStack = await redstone.getPrice(symbols)
+  return symbols.map(symbol => {
+    return {
+      symbol,
+      price: priceStack[symbol] != null ? priceStack[symbol].value.toString() : '0'
+    }
+  })
+}
 
 let socket = null as any
 

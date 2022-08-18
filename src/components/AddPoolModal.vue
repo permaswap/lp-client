@@ -15,7 +15,7 @@ export default defineComponent({
     const store = useStore()
     const lowPrice = ref('0')
     const highPrice = ref('∞')
-    const currentPrice = ref('1450')
+    const currentPrice = ref('')
     const pairModalVisible = ref(false)
     const hideAddPoolModal = () => {
       store.commit('updateAddPoolModalVisible', false)
@@ -115,7 +115,8 @@ export default defineComponent({
     }
     const getSqrtPrice = () => {
       const lowSqrtPrice = +lowPrice.value === 0
-        ? toBN(2).pow(-64).toString()
+      // toBN(2).pow(-64).toString() bignumber 只能截取到 0.00000000000000000005，通不过后端校验
+        ? '0.00000000000000000006'
         : getLowSqrtPrice(toBN(lowPrice.value).times(toBN(10).pow((tokenY as any).value?.decimals)).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)))
       const highSqrtPrice = highPrice.value === '∞'
         ? toBN(2).pow(64).toString()
@@ -208,6 +209,34 @@ export default defineComponent({
         highPrice: highPrice.value
       })
     }
+    const reduceLowPrice = () => {
+      if (lowPrice.value.trim() !== '0' && +lowPrice.value) {
+        lowPrice.value = toBN(lowPrice.value).times(0.99).toString()
+        tokenXAmount.value = ''
+        tokenYAmount.value = ''
+      }
+    }
+    const plusLowPirce = () => {
+      if (lowPrice.value.trim() !== '0' && +lowPrice.value) {
+        lowPrice.value = toBN(lowPrice.value).times(1.01).toString()
+        tokenXAmount.value = ''
+        tokenYAmount.value = ''
+      }
+    }
+    const reduceHighPrice = () => {
+      if (highPrice.value.trim() !== '∞' && +highPrice.value) {
+        highPrice.value = toBN(highPrice.value).times(0.99).toString()
+        tokenXAmount.value = ''
+        tokenYAmount.value = ''
+      }
+    }
+    const plusHighPrice = () => {
+      if (highPrice.value.trim() !== '∞' && +highPrice.value) {
+        highPrice.value = toBN(highPrice.value).times(1.01).toString()
+        tokenXAmount.value = ''
+        tokenYAmount.value = ''
+      }
+    }
     return {
       tokenX,
       tokenY,
@@ -230,7 +259,11 @@ export default defineComponent({
       setMaxTokenXAmount,
       setMaxTokenYAmount,
       showPreviewModal,
-      hideAddPoolModal
+      hideAddPoolModal,
+      reduceLowPrice,
+      plusLowPirce,
+      reduceHighPrice,
+      plusHighPrice
     }
   }
 })
@@ -341,7 +374,11 @@ export default defineComponent({
               Min Price
             </div>
             <div class="flex flex-row items-center justify-between">
-              <div class="w-6 h-6 flex flex-row items-center justify-center" style="background: #161E1B;border-radius: 6px;">
+              <div
+                class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
+                style="background: #161E1B;border-radius: 6px;"
+                @click="reduceLowPrice"
+              >
                 -
               </div>
               <input
@@ -349,7 +386,11 @@ export default defineComponent({
                 style="font-size: 20px;outline: none;width: 100px;text-align: center; background-color: transparent;"
                 class="my-2"
               >
-              <div class="w-6 h-6 flex flex-row items-center justify-center" style="background: #161E1B;border-radius: 6px;">
+              <div
+                class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
+                style="background: #161E1B;border-radius: 6px;"
+                @click="plusLowPirce"
+              >
                 +
               </div>
             </div>
@@ -362,7 +403,11 @@ export default defineComponent({
               Max Price
             </div>
             <div class="flex flex-row items-center justify-between">
-              <div class="w-6 h-6 flex flex-row items-center justify-center" style="background: #161E1B;border-radius: 6px;">
+              <div
+                class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
+                style="background: #161E1B;border-radius: 6px;"
+                @click="reduceHighPrice"
+              >
                 -
               </div>
               <input
@@ -370,7 +415,11 @@ export default defineComponent({
                 style="font-size: 20px;outline: none;width: 100px;text-align: center; background-color: transparent;"
                 class="my-2"
               >
-              <div class="w-6 h-6 flex flex-row items-center justify-center" style="background: #161E1B;border-radius: 6px;">
+              <div
+                class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
+                style="background: #161E1B;border-radius: 6px;"
+                @click="plusHighPrice"
+              >
                 +
               </div>
             </div>

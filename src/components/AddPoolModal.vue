@@ -50,6 +50,15 @@ export default defineComponent({
       }
       return 'Preview'
     })
+    const invalidRange = computed(() => {
+      if (+lowPrice.value > +highPrice.value) {
+        return 'Invalid range selected. The min price must be lower than the max price.'
+      } else if (+lowPrice.value > +currentPrice.value || +highPrice.value < +currentPrice.value) {
+        return 'Your position will not earn contribution value or be used in trades until the market price moves into your range.'
+      } else {
+        return ''
+      }
+    })
     const everpay = new Everpay({
       chainType: 'ethereum' as any,
       debug: true
@@ -263,7 +272,8 @@ export default defineComponent({
       reduceLowPrice,
       plusLowPirce,
       reduceHighPrice,
-      plusHighPrice
+      plusHighPrice,
+      invalidRange
     }
   }
 })
@@ -427,6 +437,13 @@ export default defineComponent({
               {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
             </div>
           </div>
+        </div>
+        <div
+          v-if="invalidRange"
+          class="flex flex-row items-center py-1 px-3 text-xs mb-4"
+          style="background: rgba(255, 197, 61, 0.2);border: 1px solid rgba(255, 197, 61, 0.2);border-radius: 8px;">
+          <img src="@/images/warning.png" class="ml-1 mr-2">
+          {{ invalidRange }}
         </div>
         <div
           class="text-sm cursor-pointer"

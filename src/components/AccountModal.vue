@@ -3,6 +3,8 @@ import { closeSocket } from '@/lib/swap'
 import { useStore } from '@/store'
 import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import ClipboardJS from 'clipboard'
+import { useI18n } from 'vue-i18n'
+import { savedI18nStorageKey } from '@/constants'
 
 export default defineComponent({
   setup () {
@@ -10,6 +12,7 @@ export default defineComponent({
     const account = computed(() => store.state.account)
     const accountModalVisible = computed(() => store.state.accountModalVisible)
     const copyedNoticeVisible = ref(false)
+    const { locale } = useI18n({ useScope: 'global' })
     const links1 = [
       {
         name: 'github',
@@ -53,6 +56,12 @@ export default defineComponent({
       closeSocket()
     }
 
+    const localesOpen = ref(false)
+    const changeLocale = (lang: string) => {
+      window.localStorage.setItem(savedI18nStorageKey, lang)
+      locale.value = lang
+    }
+
     let clipboard = null as any
     let timer = null as any
 
@@ -75,7 +84,10 @@ export default defineComponent({
     })
 
     return {
+      locale,
       account,
+      localesOpen,
+      changeLocale,
       links1,
       links2,
       disconnect,
@@ -156,9 +168,28 @@ export default defineComponent({
       </div>
     </div>
     <ul class="p-6 text-sm" style="color: rgba(255, 255, 255, 0.85);">
-      <li class="flex flex-row items-center mb-4">
-        <img class="w-4 mr-3" src="@/images/lang.png">
-        <span>English</span>
+      <li class="mb-4">
+        <div class="flex flex-row items-center cursor-pointer">
+          <img class="w-4 mr-3" src="@/images/lang.png">
+          <div class="flex flex-row items-center" @click="localesOpen = !localesOpen">
+            <span>{{ locale === 'zh' ? '中文' : 'English' }}</span>
+            <img src="@/images/arrow-top.png" class="transform w-5 ml-1" :class="localesOpen ? '' : 'rotate-180'">
+          </div>
+        </div>
+        <div v-if="localesOpen" class="ml-7">
+          <div
+            class="mt-2 cursor-pointer"
+            :style="locale === 'en' ? 'color:#79D483;' : ''"
+            @click="changeLocale('en')">
+            English
+          </div>
+          <div
+            class="mt-2 cursor-pointer"
+            :style="locale === 'zh' ? 'color:#79D483;' : ''"
+            @click="changeLocale('zh')">
+            中文
+          </div>
+        </div>
       </li>
       <li :class="account ? 'mb-4' : ''">
         <a

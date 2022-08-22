@@ -10,7 +10,7 @@ const messages = {
 
 let lang = 'en';
 
-['zh', 'en', 'fr', 'es', 'zh-TW'].forEach(item => {
+['zh', 'en'].forEach(item => {
   if (window.localStorage.getItem(savedI18nStorageKey) === item) {
     lang = item
   }

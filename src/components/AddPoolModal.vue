@@ -319,20 +319,26 @@ export default defineComponent({
         </div>
         <div class="flex flex-row items-center justify-between mb-4">
           <div
-            class="p-2 border-box cursor-pointer flex flex-row items-center"
+            class="p-2 border-box cursor-pointer flex flex-row items-center justify-between"
             style="background: #000A06;border-radius: 8px;font-size: 20px;width:184px;"
             @click="pairModalVisible = true"
           >
-            <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenX ? tokenX.symbol : ''" />
-            {{ tokenX && tokenX.symbol }}
+            <div class="flex flex-row items-center">
+              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenX ? tokenX.symbol : ''" />
+              {{ tokenX && tokenX.symbol }}
+            </div>
+            <img src="@/images/arrow-top.png" class="transform rotate-180 w-5">
           </div>
           <div
-            class="p-2 border-box cursor-pointer flex flex-row items-center"
+            class="p-2 border-box cursor-pointer flex flex-row items-center justify-between"
             style="background: #000A06;border-radius: 8px;font-size: 20px;width:184px;"
             @click="pairModalVisible = true"
           >
-            <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenY ? tokenY.symbol : ''" />
-            {{ tokenY && tokenY.symbol }}
+            <div class="flex flex-row items-center">
+              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenY ? tokenY.symbol : ''" />
+              {{ tokenY && tokenY.symbol }}
+            </div>
+            <img src="@/images/arrow-top.png" class="transform rotate-180 w-5">
           </div>
         </div>
         <div

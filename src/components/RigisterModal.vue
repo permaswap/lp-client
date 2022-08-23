@@ -201,7 +201,9 @@ border-radius: 24px;">
         class="privatekey-area p-3 block m-0"
         style="resize: none;width: 416px;height: 68px;background: #000A06;border-radius: 12px;"
         placeholder="Please paste your private key" />
-      <span style="color: #FF7D69;" class="text-xs">Expected private key to be a string with length 64</span>
+      <span v-if="privateKey && !isPrivateKeyValid" style="color: #FF7D69;" class="text-xs">
+        Expected private key to be a string with length 64
+      </span>
     </div>
     <div class="flex flex-row items-center justify-between">
       <div

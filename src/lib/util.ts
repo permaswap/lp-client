@@ -1,4 +1,5 @@
 import BN from 'bignumber.js'
+import isString from 'lodash/isString'
 
 BN.config({
   EXPONENTIAL_AT: 1000
@@ -44,4 +45,22 @@ export const isInRange = (currentPrice: string, lowPrice: string, highPrice: str
     highInRange = true
   }
   return lowInRange && highInRange
+}
+
+export const formatInputPrecision = (amount: string, precision: number): string => {
+  if (amount === '' || amount === undefined || amount === null) return ''
+  if (amount === '0') return '0'
+  if (isString(amount) && !amount.includes('.')) return amount
+
+  if (isString(amount) && amount.includes('.')) {
+    const amountArr = amount.split('.')
+    if (amountArr[1].length > precision) {
+      if (precision > 0) {
+        return `${amountArr[0]}.${amountArr[1].slice(0, precision)}`
+      } else {
+        return `${amountArr[0]}`
+      }
+    }
+  }
+  return amount
 }

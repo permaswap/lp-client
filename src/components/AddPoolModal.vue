@@ -3,14 +3,15 @@ import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
 import { getLpId, getPoolPrice, getSwapInfo, sendAdd } from '@/lib/swap'
 import { useStore } from '@/store'
-import { toBN } from '@/lib/util'
+import { formatInputPrecision, toBN } from '@/lib/util'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
 import PairModal from './PairModal.vue'
 import PreviewModal from './PreviewModal.vue'
 import TokenLogo from './TokenLogo.vue'
+import InputArea from './InputArea.vue'
 
 export default defineComponent({
-  components: { PairModal, PreviewModal, TokenLogo },
+  components: { PairModal, PreviewModal, TokenLogo, InputArea },
   setup () {
     const store = useStore()
     const lowPrice = ref('0')
@@ -39,6 +40,9 @@ export default defineComponent({
     const account = computed(() => store.state.account)
     const previewModalVisible = ref(false)
     const btnMessage = computed(() => {
+      if (!account.value) {
+        return 'Sign up'
+      }
       if (!+tokenXAmount.value || !+tokenYAmount.value || +tokenXAmount.value <= 0 || +tokenYAmount.value <= 0) {
         return 'Enter an Amount'
       }
@@ -137,7 +141,10 @@ export default defineComponent({
         currentSqrtPrice
       }
     }
-    const handleAmountXInput = () => {
+    const handleAmountXInput = (amount?: string) => {
+      if (amount != null) {
+        tokenXAmount.value = amount
+      }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenXAmountDecimal = toBN(tokenXAmount.value).times(toBN(10).pow((tokenX as any).value?.decimals))
       const { amountY, liquidity } = getAmountYAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenXAmountDecimal as any)
@@ -154,7 +161,10 @@ export default defineComponent({
         priceDirection: 'both'
       }
     }
-    const handleAmountYInput = () => {
+    const handleAmountYInput = (amount?: string) => {
+      if (amount != null) {
+        tokenYAmount.value = amount
+      }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenYAmountDecimal = toBN(tokenYAmount.value).times(toBN(10).pow((tokenY as any).value?.decimals))
       const { amountX, liquidity } = getAmountXAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenYAmountDecimal as any)
@@ -217,6 +227,8 @@ export default defineComponent({
         lowPrice: lowPrice.value,
         highPrice: highPrice.value
       })
+      store.commit('updateAddPoolModalVisible', false)
+      // TODO: toast
     }
     const reduceLowPrice = () => {
       if (lowPrice.value.trim() !== '0' && +lowPrice.value) {
@@ -246,6 +258,12 @@ export default defineComponent({
         tokenYAmount.value = ''
       }
     }
+    const showRegisterModal = () => {
+      store.commit('updateRegisterModalVisible', true)
+    }
+    const oppositePrice = computed(() => {
+      return formatInputPrecision(toBN(1).dividedBy(currentPrice.value).toString(), 8)
+    })
     return {
       tokenX,
       tokenY,
@@ -273,7 +291,9 @@ export default defineComponent({
       plusLowPirce,
       reduceHighPrice,
       plusHighPrice,
-      invalidRange
+      invalidRange,
+      showRegisterModal,
+      oppositePrice
     }
   }
 })
@@ -336,11 +356,14 @@ export default defineComponent({
                 <span style="color: #5AAD67;">Max</span> {{ tokenXBalance }}
               </div>
             </div>
-            <input
-              v-model="tokenXAmount"
-              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+            <InputArea
+              :input-text="tokenXAmount"
+              :input-text-modifiers="{ precise: true }"
               placeholder="0.0"
-              @input="handleAmountXInput">
+              :precision="tokenX ? tokenX.decimals : 8"
+              :text-right="true"
+              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+              @update:inputText="handleAmountXInput" />
           </div>
 
           <div
@@ -355,11 +378,14 @@ export default defineComponent({
                 <span style="color: #5AAD67;">Max</span> {{ tokenYBalance }}
               </div>
             </div>
-            <input
-              v-model="tokenYAmount"
-              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+            <InputArea
+              :input-text="tokenYAmount"
+              :input-text-modifiers="{ precise: true }"
               placeholder="0.0"
-              @input="handleAmountYInput">
+              :precision="tokenY ? tokenY.decimals : 8"
+              :text-right="true"
+              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+              @update:inputText="handleAmountYInput" />
           </div>
         </div>
       </div>
@@ -375,7 +401,7 @@ export default defineComponent({
             {{ currentPrice }} {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
           </div>
           <div style="color: rgba(255, 255, 255, 0.65);">
-            {{ 1 / currentPrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
+            {{ oppositePrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
           </div>
         </div>
         <div class="flex flex-row items-center justify-between mb-4">
@@ -393,6 +419,7 @@ export default defineComponent({
               </div>
               <input
                 v-model="lowPrice"
+                placeholder="0.0"
                 style="font-size: 20px;outline: none;width: 100px;text-align: center; background-color: transparent;"
                 class="my-2"
               >
@@ -422,6 +449,7 @@ export default defineComponent({
               </div>
               <input
                 v-model="highPrice"
+                placeholder="0.0"
                 style="font-size: 20px;outline: none;width: 100px;text-align: center; background-color: transparent;"
                 class="my-2"
               >
@@ -455,10 +483,10 @@ export default defineComponent({
         <div
           class="py-3 text-center"
           style="border-radius: 8px;"
-          :style="btnMessage === 'Preview' ?
+          :style="btnMessage === 'Preview' || btnMessage === 'Sign up' ?
             'background: #79D483;color:#000;cursor:pointer' :
             'background: rgba(255, 255, 255, 0.12);color: rgba(255, 255, 255, 0.3);cursor:not-allowed'"
-          @click="showPreviewModal"
+          @click="btnMessage === 'Sign up' ? showRegisterModal() : showPreviewModal()"
         >
           {{ btnMessage }}
         </div>

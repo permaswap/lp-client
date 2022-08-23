@@ -1,9 +1,9 @@
 <script>
 import { getAmountXY } from '@/lib/lp'
 import { getMarketPrices, getPoolPrice, sendRemove } from '@/lib/swap'
-import { isInRange, toBN } from '@/lib/util'
+import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 import { useStore } from '@/store'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, computed } from 'vue'
 import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
@@ -51,7 +51,12 @@ export default defineComponent({
       inRange.value = isInRange(currentPrice.value, props.lp.lowPrice, props.lp.highPrice)
     })
 
+    const oppositePrice = computed(() => {
+      return formatInputPrecision(toBN(1).dividedBy(currentPrice.value).toString(), 8)
+    })
+
     return {
+      oppositePrice,
       amountX,
       amountY,
       inRange,
@@ -172,7 +177,7 @@ export default defineComponent({
           {{ currentPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
         </div>
         <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
-          {{ 1 / currentPrice }} {{ lp.tokenXSymbol }} per {{ lp.tokenYSymbol }}
+          {{ oppositePrice }} {{ lp.tokenXSymbol }} per {{ lp.tokenYSymbol }}
         </div>
       </div>
     </div>

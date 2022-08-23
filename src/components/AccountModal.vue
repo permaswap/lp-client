@@ -5,10 +5,13 @@ import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import ClipboardJS from 'clipboard'
 import { useI18n } from 'vue-i18n'
 import { savedI18nStorageKey } from '@/constants'
+import DisconnectModal from './DisconnectModal.vue'
 
 export default defineComponent({
+  components: { DisconnectModal },
   setup () {
     const store = useStore()
+    const disconnectConfirmModalVisible = ref(false)
     const account = computed(() => store.state.account)
     const accountModalVisible = computed(() => store.state.accountModalVisible)
     const copyedNoticeVisible = ref(false)
@@ -47,6 +50,7 @@ export default defineComponent({
       store.commit('updateRegisterModalVisible', true)
     }
     const disconnect = () => {
+      disconnectConfirmModalVisible.value = false
       const lps = [...store.state.lps]
       lps.forEach((lp) => {
         store.commit('removeLp', lp)
@@ -84,6 +88,7 @@ export default defineComponent({
     })
 
     return {
+      disconnectConfirmModalVisible,
       locale,
       account,
       localesOpen,
@@ -200,7 +205,7 @@ export default defineComponent({
           <span>Whitepaper</span>
         </a>
       </li>
-      <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="disconnect">
+      <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="disconnectConfirmModalVisible = true">
         <img class="w-4 mr-3" src="@/images/disconnect.png">
         <span>Disconnect</span>
       </li>
@@ -226,4 +231,9 @@ export default defineComponent({
       </div>
     </div>
   </div>
+  <disconnect-modal
+    v-if="disconnectConfirmModalVisible"
+    @closeModal="disconnectConfirmModalVisible = false"
+    @confirmDisconnect="disconnect"
+  />
 </template>

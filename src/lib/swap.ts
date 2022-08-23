@@ -2,7 +2,7 @@ import { sendRequest } from 'everpay/esm/api'
 import { ethers } from 'ethers'
 import redstone from 'redstone-api'
 import hashPersonalMessage from 'everpay/esm/lib/hashPersonalMessage'
-import { toBN } from './util'
+import { formatInputPrecision, toBN } from './util'
 
 export interface CurrencyPriceItem {
   symbol: string
@@ -36,7 +36,7 @@ export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenY
     url,
     method: 'GET'
   })
-  return toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString()
+  return formatInputPrecision(toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString(), 8)
 }
 
 export interface InitSocketParams {

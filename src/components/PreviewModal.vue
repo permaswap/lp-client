@@ -2,7 +2,7 @@
 import { computed, defineComponent } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
-import { isInRange } from '@/lib/util'
+import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 
 export default defineComponent({
   components: { TokenLogo, Range },
@@ -42,7 +42,11 @@ export default defineComponent({
     const inRange = computed(() => {
       return isInRange(props.currentPrice, props.lowPrice, props.highPrice)
     })
+    const oppositePrice = computed(() => {
+      return formatInputPrecision(toBN(1).dividedBy(props.currentPrice).toString(), 8)
+    })
     return {
+      oppositePrice,
       inRange
     }
   }
@@ -144,7 +148,7 @@ export default defineComponent({
           {{ currentPrice }} {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
         </div>
         <div class="text-xs" style="opacity:0.65">
-          {{ 1 / currentPrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
+          {{ oppositePrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
         </div>
       </div>
       <div

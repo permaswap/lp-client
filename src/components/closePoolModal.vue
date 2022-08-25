@@ -4,6 +4,7 @@ import { getMarketPrices, getPoolPrice, sendRemove } from '@/lib/swap'
 import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 import { useStore } from '@/store'
 import { defineComponent, onMounted, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
@@ -27,6 +28,7 @@ export default defineComponent({
       store.commit('removeLp', props.lp)
       context.emit('back')
     }
+    const { t } = useI18n()
     const inRange = ref(true)
     const amountX = ref('')
     const amountY = ref('')
@@ -63,7 +65,8 @@ export default defineComponent({
       totalPrice,
       confirmClose,
       closeConfirmModalVisible,
-      currentPrice
+      currentPrice,
+      t
     }
   }
 })
@@ -74,7 +77,7 @@ export default defineComponent({
     <div class="flex flex-row items-center mb-7">
       <img src="@/images/back.png" class="cursor-pointer" @click="$emit('back')">
       <div style="color: rgba(255, 255, 255, 0.65);" class="text-sm ml-2 cursor-pointer" @click="$emit('back')">
-        Back to Pool Overview
+        {{ t('back_to_overview') }}
       </div>
     </div>
     <div class="flex flex-row items-center justify-between mb-4">
@@ -90,16 +93,16 @@ export default defineComponent({
         class="text-sm py-1 px-4 cursor-pointer"
         style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
         @click="closeConfirmModalVisible = true">
-        Close Lp Node
+        {{ t('close_lp_node') }}
       </div>
     </div>
     <div class="flex flex-row justify-between mb-6">
       <div class="border-box px-4" style="width: 424px;height: 222px;background: #161E1B;border-radius: 12px;">
         <div class="pt-4 pb-2 mb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-          Transaction Donate
+          {{ t('contribution_value') }}
         </div>
         <div style="color: rgba(255, 255, 255, 0.3);">
-          Coming Soon
+          {{ t('coming_soon') }}
         </div>
       </div>
       <div>
@@ -107,7 +110,7 @@ export default defineComponent({
           <div
             class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-            <span>Liquidity</span>
+            <span>{{ t('liquidity') }}</span>
             <span>{{ totalPrice ? `$${totalPrice}` : '-' }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
@@ -128,25 +131,25 @@ export default defineComponent({
         <div
           class="flex flex-row items-center justify-between text-sm p-4"
           style="background: #161E1B;border-radius: 12px;">
-          <span>Volume</span>
+          <span>{{ t('volume') }}(24h)</span>
           <span>{{ totalPrice ? `$${totalPrice}` : '-' }}</span>
         </div>
       </div>
     </div>
     <div>
       <div class="mb-4">
-        Selected Range
+        {{ t('selected_range') }}
       </div>
       <div class="flex flex-row items-center justify-between text-center mb-4">
         <div style="background: #161E1B;border-radius: 12px;width:424px;" class="py-2">
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
-            Min Price
+            {{ t('min_price') }}
           </div>
           <div class="text-white my-1" style="font-size: 20px;">
             {{ lp.lowPrice }}
           </div>
           <div class="text-xs mb-2" style="color:rgba(255, 255, 255, 0.65);">
-            {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
+            {{ lp.tokenYSymbol }} {{ t('per') }} {{ lp.tokenXSymbol }}
           </div>
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.45);">
             Your position will be 100% {{ lp.tokenXSymbol }} at this price.
@@ -154,7 +157,7 @@ export default defineComponent({
         </div>
         <div style="background: #161E1B;border-radius: 12px;width:424px;" class="py-2">
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
-            Max Price
+            {{ t('max_price') }}
           </div>
           <div class="text-white my-1" style="font-size: 20px;">
             {{ lp.highPrice }}
@@ -171,13 +174,13 @@ export default defineComponent({
         class="text-center py-2"
         style="background: #161E1B;border-radius: 12px;color:rgba(255, 255, 255, 0.65);">
         <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
-          Current Price
+          {{ t('current_price') }}
         </div>
         <div class="text-white my-1" style="font-size: 20px;">
-          {{ currentPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
+          {{ currentPrice }} {{ lp.tokenYSymbol }} {{ t('per') }} {{ lp.tokenXSymbol }}
         </div>
         <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
-          {{ oppositePrice }} {{ lp.tokenXSymbol }} per {{ lp.tokenYSymbol }}
+          {{ oppositePrice }} {{ lp.tokenXSymbol }} {{ t('per') }} {{ lp.tokenYSymbol }}
         </div>
       </div>
     </div>

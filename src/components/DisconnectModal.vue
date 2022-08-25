@@ -1,11 +1,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   emits: ['closeModal', 'confirmDisconnect'],
   setup () {
     const seconds = ref(5)
     const disable = ref(true)
+    const { t } = useI18n()
     onMounted(() => {
       const timer = () => {
         setTimeout(() => {
@@ -23,6 +25,7 @@ export default defineComponent({
       timer()
     })
     return {
+      t,
       seconds,
       disable
     }
@@ -31,7 +34,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fixed" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;">
+  <div class="fixed" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0; z-index: 10;">
     <div
       style="
     position: fixed;
@@ -47,7 +50,7 @@ export default defineComponent({
     padding:32px;">
       <div class="flex flex-row items-center mb-8">
         <img src="@/images/warn.png" class="mr-2">
-        You won't get PSN bonus, after closing the Node!
+        {{ t('disconnect_notice') }}
       </div>
       <div class="flex flex-row items-center justify-center">
         <div
@@ -60,7 +63,7 @@ export default defineComponent({
           border: 1px solid rgba(255, 197, 61, 0.25);;
           border-radius: 8px;"
           @click="$emit('closeModal')">
-          Think Again
+          {{ t('think_again') }}
         </div>
         <div
           class="text-center text-sm border-box"
@@ -74,7 +77,7 @@ export default defineComponent({
             `color: rgba(255, 255, 255, 0.3);background: rgba(255, 255, 255, 0.12);` :
             `color: #000000;background: #FFC53D;border: 1px solid rgba(121, 212, 131, 0.08);`"
           @click="!disable ? $emit('confirmDisconnect') : (() => {})">
-          Close Anyway{{ seconds ? `(${seconds}s)` : '' }}
+          {{ t('close_anyway') }}{{ seconds ? `(${seconds}s)` : '' }}
         </div>
       </div>
     </div>

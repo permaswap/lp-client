@@ -9,6 +9,8 @@ import PairModal from './PairModal.vue'
 import PreviewModal from './PreviewModal.vue'
 import TokenLogo from './TokenLogo.vue'
 import InputArea from './InputArea.vue'
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   components: { PairModal, PreviewModal, TokenLogo, InputArea },
@@ -18,6 +20,7 @@ export default defineComponent({
     const highPrice = ref('∞')
     const currentPrice = ref('')
     const pairModalVisible = ref(false)
+    const { t } = useI18n()
     const hideAddPoolModal = () => {
       store.commit('updateAddPoolModalVisible', false)
     }
@@ -41,24 +44,24 @@ export default defineComponent({
     const previewModalVisible = ref(false)
     const btnMessage = computed(() => {
       if (!account.value) {
-        return 'Sign up'
+        return 'sign_up'
       }
       if (!+tokenXAmount.value || !+tokenYAmount.value || +tokenXAmount.value <= 0 || +tokenYAmount.value <= 0) {
-        return 'Enter an Amount'
+        return 'enter_amount'
       }
       if (+tokenXAmount.value > +tokenXBalance.value) {
-        return 'Insufficient Tokenin Balance'
+        return 'insufficient_tokenin'
       }
       if (+tokenYAmount.value > +tokenYBalance.value) {
-        return 'Insufficient Tokenout Balance'
+        return 'insufficient_tokenout'
       }
-      return 'Preview'
+      return 'preview'
     })
     const invalidRange = computed(() => {
       if (+lowPrice.value > +highPrice.value) {
-        return 'Invalid range selected. The min price must be lower than the max price.'
+        return 'invalid_range_selected'
       } else if (+lowPrice.value > +currentPrice.value || +highPrice.value < +currentPrice.value) {
-        return 'Your position will not earn contribution value or be used in trades until the market price moves into your range.'
+        return 'invalid_out_range'
       } else {
         return ''
       }
@@ -207,7 +210,7 @@ export default defineComponent({
       currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
     }
     const showPreviewModal = () => {
-      if (btnMessage.value === 'Preview') {
+      if (btnMessage.value === 'preview') {
         previewModalVisible.value = true
       }
     }
@@ -228,7 +231,12 @@ export default defineComponent({
         highPrice: highPrice.value
       })
       store.commit('updateAddPoolModalVisible', false)
-      // TODO: toast
+      ElMessage({
+        showClose: true,
+        message: 'Add successful',
+        type: 'success',
+        duration: 3000
+      })
     }
     const reduceLowPrice = () => {
       if (lowPrice.value.trim() !== '0' && +lowPrice.value) {
@@ -293,7 +301,8 @@ export default defineComponent({
       plusHighPrice,
       invalidRange,
       showRegisterModal,
-      oppositePrice
+      oppositePrice,
+      t
     }
   }
 })
@@ -309,13 +318,13 @@ export default defineComponent({
         style="width:14px;"
         class="cursor-pointer"
         @click="hideAddPoolModal">
-      <span style="font-size: 20px;">Add Liquidity</span>
-      <span style="color: #79D483;" class="text-sm cursor-pointer" @click="setFullRange">Clear All</span>
+      <span style="font-size: 20px;">{{ t('add_liquidity') }}</span>
+      <span style="color: #79D483;" class="text-sm cursor-pointer" @click="setFullRange">{{ t('clear_all') }}</span>
     </div>
     <div class="flex flex-row">
       <div style="width:384px;" class="mr-8">
         <div class="mb-4">
-          Select Pair
+          {{ t('select_pair') }}
         </div>
         <div class="flex flex-row items-center justify-between mb-4">
           <div
@@ -344,10 +353,10 @@ export default defineComponent({
         <div
           class="p-2 text-sm mb-6"
           style="border: 1px solid rgba(255, 255, 255, 0.08);border-radius: 8px;color: rgba(255, 255, 255, 0.65);">
-          No fees, become a node, win PSN！
+          {{ t('fee_tip') }}
         </div>
         <div class="mb-4">
-          Deposit Amounts
+          {{ t('deposit_amounts') }}
         </div>
         <div>
           <div
@@ -359,7 +368,7 @@ export default defineComponent({
                 {{ tokenX && tokenX.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenXAmount">
-                <span style="color: #5AAD67;">Max</span> {{ tokenXBalance }}
+                <span style="color: #5AAD67;">{{ t('max') }}</span> {{ tokenXBalance }}
               </div>
             </div>
             <InputArea
@@ -381,7 +390,7 @@ export default defineComponent({
                 {{ tokenY && tokenY.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenYAmount">
-                <span style="color: #5AAD67;">Max</span> {{ tokenYBalance }}
+                <span style="color: #5AAD67;">{{ t('max') }}</span> {{ tokenYBalance }}
               </div>
             </div>
             <InputArea
@@ -397,23 +406,23 @@ export default defineComponent({
       </div>
       <div style="width:384px;">
         <div class="mb-4">
-          Set Price Range
+          {{ t('set_price_range') }}
         </div>
         <div style="background: #000A06;border-radius: 12px;" class="text-center text-xs py-2 mb-4">
           <div style="color: rgba(255, 255, 255, 0.65);">
-            Current Price
+            {{ t('current_price') }}
           </div>
           <div class="my-2" style="font-size:20px;">
-            {{ currentPrice }} {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+            {{ currentPrice }} {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
           </div>
           <div style="color: rgba(255, 255, 255, 0.65);">
-            {{ oppositePrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
+            {{ oppositePrice }} {{ tokenX && tokenX.symbol }} {{ t('per') }} {{ tokenY && tokenY.symbol }}
           </div>
         </div>
         <div class="flex flex-row items-center justify-between mb-4">
           <div class="p-2" style="background: #000A06;border-radius: 12px;width:182px;height:92px;box-sizing: border-box;">
             <div class="text-center text-xs" style="color: rgba(255, 255, 255, 0.65);">
-              Min Price
+              {{ t('min_price') }}
             </div>
             <div class="flex flex-row items-center justify-between">
               <div
@@ -438,12 +447,12 @@ export default defineComponent({
               </div>
             </div>
             <div class="text-center text-xs" style="color: rgba(255, 255, 255, 0.65);">
-              {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+              {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
             </div>
           </div>
           <div class="p-2" style="background: #000A06;border-radius: 12px;width:182px;height:92px;box-sizing: border-box;">
             <div class="text-center text-xs" style="color: rgba(255, 255, 255, 0.65);">
-              Max Price
+              {{ t('max_price') }}
             </div>
             <div class="flex flex-row items-center justify-between">
               <div
@@ -468,7 +477,7 @@ export default defineComponent({
               </div>
             </div>
             <div class="text-center text-xs" style="color: rgba(255, 255, 255, 0.65);">
-              {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+              {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
             </div>
           </div>
         </div>
@@ -477,24 +486,24 @@ export default defineComponent({
           class="flex flex-row items-center py-1 px-3 text-xs mb-4"
           style="background: rgba(255, 197, 61, 0.2);border: 1px solid rgba(255, 197, 61, 0.2);border-radius: 8px;">
           <img src="@/images/warning.png" class="ml-1 mr-2">
-          {{ invalidRange }}
+          {{ t(invalidRange) }}
         </div>
         <div
           class="text-sm cursor-pointer"
           style="margin-bottom: 52px;padding: 6px 8px;background: rgba(24, 59, 33, 0.2);border: 1px solid #183B21;border-radius: 8px;text-align:center;"
           @click="setFullRange"
         >
-          Full Range
+          {{ t('full_range') }}
         </div>
         <div
           class="py-3 text-center"
           style="border-radius: 8px;"
-          :style="btnMessage === 'Preview' || btnMessage === 'Sign up' ?
+          :style="btnMessage === 'preview' || btnMessage === 'sign_up' ?
             'background: #79D483;color:#000;cursor:pointer' :
             'background: rgba(255, 255, 255, 0.12);color: rgba(255, 255, 255, 0.3);cursor:not-allowed'"
-          @click="btnMessage === 'Sign up' ? showRegisterModal() : showPreviewModal()"
+          @click="btnMessage === 'sign_up' ? showRegisterModal() : showPreviewModal()"
         >
-          {{ btnMessage }}
+          {{ t(btnMessage) }}
         </div>
       </div>
     </div>

@@ -4,17 +4,20 @@ import { computed, defineComponent } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
 import { isInRange } from '@/lib/util'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   components: { TokenLogo, Range },
   emits: ['selectLp'],
   setup () {
     const store = useStore()
+    const { t } = useI18n()
     const account = computed(() => store.state.account)
     const showRegisterModal = () => store.commit('updateRegisterModalVisible', true)
     const showAddPoolModal = () => store.commit('updateAddPoolModalVisible', true)
     const lps = computed(() => store.state.lps)
     return {
+      t,
       lps,
       isInRange,
       account,
@@ -28,24 +31,24 @@ export default defineComponent({
 <template>
   <div style="width:864px;" class="mx-auto">
     <div style="font-size: 20px;" class="mb-6">
-      Pool Overview
+      {{ t('pool_overview') }}
     </div>
     <div style="background: #161E1B;border-radius: 24px;" class="p-4">
       <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-        <span>My Pool {{ lps.length ? `(${lps.length})` : '' }}</span>
+        <span>{{ t('my_pool') }} {{ lps.length ? `(${lps.length})` : '' }}</span>
         <div class="flex flex-row items-center">
           <a
             v-if="account"
             class="text-sm px-4 py-1 border-box"
             style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
             href="https://permaswap.network/#/nft"
-            target="_blank">Collect NFT</a>
+            target="_blank">{{ t('collect_nft') }}</a>
           <div
             class="text-sm px-4 py-1 border-box ml-6 cursor-pointer"
             style="color: #000;background: #79D483;border-radius: 8px;"
             @click="showAddPoolModal"
           >
-            New Position
+            {{ t('new_position') }}
           </div>
         </div>
       </div>
@@ -53,11 +56,11 @@ export default defineComponent({
         <ul v-if="lps.length && account" class="text-left">
           <li class="flex flex-row mb-2 px-4">
             <div style="width: 160px;margin-right:35px;">
-              Name
+              {{ t('name') }}
             </div>
             <div class="mr-8" style="width:160px;" />
             <div class="text-right mr-8" style="width:100px;">
-              Volume
+              {{ t('volume') }}(24h)
             </div>
             <div class="text-right mr-8" style="width:100px;">
               TVL
@@ -94,21 +97,21 @@ export default defineComponent({
             </div>
           </li>
         </ul>
-        <span v-else-if="account">Your active liquidity positions will appear here.</span>
-        <span v-else>Hold NFT, register as a node, get more rewards！</span>
+        <span v-else-if="account">{{ t('your_at_liq_appr') }}</span>
+        <span v-else>{{ t('hold_nft_register') }}</span>
       </div>
       <div v-if="!account" class="flex flex-row items-center justify-center pb-4">
         <a
           class="text-sm px-4 py-1 border-box"
           style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
           href="https://permaswap.network/#/nft"
-          target="_blank">Collect NFT</a>
+          target="_blank">{{ t('collect_nft') }}</a>
         <div
           class="text-sm px-4 py-1 border-box ml-12 cursor-pointer"
           style="color: #000;background: #79D483;border-radius: 8px;"
           @click="showRegisterModal"
         >
-          Sign Up
+          {{ t('sign_up') }}
         </div>
       </div>
     </div>

@@ -7,10 +7,12 @@ import { ethers, Wallet } from 'ethers'
 import { toBN } from '@/lib/util'
 import { swapX, swapY } from '@/lib/math'
 import Everpay from 'everpay'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
     const store = useStore()
+    const { t, locale } = useI18n()
     const privateKey = ref(store.state.privateKey)
     const importNoticeVisible = ref(false)
     const registerModalVisible = computed(() => store.state.registerModalVisible)
@@ -123,6 +125,8 @@ export default defineComponent({
       })
     }
     return {
+      t,
+      locale,
       registerModalVisible,
       privateKey,
       hidenRegisterModal,
@@ -139,30 +143,30 @@ export default defineComponent({
     class="absolute border-box p-8"
     :class="registerModalVisible ? 'block' : 'hidden'"
     style="width:480px;height: 610px; top: 162px;left:50%;transform: translateX(-50%);background: #161E1B;
-border-radius: 24px;">
+border-radius: 24px;z-index: 9;">
     <div class="pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
       <div class="flex flex-row items-center justify-between">
-        <span style="font-size: 20px;" class="mb-2">Registration node</span>
+        <span style="font-size: 20px;" class="mb-2">{{ t('registration_node') }}</span>
         <img class="cursor-pointer" src="@/images/close.png" @click="hidenRegisterModal">
       </div>
       <div>
-        <span class="text-sm" style="color: rgba(255, 255, 255, 0.65);">Holding certified NFT to register as a node</span>
+        <span class="text-sm" style="color: rgba(255, 255, 255, 0.65);">{{ t('hold_nft_register_1') }}</span>
         <a
           class="text-sm ml-2"
           style="color: #D3B078;"
           href="https://permaswap.network/#/nft"
-          target="_blank">Buy Now</a>
+          target="_blank">{{ t('buy_nfts') }}</a>
       </div>
     </div>
     <ul class="text-sm mb-6" style="color: rgba(255, 255, 255, 0.65); list-style-type: circle;margin-left: 16px;">
       <li class="mb-2" style="color: #FFC53D;">
-        We will not save your private key, please import it in a secure environment!
+        {{ t('import_warn_1') }}
       </li>
-      <li>Only one role is supported for the same account, i.e. to become an Lp node and will not be able to exchange in the Permaswap DApp.</li>
+      <li>{{ t('import_warn_2') }}</li>
     </ul>
     <div class="mb-6">
       <div class="mb-4">
-        Select Format
+        {{ t('select_format') }}
       </div>
       <div
         class="border-box pl-6 text-sm cursor-pointer"
@@ -172,7 +176,7 @@ border-radius: 24px;">
     </div>
     <div class="mb-8">
       <div class="mb-4 flex flex-row items-center">
-        <div>Import Private Key</div>
+        <div>{{ t('import_pk') }}</div>
         <div class="ml-2 relative" @mouseover="importNoticeVisible = true" @mouseleave="importNoticeVisible = false">
           <img src="@/images/warning.png" class="cursor-pointer">
           <div
@@ -184,11 +188,10 @@ border-radius: 24px;">
               box-shadow: 0px 1px 2px -2px rgba(0, 10, 6, 0.16), 0px 3px 6px rgba(0, 10, 6, 0.12), 0px 5px 12px 4px rgba(0, 10, 6, 0.09);
               border-radius: 12px;
               left: -30px;
-              top: -150px;
             "
+            :style="locale === 'en' ? 'top:-150px;' : 'top:-100px;'"
           >
-            Imported Accounts are accounts you import using a private key string or a private key JSON file, and were not created with the same Secret Recovery Phrase as your wallet and accounts.
-            Therefore, it is important that you keep the information you use to access Imported Accounts separately and safe to ensure the recovery of these accounts in the future.
+            {{ t('import_notice') }}
             <img
               src="@/images/arrow.png"
               class="absolute"
@@ -202,7 +205,7 @@ border-radius: 24px;">
         style="resize: none;width: 416px;height: 68px;background: #000A06;border-radius: 12px;"
         placeholder="Please paste your private key" />
       <span v-if="privateKey && !isPrivateKeyValid" style="color: #FF7D69;" class="text-xs">
-        Expected private key to be a string with length 64
+        {{ t('pk_notice') }}
       </span>
     </div>
     <div class="flex flex-row items-center justify-between">
@@ -210,13 +213,13 @@ border-radius: 24px;">
         class="border-box cursor-pointer"
         style="border: 1px solid #183B21;color: #79D483;border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
         @click="hidenRegisterModal">
-        Cancel
+        {{ t('cancel') }}
       </div>
       <div
         :class="isPrivateKeyValid ? 'primary-btn' : 'disable-btn'"
         style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
         @click="handleRegister">
-        Sign Up
+        {{ t('sign_up') }}
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   props: {
@@ -9,7 +10,10 @@ export default defineComponent({
     }
   },
   setup () {
-
+    const { t } = useI18n()
+    return {
+      t
+    }
   }
 })
 </script>
@@ -23,6 +27,6 @@ export default defineComponent({
       class="mr-1"
       style="width: 6px;height: 6px;border-radius: 50%;"
       :style="inRange ? 'background: #52C763;' : 'background: #FFC53D;'" />
-    <div>{{ inRange ? 'in range' : 'Out of range' }}</div>
+    <div>{{ inRange ? t('in_range') : t('out_of_range') }}</div>
   </div>
 </template>

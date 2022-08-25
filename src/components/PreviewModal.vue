@@ -3,6 +3,7 @@ import { computed, defineComponent } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
 import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   components: { TokenLogo, Range },
@@ -39,6 +40,7 @@ export default defineComponent({
   emits: ['confirm', 'closeModal'],
   setup (props) {
     console.log(props.pairs)
+    const { t } = useI18n()
     const inRange = computed(() => {
       return isInRange(props.currentPrice, props.lowPrice, props.highPrice)
     })
@@ -46,6 +48,7 @@ export default defineComponent({
       return formatInputPrecision(toBN(1).dividedBy(props.currentPrice).toString(), 8)
     })
     return {
+      t,
       oppositePrice,
       inRange
     }
@@ -69,7 +72,7 @@ export default defineComponent({
     box-sizing: border-box;
     padding:32px;">
       <div class="flex flex-row items-center justify-between pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-        <span style="font-size:20px;">Add Liquidity</span>
+        <span style="font-size:20px;">{{ t('add_liquidity') }}</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">
       </div>
       <div class="mb-4 flex flex-row items-center justify-between" style="font-size:20px;">
@@ -97,7 +100,7 @@ export default defineComponent({
         </div>
       </div>
       <div class="mb-4">
-        Selected Range
+        {{ t('set_price_range') }}
       </div>
       <div class="flex flex-row justify-between mb-2">
         <div
@@ -108,13 +111,13 @@ export default defineComponent({
               height: 92px;
               border-radius: 12px;">
           <div class="text-xs" style="opacity:0.65">
-            Min Price
+            {{ t('min_price') }}
           </div>
           <div style="font-size:20px;" class="my-1">
             {{ lowPrice }}
           </div>
           <div class="text-xs" style="opacity:0.65">
-            {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+            {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
           </div>
         </div>
         <div
@@ -125,13 +128,13 @@ export default defineComponent({
               height: 92px;
               border-radius: 12px;">
           <div class="text-xs" style="opacity:0.65">
-            Max Price
+            {{ t('max_price') }}
           </div>
           <div style="font-size:20px;" class="my-1">
             {{ highPrice }}
           </div>
           <div class="text-xs" style="opacity:0.65">
-            {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+            {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
           </div>
         </div>
       </div>
@@ -142,13 +145,13 @@ export default defineComponent({
             height: 92px;
             border-radius: 12px;">
         <div class="text-xs" style="opacity:0.65">
-          Current Price
+          {{ t('current_price') }}
         </div>
         <div style="font-size:20px;" class="my-1">
-          {{ currentPrice }} {{ tokenY && tokenY.symbol }} per {{ tokenX && tokenX.symbol }}
+          {{ currentPrice }} {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
         </div>
         <div class="text-xs" style="opacity:0.65">
-          {{ oppositePrice }} {{ tokenX && tokenX.symbol }} per {{ tokenY && tokenY.symbol }}
+          {{ oppositePrice }} {{ tokenX && tokenX.symbol }} {{ t('per') }} {{ tokenY && tokenY.symbol }}
         </div>
       </div>
       <div
@@ -156,7 +159,7 @@ export default defineComponent({
         style="color:#000;text-align:center;background: #79D483;border-radius: 8px;height:48px;line-height:48px;"
         @click="$emit('confirm')"
       >
-        Become LP Node
+        {{ t('become_lp') }}
       </div>
     </div>
   </div>

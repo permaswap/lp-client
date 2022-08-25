@@ -1,5 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import TokenLogo from './TokenLogo.vue'
 
 export default defineComponent({
@@ -20,7 +21,10 @@ export default defineComponent({
   },
   emits: ['closeModal', 'confirmClose'],
   setup () {
-
+    const { t } = useI18n()
+    return {
+      t
+    }
   }
 })
 </script>
@@ -41,7 +45,7 @@ export default defineComponent({
     box-sizing: border-box;
     padding:32px;">
       <div class="flex flex-row items-center justify-between pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-        <span style="font-size:20px;">Close Lp Node</span>
+        <span style="font-size:20px;">{{ t('close_lp_node') }}</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">
       </div>
       <div class="flex flex-row items-center justify-between mb-4 text-sm" style="color: rgba(255, 255, 255, 0.85);">
@@ -59,7 +63,7 @@ export default defineComponent({
         <span>{{ amountY ? amountY : '-' }}</span>
       </div>
       <div class="text-sm mb-8" style="color: #FFC53D;">
-        You won't get PSN bonus, After Closing the ETH/USDC LP node! But you could add new position next time.
+        {{ t('close_lp_notice') }}
       </div>
       <div class="flex flex-row items-center justify-between">
         <div
@@ -72,7 +76,7 @@ export default defineComponent({
           border: 1px solid rgba(255, 197, 61, 0.25);;
           border-radius: 8px;"
           @click="$emit('closeModal')">
-          Think Again
+          {{ t('think_again') }}
         </div>
         <div
           class="text-center text-sm cursor-pointer"
@@ -85,7 +89,7 @@ export default defineComponent({
           border: 1px solid rgba(121, 212, 131, 0.08);
           border-radius: 8px;"
           @click="$emit('confirmClose')">
-          Close Anyway
+          {{ t('close_anyway') }}
         </div>
       </div>
     </div>

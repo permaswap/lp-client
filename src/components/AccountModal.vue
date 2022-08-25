@@ -11,6 +11,7 @@ export default defineComponent({
   components: { DisconnectModal },
   setup () {
     const store = useStore()
+    const { t } = useI18n()
     const disconnectConfirmModalVisible = ref(false)
     const account = computed(() => store.state.account)
     const accountModalVisible = computed(() => store.state.accountModalVisible)
@@ -88,6 +89,7 @@ export default defineComponent({
     })
 
     return {
+      t,
       disconnectConfirmModalVisible,
       locale,
       account,
@@ -112,7 +114,7 @@ export default defineComponent({
     class="absolute">
     <div class="flex flex-row items-center justify-between pt-6 px-6 pb-4">
       <div style="font-size:20px;">
-        Balance on everPay
+        {{ t('balance_on_everpay') }}
       </div>
       <img class="cursor-pointer" src="@/images/close.png" @click="hidenAccountModal">
     </div>
@@ -138,7 +140,7 @@ export default defineComponent({
             target="_blank"
             class="text-xs"
             style="color: #D3B078;">
-            Buy Now
+            {{ t('buy_nfts') }}
           </a>
         </div>
       </div>
@@ -147,12 +149,12 @@ export default defineComponent({
           class="rounded-lg h-8 text-center text-sm border-box leading-8 cursor-pointer relative clipboard-modal-account"
           :data-clipboard-text="account"
           style="width:188px; border: 1px solid #183B21;">
-          Copy
+          {{ t('copy') }}
           <div
             v-if="copyedNoticeVisible"
             class="absolute py-1 px-4 text-sm"
             style="left:50%;top:-48px;transform: translateX(-50%);color: #52C763;background: rgba(54, 63, 59, 0.65);border-radius: 6px;">
-            Replicated！
+            {{ t('replicated') }}
           </div>
         </div>
         <a
@@ -160,7 +162,7 @@ export default defineComponent({
           target="_blank"
           class="block rounded-lg h-8 text-center text-sm text-black leading-8 cursor-pointer"
           style="width:188px;background: #79D483;">
-          Deposit
+          {{ t('deposit') }}
         </a>
       </div>
     </div>
@@ -169,7 +171,7 @@ export default defineComponent({
         class="h-12 text-center rounded-lg text-black cursor-pointer"
         style="background: #79D483;border: 1px solid rgba(121, 212, 131, 0.08);line-height: 48px;"
         @click="showRegisterModal">
-        Sign Up
+        {{ t('sign_up') }}
       </div>
     </div>
     <ul class="p-6 text-sm" style="color: rgba(255, 255, 255, 0.85);">
@@ -202,12 +204,12 @@ export default defineComponent({
           href="https://mirror.xyz/permaswap.eth/ustZcDgavlm4xmYI26thEAj8W2cXlZpRkG5Jqz0iS14"
           target="_blank">
           <img class="w-4 mr-3" src="@/images/paper.png">
-          <span>Whitepaper</span>
+          <span>{{ t('whitepaper') }}</span>
         </a>
       </li>
       <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="disconnectConfirmModalVisible = true">
         <img class="w-4 mr-3" src="@/images/disconnect.png">
-        <span>Disconnect</span>
+        <span>{{ t('disconnect') }}</span>
       </li>
     </ul>
     <div style="border-top: 1px solid rgba(0, 10, 5, 0.45);" class="p-6 flex flex-row items-center justify-between">

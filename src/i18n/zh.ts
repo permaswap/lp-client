@@ -31,7 +31,7 @@ const messages = {
   import_pk: '导入私钥',
   close_anyway: '仍关闭',
   invalid_range_selected: '选择的范围无效。最小兑换率必须低于最大兑换率',
-  invalid_out_range: '市场兑换率超出您指定的范围。',
+  invalid_out_range: '您的仓位在市场兑换率变化进入到您设置的范围内之前不会赚取交易贡献值或被用于进行兑换交易。',
   in_range: '在范围内',
   enter_amount: '输入数额',
   sign_up: '注册',
@@ -56,7 +56,8 @@ const messages = {
   insufficient_tokenin: 'Tokenin 余额不足',
   insufficient_tokenout: 'Tokenout 余额不足',
   back_to_overview: '返回流动性概览',
-  selected_range: '兑换率范围'
+  selected_range: '兑换率范围',
+  price_reached_$symbol: '当达到此兑换率时，您的仓位流动资金将 100% 由 {symbol} 代币所组成。'
 }
 
 export default messages

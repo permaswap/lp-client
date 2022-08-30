@@ -31,7 +31,7 @@ const messages = {
   import_pk: 'Import Private Key',
   close_anyway: 'Close Anyway',
   invalid_range_selected: 'Invalid range selected. The min price must be lower than the max price.',
-  invalid_out_range: 'The market price is outside your specified price range.',
+  invalid_out_range: 'Your position will not earn contribution value or be used in trades until the market price moves into your range.',
   in_range: 'in range',
   enter_amount: 'Enter an Amount',
   sign_up: 'Sign Up',
@@ -56,7 +56,8 @@ const messages = {
   insufficient_tokenin: 'Insufficient Tokenin Balance',
   insufficient_tokenout: 'Insufficient Tokenout Balance',
   back_to_overview: 'Back to Pool Overview',
-  selected_range: 'Selected Range'
+  selected_range: 'Selected Range',
+  price_reached_$symbol: 'Your position will be 100% {symbol} at this price.'
 }
 
 export default messages

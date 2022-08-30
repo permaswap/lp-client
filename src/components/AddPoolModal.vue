@@ -60,7 +60,7 @@ export default defineComponent({
     const invalidRange = computed(() => {
       if (+lowPrice.value > +highPrice.value) {
         return 'invalid_range_selected'
-      } else if (+lowPrice.value > +currentPrice.value || +highPrice.value < +currentPrice.value) {
+      } else if (+lowPrice.value > +currentPrice.value || (highPrice.value.trim() !== '' && +highPrice.value < +currentPrice.value)) {
         return 'invalid_out_range'
       } else {
         return ''

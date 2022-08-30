@@ -152,7 +152,7 @@ export default defineComponent({
             {{ lp.tokenYSymbol }} {{ t('per') }} {{ lp.tokenXSymbol }}
           </div>
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.45);">
-            Your position will be 100% {{ lp.tokenXSymbol }} at this price.
+            {{ t('price_reached_$symbol', { symbol: lp.tokenXSymbol }) }}
           </div>
         </div>
         <div style="background: #161E1B;border-radius: 12px;width:424px;" class="py-2">
@@ -166,7 +166,7 @@ export default defineComponent({
             {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
           </div>
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.45);">
-            Your position will be 100% {{ lp.tokenYSymbol }} at this price.
+            {{ t('price_reached_$symbol', { symbol: lp.tokenYSymbol }) }}
           </div>
         </div>
       </div>

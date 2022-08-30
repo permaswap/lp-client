@@ -53,8 +53,7 @@ const messages = {
   set_price_range: 'Set Price Range',
   become_lp: 'Become LP Node',
   preview: 'Preview',
-  insufficient_tokenin: 'Insufficient Tokenin Balance',
-  insufficient_tokenout: 'Insufficient Tokenout Balance',
+  insufficient_$symbol: 'Insufficient {symbol} Balance',
   back_to_overview: 'Back to Pool Overview',
   selected_range: 'Selected Range',
   price_reached_$symbol: 'Your position will be 100% {symbol} at this price.'

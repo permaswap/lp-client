@@ -50,10 +50,10 @@ export default defineComponent({
         return 'enter_amount'
       }
       if (+tokenXAmount.value > +tokenXBalance.value) {
-        return 'insufficient_tokenin'
+        return t('insufficient_$symbol', { symbol: tokenX.value.symbol })
       }
       if (+tokenYAmount.value > +tokenYBalance.value) {
-        return 'insufficient_tokenout'
+        return t('insufficient_$symbol', { symbol: tokenY.value.symbol })
       }
       return 'preview'
     })
@@ -148,6 +148,14 @@ export default defineComponent({
       if (amount != null) {
         tokenXAmount.value = amount
       }
+      if (amount === '' || !amount) {
+        tokenYAmount.value = ''
+        return
+      }
+      if (+amount === 0) {
+        tokenYAmount.value = '0'
+        return
+      }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenXAmountDecimal = toBN(tokenXAmount.value).times(toBN(10).pow((tokenX as any).value?.decimals))
       const { amountY, liquidity } = getAmountYAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenXAmountDecimal as any)
@@ -167,6 +175,14 @@ export default defineComponent({
     const handleAmountYInput = (amount?: string) => {
       if (amount != null) {
         tokenYAmount.value = amount
+      }
+      if (amount === '' || !amount) {
+        tokenXAmount.value = ''
+        return
+      }
+      if (+amount === 0) {
+        tokenXAmount.value = '0'
+        return
       }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenYAmountDecimal = toBN(tokenYAmount.value).times(toBN(10).pow((tokenY as any).value?.decimals))

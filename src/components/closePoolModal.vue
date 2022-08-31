@@ -163,7 +163,7 @@ export default defineComponent({
             {{ lp.highPrice }}
           </div>
           <div class="text-xs mb-2" style="color:rgba(255, 255, 255, 0.65);">
-            {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
+            {{ lp.tokenYSymbol }} {{ t('per') }} {{ lp.tokenXSymbol }}
           </div>
           <div class="text-xs" style="color:rgba(255, 255, 255, 0.45);">
             {{ t('price_reached_$symbol', { symbol: lp.tokenYSymbol }) }}

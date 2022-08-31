@@ -17,7 +17,7 @@ export default defineComponent({
     const importNoticeVisible = ref(false)
     const registerModalVisible = computed(() => store.state.registerModalVisible)
     const isPrivateKeyValid = computed(() => {
-      return /[a-zA-Z0-9]{64}/gi.test(privateKey.value)
+      return /[a-fA-F0-9]{64}/gi.test(privateKey.value)
     })
     const hidenRegisterModal = () => store.commit('updateRegisterModalVisible', false)
     const handleRegister = () => {

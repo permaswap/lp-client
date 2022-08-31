@@ -22,10 +22,10 @@ store.commit('clearLps')
 
 <template>
   <div class="bg-black text-white">
-    <Header />
+    <Header :select-overview="!addPoolModalVisible && !selectedLp" />
     <AccountModal />
     <RigisterModal />
-    <div style="min-height:700px;">
+    <div style="min-height:700px;" class="mt-20">
       <ClosePoolModal v-if="selectedLp" :lp="selectedLp" @back="selectedLp = null" />
       <Overview v-else-if="!addPoolModalVisible" @selectLp="selectLp" />
       <AddPoolModal v-else />

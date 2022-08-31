@@ -30,27 +30,29 @@ export default defineComponent({
 
 <template>
   <div style="width:864px;" class="mx-auto">
-    <div style="font-size: 20px;" class="mb-6">
-      {{ t('pool_overview') }}
+    <div style="font-size: 20px;" class="mb-6 flex flex-row items-center justify-between">
+      <div>{{ t('pool_overview') }}</div>
+
+      <div class="flex flex-row items-center">
+        <a
+          v-if="account"
+          class="text-sm px-4 py-1 border-box"
+          style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
+          href="https://permaswap.network/#/nft"
+          target="_blank">{{ t('collect_nft') }}</a>
+        <div
+          class="text-sm px-4 py-1 border-box ml-6 cursor-pointer flex flex-row items-center"
+          style="color: #000;background: #79D483;border-radius: 8px;"
+          @click="showAddPoolModal"
+        >
+          <img src="@/images/plus.png" class="w-2 h-2 mr-2">
+          {{ t('new_position') }}
+        </div>
+      </div>
     </div>
     <div style="background: #161E1B;border-radius: 24px;" class="p-4">
       <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span>{{ t('my_pool') }} {{ lps.length ? `(${lps.length})` : '' }}</span>
-        <div class="flex flex-row items-center">
-          <a
-            v-if="account"
-            class="text-sm px-4 py-1 border-box"
-            style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
-            href="https://permaswap.network/#/nft"
-            target="_blank">{{ t('collect_nft') }}</a>
-          <div
-            class="text-sm px-4 py-1 border-box ml-6 cursor-pointer"
-            style="color: #000;background: #79D483;border-radius: 8px;"
-            @click="showAddPoolModal"
-          >
-            {{ t('new_position') }}
-          </div>
-        </div>
       </div>
       <div class="text-sm my-8 text-center" style="color: rgba(255, 255, 255, 0.45);">
         <ul v-if="lps.length && account" class="text-left">

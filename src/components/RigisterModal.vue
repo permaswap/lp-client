@@ -158,7 +158,7 @@ border-radius: 24px;z-index: 9;">
           target="_blank">{{ t('buy_nfts') }}</a>
       </div>
     </div>
-    <ul class="text-sm mb-6" style="color: rgba(255, 255, 255, 0.65); list-style-type: circle;margin-left: 16px;">
+    <ul class="text-sm mb-6" style="color: rgba(255, 255, 255, 0.65); list-style-type: disc;margin-left: 16px;">
       <li class="mb-2" style="color: #FFC53D;">
         {{ t('import_warn_1') }}
       </li>

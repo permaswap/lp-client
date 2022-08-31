@@ -4,6 +4,12 @@ import { computed, defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
+  props: {
+    selectOverview: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup () {
     const store = useStore()
     const { t } = useI18n()
@@ -27,7 +33,7 @@ export default defineComponent({
     class="flex flex-row items-center justify-between px-16 py-6 relative"
     style="background: #000A06;box-shadow: 0px 2px 24px rgba(24, 59, 33, 0.16);">
     <img class="h-8" src="@/images/logo.png">
-    <div class="text-base" style="color: rgba(255, 255, 255, 0.85);">
+    <div class="text-base" :style="selectOverview ? 'color: #79D483;' : 'color: rgba(255, 255, 255, 0.85);'">
       {{ t('pool_overview') }}
     </div>
     <div

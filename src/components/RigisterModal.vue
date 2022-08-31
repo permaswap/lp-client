@@ -177,8 +177,8 @@ border-radius: 24px;z-index: 9;">
     <div class="mb-8">
       <div class="mb-4 flex flex-row items-center">
         <div>{{ t('import_pk') }}</div>
-        <div class="ml-2 relative" @mouseover="importNoticeVisible = true" @mouseleave="importNoticeVisible = false">
-          <img src="@/images/warning.png" class="cursor-pointer">
+        <div class="ml-2 relative flex flex-row items-center" @mouseover="importNoticeVisible = true" @mouseleave="importNoticeVisible = false">
+          <img src="@/images/warning.png" class="cursor-pointer" style="width:13px;">
           <div
             v-if="importNoticeVisible"
             class="absolute border-box p-3 text-xs cursor-pointer"

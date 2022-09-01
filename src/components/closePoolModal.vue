@@ -113,16 +113,16 @@ export default defineComponent({
             <span>{{ t('liquidity') }}</span>
             <span>{{ totalPrice ? `$${totalPrice}` : '-' }}</span>
           </div>
-          <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
+          <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" />
+              <TokenLogo :symbol="lp.tokenXSymbol" class="mr-2" style="width:18px;height:18px;" />
               <span>Pooled {{ lp.tokenXSymbol }}</span>
             </div>
             <span>{{ amountX ? amountX : '-' }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" />
+              <TokenLogo :symbol="lp.tokenYSymbol" class="mr-2" style="width:18px;height:18px;" />
               <span>Pooled {{ lp.tokenYSymbol }}</span>
             </div>
             <span>{{ amountY ? amountY : '-' }}</span>
@@ -176,7 +176,7 @@ export default defineComponent({
         <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">
           {{ t('current_price') }}
         </div>
-        <div class="text-white my-1" style="font-size: 20px;">
+        <div class="text-white my-1" style="font-size: 20px;color:rgba(255, 255, 255, 0.85);">
           {{ currentPrice }} {{ lp.tokenYSymbol }} {{ t('per') }} {{ lp.tokenXSymbol }}
         </div>
         <div class="text-xs" style="color:rgba(255, 255, 255, 0.65);">

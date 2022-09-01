@@ -431,7 +431,7 @@ export default defineComponent({
           <div style="color: rgba(255, 255, 255, 0.65);">
             {{ t('current_price') }}
           </div>
-          <div class="my-2" style="font-size:20px;">
+          <div class="my-2" style="font-size:20px;color: rgba(255, 255, 255, 0.85);">
             {{ currentPrice }} {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
           </div>
           <div style="color: rgba(255, 255, 255, 0.65);">

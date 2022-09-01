@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Space Gtotesk Light';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./fonts/SpaceGrotesk-Light.ttf');
+}
+@font-face {
+  font-family: 'Space Grotesk Regular';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/SpaceGrotesk-Regular.ttf');
+}
+@font-face {
+  font-family: 'Space Gtotesk Medium';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./fonts/SpaceGrotesk-Medium.ttf');
+}
+@font-face {
+  font-family: 'Space Gtotesk SemiBold';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./fonts/SpaceGrotesk-SemiBold.ttf');
+}
+@font-face {
+  font-family: 'Space Gtotesk Bold';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/SpaceGrotesk-Bold.ttf');
+}
+
+body {
+  font-family:
+    'Space Grotesk Regular',
+    system-ui,
+    -apple-system, /* Firefox supports this but not yet `system-ui` */
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji';
+}
+.el-message {
+  top: 102px !important;
+}
+.el-message--success{
+  background: rgba(82, 199, 99, 0.2) !important;
+  border: 1px solid rgba(82, 199, 99, 0.2) !important;
+}
+.el-message--success .el-message__content {
+  color: #FFFFFF !important;
+}

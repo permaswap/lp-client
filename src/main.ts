@@ -3,7 +3,7 @@ import router from './router'
 import App from './App.vue'
 import store, { vuexStoreKey } from './store'
 import i18n from './i18n'
-import './index.css'
+import './style/index.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 

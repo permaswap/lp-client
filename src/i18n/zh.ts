@@ -22,6 +22,7 @@ const messages = {
   registration_node: '注册节点',
   close_lp_node: '关闭 LP 节点',
   deposit: '充值',
+  deposit_2: '充值  ↗︎',
   disconnect_notice: '关闭 LP 节点后，您将无法获得 PSN 奖励！',
   close_lp_notice: '关闭 LP 节点后，您将无法获得 PSN 奖励！但您可以再次新增仓位',
   max: '最大',

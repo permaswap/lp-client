@@ -22,6 +22,7 @@ const messages = {
   registration_node: 'Registration node',
   close_lp_node: 'Close LP Node',
   deposit: 'Deposit',
+  deposit_2: 'Deposit  ↗︎',
   disconnect_notice: "You won't get PSN bonus, after closing the Node!",
   close_lp_notice: "After closing LP node, you won't get PSN bonus! But you could add new position next time.",
   max: 'Max',

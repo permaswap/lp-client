@@ -524,6 +524,12 @@ export default defineComponent({
         >
           {{ t(btnMessage) }}
         </div>
+        <div
+          v-if="btnMessage !== 'sign_up' && btnMessage !== 'preview' && btnMessage !== 'enter_amount'"
+          class="text-right text-xs mt-1"
+        >
+          <a href="https://app.everpay.io/deposit" target="_blank" style="color: #D3B078;">{{ t('deposit_2') }}</a>
+        </div>
       </div>
     </div>
     <PairModal

@@ -9,7 +9,7 @@ const messages = {
   balance_on_everpay: 'Balance on everPay',
   collect_nft: 'Collect NFT',
   pls_paste_pk: 'Please paste your private key',
-  buy_nfts: 'Buy NFTs',
+  buy_nfts: 'Buy Now  ↗︎',
   pk_notice: 'Expected private key to be a string with length 64 and a-f0-9 characters',
   max_price: 'Max Price',
   select_pair: 'Select a Pair',

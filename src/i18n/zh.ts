@@ -9,7 +9,7 @@ const messages = {
   balance_on_everpay: 'everPay 上的余额',
   collect_nft: '收藏 NFT',
   pls_paste_pk: '请输入或粘贴私钥',
-  buy_nfts: '购买 NFTs',
+  buy_nfts: '购买 NFTs  ↗︎',
   pk_notice: '私钥为长度64位的a-f0-9字符串',
   max_price: '最高兑换率',
   select_pair: '选择交易对',

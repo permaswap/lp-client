@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AccountModal from '@/components/AccountModal.vue'
@@ -11,6 +11,7 @@ import AddPoolModal from '../components/AddPoolModal.vue'
 import ClosePoolModal from '../components/closePoolModal.vue'
 
 const store = useStore()
+const account = computed(() => store.state.account)
 const addPoolModalVisible = computed(() => store.state.addPoolModalVisible)
 const selectedLp = ref(null)
 const selectLp = (lp: any) => {
@@ -18,6 +19,13 @@ const selectLp = (lp: any) => {
 }
 store.commit('updateAccount', '')
 store.commit('clearLps')
+
+watch(account, () => {
+  if (account.value === '') {
+    selectedLp.value = null
+    store.commit('updateAddPoolModalVisible', false)
+  }
+})
 </script>
 
 <template>

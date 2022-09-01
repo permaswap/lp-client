@@ -56,7 +56,7 @@ export default defineComponent({
       </div>
       <div class="text-sm my-8 text-center" style="color: rgba(255, 255, 255, 0.45);">
         <ul v-if="lps.length && account" class="text-left">
-          <li class="flex flex-row mb-2 px-4">
+          <li class="flex flex-row mb-4 px-4">
             <div style="width: 160px;margin-right:35px;">
               {{ t('name') }}
             </div>
@@ -72,7 +72,7 @@ export default defineComponent({
           <li
             v-for="(lp, index) in lps"
             :key="index"
-            class="flex flex-row items-center p-4 cursor-pointer item"
+            class="flex flex-row items-center p-4 mb-4 cursor-pointer item"
             style="border-radius: 12px;"
             @click="$emit('selectLp', lp)"
           >

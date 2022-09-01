@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n'
 import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   components: { CloseConfirmModal, Range, TokenLogo },
@@ -27,6 +28,12 @@ export default defineComponent({
       sendRemove(props.lp)
       store.commit('removeLp', props.lp)
       context.emit('back')
+      ElMessage({
+        showClose: true,
+        message: t('close_lp_successful'),
+        type: 'success',
+        duration: 3000
+      })
     }
     const { t } = useI18n()
     const inRange = ref(true)

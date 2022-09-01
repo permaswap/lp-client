@@ -57,7 +57,9 @@ const messages = {
   insufficient_$symbol: 'Insufficient {symbol} Balance',
   back_to_overview: 'Back to Pool Overview',
   selected_range: 'Selected Range',
-  price_reached_$symbol: 'Your position will be 100% {symbol} at this price.'
+  price_reached_$symbol: 'Your position will be 100% {symbol} at this price.',
+  add_successful: 'Add successful!',
+  close_lp_successful: 'LP Node Closed!'
 }
 
 export default messages

@@ -249,7 +249,7 @@ export default defineComponent({
       store.commit('updateAddPoolModalVisible', false)
       ElMessage({
         showClose: true,
-        message: 'Add successful',
+        message: t('add_successful'),
         type: 'success',
         duration: 3000
       })

@@ -128,7 +128,7 @@ export default defineComponent({
         <img class="cursor-pointer" src="@/images/close.png" @click="hidenAccountModal">
       </div>
       <div v-if="account" style="background:rgba(24, 59, 33, 0.3)" class="py-6 px-5">
-        <div class="flex flex-row mb-4" style="background: #161E1B;height:126px;border-radius: 12px;">
+        <div class="flex flex-row mb-4 relative" style="background: #161E1B;height:126px;border-radius: 12px;">
           <div class="flex flex-col items-center" style="margin:24px 70px 14px;">
             <div style="font-size:24px;" class="mb-2">
               -
@@ -152,6 +152,7 @@ export default defineComponent({
               {{ t('buy_nfts') }}
             </a>
           </div>
+          <img class="absolute right-0 top-0" style="height:126px;" src="@/images/background.png">
         </div>
         <div class="flex flex-row items-center justify-between">
           <div
@@ -162,7 +163,7 @@ export default defineComponent({
             <div
               v-if="copyedNoticeVisible"
               class="absolute py-1 px-4 text-sm"
-              style="left:50%;top:-48px;transform: translateX(-50%);color: #52C763;background: rgba(54, 63, 59, 0.65);border-radius: 6px;">
+              style="left:50%;top:-48px;transform: translateX(-50%);color: #79D483;background: rgba(54, 63, 59, 0.65);border-radius: 6px;">
               {{ t('replicated') }}
             </div>
           </div>
@@ -186,7 +187,9 @@ export default defineComponent({
       <ul class="p-6 text-sm" style="color: rgba(255, 255, 255, 0.85);">
         <li class="mb-4">
           <div class="flex flex-row items-center cursor-pointer">
-            <img class="w-4 mr-3" src="@/images/lang.png">
+            <div class="flex flex-col items-center mr-3" style="width: 18px;">
+              <img src="@/images/lang.png" style="width:17px;height:17px;">
+            </div>
             <div class="flex flex-row items-center" @click="localesOpen = !localesOpen">
               <span>{{ locale === 'zh' ? '中文' : 'English' }}</span>
               <img src="@/images/arrow-top.png" class="transform w-5 ml-1" :class="localesOpen ? '' : 'rotate-180'">
@@ -212,12 +215,16 @@ export default defineComponent({
             class="flex flex-row items-center"
             href="https://mirror.xyz/permaswap.eth/ustZcDgavlm4xmYI26thEAj8W2cXlZpRkG5Jqz0iS14"
             target="_blank">
-            <img class="w-4 mr-3" src="@/images/paper.png">
+            <div class="flex flex-col items-center mr-3" style="width: 18px;">
+              <img src="@/images/paper.png" style="height:17px;width:14px;">
+            </div>
             <span>{{ t('whitepaper') }}</span>
           </a>
         </li>
         <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="showDisconnectModal">
-          <img class="w-4 mr-3" src="@/images/disconnect.png">
+          <div class="flex flex-col items-center mr-3" style="width: 18px;">
+            <img src="@/images/disconnect.png" style="height:16px;">
+          </div>
           <span>{{ t('disconnect') }}</span>
         </li>
       </ul>

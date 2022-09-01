@@ -21,7 +21,7 @@ store.commit('clearLps')
 </script>
 
 <template>
-  <div class="bg-black text-white">
+  <div class="text-white" style="background: #000a06;">
     <Header :select-overview="!addPoolModalVisible && !selectedLp" />
     <AccountModal />
     <RigisterModal />

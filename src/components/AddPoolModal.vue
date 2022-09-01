@@ -380,14 +380,15 @@ export default defineComponent({
             style="background: #000A06;border-radius: 12px;">
             <div>
               <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-1 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
+                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
                 {{ tokenX && tokenX.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenXAmount">
-                <span style="color: #5AAD67;">{{ t('max') }}</span> {{ tokenXBalance }}
+                <span style="color: #5AAD67;">{{ t('max') }}</span> <span style="color:rgba(255, 255, 255, 0.65)">{{ tokenXBalance }}</span>
               </div>
             </div>
             <InputArea
+              class="amount-input"
               :input-text="tokenXAmount"
               :input-text-modifiers="{ precise: true }"
               placeholder="0.0"
@@ -398,18 +399,20 @@ export default defineComponent({
           </div>
 
           <div
-            class="px-4 pt-4 pb-3 flex flex-row items-center justify-between"
+            class="px-4 pt-4 pb-3 flex flex-row items-center justify-between relative"
             style="background: #000A06;border-radius: 12px;">
+            <img class="absolute w-6 h-6" src="@/images/deposit-amount-plus.png" style="left:50%;transform:translateX(-50%);top:-16px;">
             <div>
               <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-1 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
+                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
                 {{ tokenY && tokenY.symbol }}
               </div>
               <div class="text-xs cursor-pointer" @click="setMaxTokenYAmount">
-                <span style="color: #5AAD67;">{{ t('max') }}</span> {{ tokenYBalance }}
+                <span style="color: #5AAD67;">{{ t('max') }}</span> <span style="color:rgba(255, 255, 255, 0.65)">{{ tokenYBalance }}</span>
               </div>
             </div>
             <InputArea
+              class="amount-input"
               :input-text="tokenYAmount"
               :input-text-modifiers="{ precise: true }"
               placeholder="0.0"
@@ -542,3 +545,11 @@ export default defineComponent({
     />
   </div>
 </template>
+
+<style lang="scss">
+.amount-input {
+  ::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+  }
+}
+</style>

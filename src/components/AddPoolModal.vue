@@ -20,6 +20,7 @@ export default defineComponent({
     const highPrice = ref('∞')
     const currentPrice = ref('')
     const pairModalVisible = ref(false)
+    const dataLoading = ref(true)
     const { t } = useI18n()
     const hideAddPoolModal = () => {
       store.commit('updateAddPoolModalVisible', false)
@@ -105,6 +106,7 @@ export default defineComponent({
       tokenYBalance.value = await everpay.balance({ account: account.value, symbol: (tokenY.value as any).symbol })
     }
     onMounted(async () => {
+      dataLoading.value = true
       info = await everpay.info()
       swapInfo = await getSwapInfo()
       pairs.value = getPairs(info.tokenList, swapInfo.poolList) as any
@@ -115,6 +117,7 @@ export default defineComponent({
       updateBalances()
       const { poolId } = getPoolData(swapInfo.poolList)
       currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
+      dataLoading.value = false
     })
     const getPoolData = (poolList: any) => {
       const poolListEntires = Object.entries(poolList)
@@ -289,6 +292,7 @@ export default defineComponent({
       return formatInputPrecision(toBN(1).dividedBy(currentPrice.value).toString(), 8)
     })
     return {
+      dataLoading,
       tokenX,
       tokenY,
       tokenXBalance,
@@ -325,7 +329,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <div style="width:864px;background: #161E1B;border-radius: 24px;" class="mx-auto p-8">
+  <div style="width:864px;background: #161E1B;border-radius: 24px;" class="mx-auto p-8 relative">
+    <div
+      v-if="dataLoading"
+      class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center"
+      style="background: rgba(22, 30, 27, 0.6);z-index:11;"
+    >
+      <img src="@/images/icon-loading.png" class="w-10 h-10 animate-spin">
+    </div>
     <div
       class="flex flex-row items-center justify-between pb-4 mb-6"
       style="border-bottom:1px solid rgba(255, 255, 255, 0.08);">

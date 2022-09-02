@@ -146,7 +146,7 @@ export default defineComponent({
     <div
       class="absolute border-box p-8"
       style="width:480px;height: 610px; top: 162px;left:50%;transform: translateX(-50%);background: #242D2A;
-  border-radius: 24px;z-index: 9;">
+  border-radius: 24px;z-index: 9;box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);">
       <div class="pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="flex flex-row items-center justify-between">
           <span style="font-size: 20px;" class="mb-2">{{ t('registration_node') }}</span>

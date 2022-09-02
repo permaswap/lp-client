@@ -6,6 +6,7 @@ import ClipboardJS from 'clipboard'
 import { useI18n } from 'vue-i18n'
 import { savedI18nStorageKey } from '@/constants'
 import DisconnectModal from './DisconnectModal.vue'
+import { checkParentsHas } from '@/lib/util'
 
 export default defineComponent({
   components: { DisconnectModal },
@@ -87,6 +88,15 @@ export default defineComponent({
           copyedNoticeVisible.value = false
         }, 2000)
       })
+
+      const isAccountModal = checkParentsHas('account-modal')
+      const isAccountModalTrigger = checkParentsHas('account-modal-trigger')
+
+      document.addEventListener('click', (e) => {
+        if (!isAccountModal(e.target as any) && !isAccountModalTrigger(e.target as any)) {
+          hidenAccountModal()
+        }
+      })
     })
 
     onUnmounted(() => {
@@ -120,7 +130,7 @@ export default defineComponent({
     :class="accountModalVisible ? 'block' : 'hidden'">
     <div
       style="background: #242D2A;border-radius: 12px;right:64px;top: 76px;width:440px;"
-      class="absolute">
+      class="absolute account-modal">
       <div class="flex flex-row items-center justify-between pt-6 px-6 pb-4">
         <div style="font-size:20px;">
           {{ t('balance_on_everpay') }}

@@ -38,7 +38,7 @@ export default defineComponent({
         {{ t('pool_overview') }}
       </div>
       <div
-        class="flex flex-row items-center py-2 px-5 rounded-lg cursor-pointer"
+        class="flex flex-row items-center py-2 px-5 rounded-lg cursor-pointer account-modal-trigger"
         style="background: #183B21;border: 1px solid rgba(121, 212, 131, 0.25);"
         @click="showAccountModal">
         <img v-if="!account" class="h-4" src="@/images/person.png">

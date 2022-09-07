@@ -126,7 +126,7 @@ export default defineComponent({
 <template>
   <div
     class="fixed"
-    style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;"
+    style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;z-index:20;"
     :class="accountModalVisible ? 'block' : 'hidden'">
     <div
       style="background: #242D2A;border-radius: 12px;right:64px;top: 76px;width:440px;"

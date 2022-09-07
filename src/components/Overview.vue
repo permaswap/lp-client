@@ -1,10 +1,11 @@
 <script>
 import { useStore } from '@/store'
-import { computed, defineComponent } from 'vue'
+import { ref, computed, defineComponent, onMounted } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
-import { isInRange } from '@/lib/util'
+import { toBN, isInRange } from '@/lib/util'
 import { useI18n } from 'vue-i18n'
+import { getStats } from '@/lib/swap'
 
 export default defineComponent({
   components: { TokenLogo, Range },
@@ -16,11 +17,31 @@ export default defineComponent({
     const showRegisterModal = () => store.commit('updateRegisterModalVisible', true)
     const showAddPoolModal = () => store.commit('updateAddPoolModalVisible', true)
     const lps = computed(() => store.state.lps)
+    const volumesStack = ref({})
+    const tvlsStack = ref({})
+
+    onMounted(async () => {
+      if (lps.value.length) {
+        const result = await getStats(account.value)
+        console.log('result', result)
+        volumesStack.value = {}
+        tvlsStack.value = {}
+        result.volumes.forEach(volumeData => {
+          volumesStack.value[volumeData.lpID] = toBN(volumeData.volumeInUSD).toFixed(2)
+        })
+        result.tvls.forEach(tvlData => {
+          tvlsStack.value[tvlData.lpID] = toBN(tvlData.tvlInUSD).toFixed(2)
+        })
+      }
+    })
+
     return {
       t,
       lps,
       isInRange,
       account,
+      volumesStack,
+      tvlsStack,
       showAddPoolModal,
       showRegisterModal
     }
@@ -74,7 +95,7 @@ export default defineComponent({
             :key="index"
             class="flex flex-row items-center p-4 mb-4 cursor-pointer item"
             style="border-radius: 12px;"
-            @click="$emit('selectLp', lp)"
+            @click="$emit('selectLp', lp, volumesStack[lp.lpId] ? volumesStack[lp.lpId] : '-', tvlsStack[lp.lpId] ? tvlsStack[lp.lpId] : '-')"
           >
             <div class="text-white flex flex-row items-center" style="width: 160px;margin-right:35px;">
               <div style="width:40px;height:40px;" class="relative mr-2">
@@ -89,10 +110,10 @@ export default defineComponent({
               <div>Max:{{ lp.highPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
             </div>
             <div class="text-right mr-8 text-white" style="width:100px;">
-              -
+              {{ volumesStack[lp.lpId] ? volumesStack[lp.lpId] : '-' }}
             </div>
             <div class="text-right mr-8 text-white" style="width:100px;">
-              -
+              {{ tvlsStack[lp.lpId] ? tvlsStack[lp.lpId] : '-' }}
             </div>
             <div class="flex flex-row items-center justify-end flex-1">
               <Range :in-range="isInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />

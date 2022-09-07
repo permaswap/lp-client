@@ -26,7 +26,12 @@ export default createStore<State>({
     updateAddPoolModalVisible (state, visible) {
       state.addPoolModalVisible = visible
     },
+    // 相同 lpId 只能有一个
     addLp (state, lp) {
+      const foundIndex = state.lps.findIndex(l => l.lpId === lp.lpId)
+      if (foundIndex !== -1) {
+        state.lps.splice(foundIndex, 1)
+      }
       state.lps.push(lp)
     },
     updateLp (state, lp) {

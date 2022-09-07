@@ -1,6 +1,6 @@
 <script>
 import { getAmountXY } from '@/lib/lp'
-import { getMarketPrices, getPoolPrice, sendRemove } from '@/lib/swap'
+import { getPoolPrice, sendRemove } from '@/lib/swap'
 import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 import { useStore } from '@/store'
 import { defineComponent, onMounted, ref, computed } from 'vue'
@@ -16,6 +16,14 @@ export default defineComponent({
     lp: {
       type: Object,
       default: () => ({})
+    },
+    volume: {
+      type: String,
+      default: ''
+    },
+    tvl: {
+      type: String,
+      default: ''
     }
   },
   emits: ['back'],
@@ -39,23 +47,23 @@ export default defineComponent({
     const inRange = ref(true)
     const amountX = ref('')
     const amountY = ref('')
-    const totalPrice = ref('')
+    // const totalPrice = ref('')
 
     onMounted(async () => {
       const amountXY = getAmountXY(props.lp.liquidity, props.lp.lowSqrtPrice, props.lp.currentSqrtPrice, props.lp.highSqrtPrice)
       amountX.value = toBN(amountXY.amountX).dividedBy(toBN(10).pow(props.lp.tokenXDecimal))
       amountY.value = toBN(amountXY.amountY).dividedBy(toBN(10).pow(props.lp.tokenYDecimal))
-      const marketPrices = await getMarketPrices('USD', [props.lp.tokenXSymbol, props.lp.tokenYSymbol])
-      totalPrice.value = marketPrices.reduce((memo, item, index) => {
-        let itemAmountPrice = 0
-        if (item.symbol.toLowerCase() === props.lp.tokenXSymbol.toLowerCase()) {
-          itemAmountPrice = item.price * amountX.value
-        } else if (item.symbol.toLowerCase() === props.lp.tokenYSymbol.toLowerCase()) {
-          itemAmountPrice = item.price * amountY.value
-        }
-        console.log('itemAmountPrice', itemAmountPrice)
-        return memo + itemAmountPrice
-      }, 0)
+      // const marketPrices = await getMarketPrices('USD', [props.lp.tokenXSymbol, props.lp.tokenYSymbol])
+      // totalPrice.value = marketPrices.reduce((memo, item, index) => {
+      //   let itemAmountPrice = 0
+      //   if (item.symbol.toLowerCase() === props.lp.tokenXSymbol.toLowerCase()) {
+      //     itemAmountPrice = item.price * amountX.value
+      //   } else if (item.symbol.toLowerCase() === props.lp.tokenYSymbol.toLowerCase()) {
+      //     itemAmountPrice = item.price * amountY.value
+      //   }
+      //   console.log('itemAmountPrice', itemAmountPrice)
+      //   return memo + itemAmountPrice
+      // }, 0)
       currentPrice.value = await getPoolPrice(props.lp.poolId, props.lp.tokenXDecimal, props.lp.tokenYDecimal)
       inRange.value = isInRange(currentPrice.value, props.lp.lowPrice, props.lp.highPrice)
     })
@@ -69,7 +77,7 @@ export default defineComponent({
       amountX,
       amountY,
       inRange,
-      totalPrice,
+      // totalPrice,
       confirmClose,
       closeConfirmModalVisible,
       currentPrice,
@@ -118,7 +126,7 @@ export default defineComponent({
             class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
             <span>{{ t('liquidity') }}</span>
-            <span>{{ totalPrice ? `$${totalPrice}` : '-' }}</span>
+            <span>{{ tvl }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">
@@ -139,7 +147,7 @@ export default defineComponent({
           class="flex flex-row items-center justify-between text-sm p-4"
           style="background: #161E1B;border-radius: 12px;">
           <span>{{ t('volume') }}(24h)</span>
-          <span>{{ totalPrice ? `$${totalPrice}` : '-' }}</span>
+          <span>{{ volume }}</span>
         </div>
       </div>
     </div>

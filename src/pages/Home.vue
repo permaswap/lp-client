@@ -14,8 +14,12 @@ const store = useStore()
 const account = computed(() => store.state.account)
 const addPoolModalVisible = computed(() => store.state.addPoolModalVisible)
 const selectedLp = ref(null)
-const selectLp = (lp: any) => {
+const selectedVolume = ref('-')
+const selectedTvl = ref('-')
+const selectLp = (lp: any, volume: string, tvl: string) => {
   selectedLp.value = lp
+  selectedVolume.value = volume
+  selectedTvl.value = tvl
 }
 store.commit('updateAccount', '')
 store.commit('clearLps')
@@ -34,7 +38,12 @@ watch(account, () => {
     <AccountModal />
     <RigisterModal />
     <div style="min-height:700px;" class="mt-20">
-      <ClosePoolModal v-if="selectedLp" :lp="selectedLp" @back="selectedLp = null" />
+      <ClosePoolModal
+        v-if="selectedLp"
+        :lp="selectedLp"
+        :volume="selectedVolume"
+        :tvl="selectedTvl"
+        @back="selectedLp = null" />
       <Overview v-else-if="!addPoolModalVisible" @selectLp="selectLp" />
       <AddPoolModal v-else />
     </div>

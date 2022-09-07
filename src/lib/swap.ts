@@ -39,6 +39,15 @@ export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenY
   return formatInputPrecision(toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString(), 8)
 }
 
+export const getStats = async (account: string): Promise<any> => {
+  const url = `https://router0-dev.permaswap.network/stats?accid=${account}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
 export interface InitSocketParams {
   handleError: any
   handleSalt: any

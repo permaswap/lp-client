@@ -36,8 +36,8 @@ export default defineComponent({
         url: 'https://twitter.com/permaswap'
       },
       {
-        name: 'medium',
-        url: 'https://medium.com/everfinance'
+        name: 'discord',
+        url: 'https://discord.gg/WM5MQZGVPF'
       },
       {
         name: 'telegram',

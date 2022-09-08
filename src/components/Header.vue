@@ -32,7 +32,7 @@ export default defineComponent({
   <div class="h-20">
     <div
       class="flex flex-row items-center justify-between px-16 py-6 fixed w-full"
-      style="background: #000A06;box-shadow: 0px 2px 24px rgba(24, 59, 33, 0.16);">
+      style="background: #000A06;box-shadow: 0px 2px 24px rgba(24, 59, 33, 0.16);z-index: 20;">
       <img class="h-8" src="@/images/logo.png">
       <div class="text-base" :style="selectOverview ? 'color: #79D483;' : 'color: rgba(255, 255, 255, 0.85);'">
         {{ t('pool_overview') }}

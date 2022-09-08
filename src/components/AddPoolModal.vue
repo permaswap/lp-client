@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
-import { getLpId, getPoolPrice, getSwapInfo, sendAdd } from '@/lib/swap'
+import { getLpId, getPoolPrice, getSwapInfo, sendAdd, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
 import { formatInputPrecision, toBN } from '@/lib/util'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
@@ -69,7 +69,7 @@ export default defineComponent({
     })
     const everpay = new Everpay({
       chainType: 'ethereum' as any,
-      debug: true
+      debug: !isProd
     })
     let info = null as any
     let swapInfo = null as any
@@ -94,6 +94,7 @@ export default defineComponent({
     }
     const getPairs = (tokenList: any, poolList: any) => {
       const poolListValues = Object.values(poolList)
+      console.log('poolListValues', poolListValues, tokenList)
       return poolListValues.map((poolListValue: any) => {
         return {
           tokenX: tokenList.find((t: any) => t.tag === poolListValue.tokenXTag),
@@ -110,6 +111,7 @@ export default defineComponent({
       info = await everpay.info()
       swapInfo = await getSwapInfo()
       pairs.value = getPairs(info.tokenList, swapInfo.poolList) as any
+      console.log('pairs.value', pairs.value)
       tokenXs.value = getTokenXs(info.tokenList, swapInfo.poolList)
       tokenX.value = tokenXs.value[0]
       tokenYs.value = getTokenYs(info.tokenList, swapInfo.poolList, tokenX.value)
@@ -515,7 +517,7 @@ export default defineComponent({
           v-if="invalidRange"
           class="flex flex-row items-center py-1 px-3 text-xs mb-4"
           style="background: rgba(255, 197, 61, 0.2);border: 1px solid rgba(255, 197, 61, 0.2);border-radius: 8px;">
-          <img src="@/images/warning.png" class="ml-1 mr-2">
+          <img src="@/images/warning.png" class="ml-1 mr-2 w-3">
           {{ t(invalidRange) }}
         </div>
         <div

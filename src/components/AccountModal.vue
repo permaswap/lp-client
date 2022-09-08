@@ -18,6 +18,14 @@ export default defineComponent({
     const accountModalVisible = computed(() => store.state.accountModalVisible)
     const copyedNoticeVisible = ref(false)
     const { locale } = useI18n({ useScope: 'global' })
+    const nftNums = computed(() => {
+      const holderToNFTs = store.state.holderToNFTs
+      if (holderToNFTs[account.value]) {
+        return holderToNFTs[account.value].length
+      } else {
+        return '0'
+      }
+    })
     const links1 = [
       {
         name: 'github',
@@ -106,6 +114,7 @@ export default defineComponent({
     return {
       showDisconnectModal,
       t,
+      nftNums,
       disconnectConfirmModalVisible,
       locale,
       account,
@@ -149,7 +158,7 @@ export default defineComponent({
           </div>
           <div class="flex flex-col items-center" style="margin:24px 0 14px;">
             <div style="font-size:24px;" class="mb-2">
-              0
+              {{ nftNums }}
             </div>
             <div class="text-sm mb-1.5">
               NFT

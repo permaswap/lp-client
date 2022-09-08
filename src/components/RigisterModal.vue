@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
 import ethereumLib from 'everpay/esm/lib/ethereum'
 import { computed, defineComponent, ref } from 'vue'
@@ -8,6 +8,7 @@ import { toBN } from '@/lib/util'
 import { swapX, swapY } from '@/lib/math'
 import Everpay from 'everpay'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus/lib/components'
 
 export default defineComponent({
   setup () {
@@ -25,6 +26,18 @@ export default defineComponent({
         return
       }
       const wallet = new Wallet(privateKey.value)
+      const holderToNFTs = store.state.holderToNFTs
+
+      if (!holderToNFTs[wallet.address]) {
+        ElMessage({
+          showClose: true,
+          message: t('need_nft'),
+          type: 'error',
+          duration: 3000
+        })
+        return
+      }
+
       initSocket({
         handleError (error: any) {
           console.log('error', error)
@@ -112,7 +125,7 @@ export default defineComponent({
               account: signer.address,
               ethConnectedSigner: signer,
               chainType: 'ethereum' as any,
-              debug: true
+              debug: !isProd
             })
 
             const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)

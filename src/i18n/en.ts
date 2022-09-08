@@ -59,7 +59,8 @@ const messages = {
   selected_range: 'Selected Range',
   price_reached_$symbol: 'Your position will be 100% {symbol} at this price.',
   add_successful: 'Add successful!',
-  close_lp_successful: 'LP Node Closed!'
+  close_lp_successful: 'LP Node Closed!',
+  need_nft: 'Need NFT to register'
 }
 
 export default messages

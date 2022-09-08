@@ -7,5 +7,13 @@ module.exports = {
         type: 'javascript/auto'
       }]
     }
+  },
+  pluginOptions: {
+    electronBuilder: {
+      builderOptions: {
+        productName: 'Permaswap',
+        icon: './src/build/icons/icon.png'
+      }
+    }
   }
 }

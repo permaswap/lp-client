@@ -26,6 +26,13 @@ export default createStore<State>({
     updateAddPoolModalVisible (state, visible) {
       state.addPoolModalVisible = visible
     },
+    updateHolderToNFTs (state, holderToNFTs: any) {
+      if (holderToNFTs != null) {
+        state.holderToNFTs = holderToNFTs
+      } else {
+        state.holderToNFTs = {}
+      }
+    },
     // 相同 lpId 只能有一个
     addLp (state, lp) {
       const foundIndex = state.lps.findIndex(l => l.lpId === lp.lpId)

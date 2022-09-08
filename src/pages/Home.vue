@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AccountModal from '@/components/AccountModal.vue'
@@ -9,6 +9,7 @@ import Overview from '@/components/Overview.vue'
 import { computed } from '@vue/reactivity'
 import AddPoolModal from '../components/AddPoolModal.vue'
 import ClosePoolModal from '../components/closePoolModal.vue'
+import { getNfts } from '@/lib/swap'
 
 const store = useStore()
 const account = computed(() => store.state.account)
@@ -23,6 +24,11 @@ const selectLp = (lp: any, volume: string, tvl: string) => {
 }
 store.commit('updateAccount', '')
 store.commit('clearLps')
+
+onMounted(async () => {
+  const nftsResult = await getNfts()
+  store.commit('updateHolderToNFTs', nftsResult.holderToNFTs)
+})
 
 watch(account, () => {
   if (account.value === '') {

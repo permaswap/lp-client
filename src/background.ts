@@ -13,8 +13,9 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
+    title: 'Permaswap',
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -23,6 +24,10 @@ async function createWindow () {
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
     }
+  })
+
+  win.on('page-title-updated', function (e) {
+    e.preventDefault()
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

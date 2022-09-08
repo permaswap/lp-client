@@ -9,6 +9,10 @@ export interface CurrencyPriceItem {
   price: string
 }
 
+export const isProd = false
+
+const host = isProd ? 'swap.everpay.io' : 'router0-dev.permaswap.network'
+
 export const getMarketPrices = async (currency: string, symbols: string[]): Promise<CurrencyPriceItem[]> => {
   const priceStack = await redstone.getPrice(symbols)
   return symbols.map(symbol => {
@@ -21,8 +25,17 @@ export const getMarketPrices = async (currency: string, symbols: string[]): Prom
 
 let socket = null as any
 
+export const getNfts = async (): Promise<any> => {
+  const url = `https://${host}/nft`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
 export const getSwapInfo = async (): Promise<string[]> => {
-  const url = 'https://router0-dev.permaswap.network/info'
+  const url = `https://${host}/info`
   const result = await sendRequest({
     url,
     method: 'GET'
@@ -31,7 +44,7 @@ export const getSwapInfo = async (): Promise<string[]> => {
 }
 
 export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenYDecimal: number): Promise<string> => {
-  const url = `https://router0-dev.permaswap.network/pool/${poolId}`
+  const url = `https://${host}/pool/${poolId}`
   const result = await sendRequest({
     url,
     method: 'GET'
@@ -40,7 +53,7 @@ export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenY
 }
 
 export const getStats = async (account: string): Promise<any> => {
-  const url = `https://router0-dev.permaswap.network/stats?accid=${account}`
+  const url = `https://${host}/stats?accid=${account}`
   const result = await sendRequest({
     url,
     method: 'GET'
@@ -56,7 +69,7 @@ export interface InitSocketParams {
 }
 
 export const initSocket = (params: InitSocketParams): void => {
-  socket = new WebSocket('wss://router0-dev.permaswap.network/wslp')
+  socket = new WebSocket(`wss://${host}/wslp`)
   socket.addEventListener('message', (message: any) => {
     console.log(11111, message.data)
     const data = JSON.parse(message.data)

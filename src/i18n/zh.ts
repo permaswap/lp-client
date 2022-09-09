@@ -30,6 +30,8 @@ const messages = {
   new_position: '新仓位',
   disconnect: '断开',
   import_pk: '导入私钥',
+  import_keyfile: '导入 Keyfile',
+  jwk_notice: '不符合 JWK File 格式',
   close_anyway: '仍关闭',
   invalid_range_selected: '选择的范围无效。最小兑换率必须低于最大兑换率',
   invalid_out_range: '您的仓位在市场兑换率变化进入到您设置的范围内之前不被用于进行兑换交易。',

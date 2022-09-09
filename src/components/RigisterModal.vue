@@ -1,8 +1,10 @@
 <script lang="ts">
 import { initSocket, sendRegister, sendSign, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
+import Arweave from 'arweave'
 import ethereumLib from 'everpay/esm/lib/ethereum'
-import { computed, defineComponent, ref } from 'vue'
+import arweaveLib from 'everpay/esm/lib/arweave'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { ethers, Wallet } from 'ethers'
 import { toBN } from '@/lib/util'
 import { swapX, swapY } from '@/lib/math'
@@ -10,25 +12,122 @@ import Everpay from 'everpay'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus/lib/components'
 
+const formatFilename = (name: string) => {
+  if (name.length < 30) {
+    return name
+  }
+  return `${name.slice(0, 15)}...${name.slice(-15)}`
+}
+
 export default defineComponent({
   setup () {
     const store = useStore()
     const { t, locale } = useI18n()
     const privateKey = ref(store.state.privateKey)
     const importNoticeVisible = ref(false)
+    const fileInputRef = ref(null)
+    const selectedFormat = ref('Ethereum')
+    const jwkFileName = ref('')
     const registerModalVisible = computed(() => store.state.registerModalVisible)
     const isPrivateKeyValid = computed(() => {
       return /[a-fA-F0-9]{64}/gi.test(privateKey.value)
     })
+    const isJwkValid = ref(false)
+    let arAddress = ''
+    let arJwk = {}
+
+    // watch(fileList, () => {
+    //   console.log('fileList', fileList.value)
+    //   const reader = new FileReader()
+    //   reader.readAsText(fileList.value[fileList.value.length - 1].raw, 'utf-8')
+    //   reader.onload = (evt) => {
+    //     console.log(evt)
+    //   }
+    // })
+
+    const triggerFileInput = () => {
+      (fileInputRef.value as any).click()
+    }
+
+    const loadFiles = async () => {
+      if ((fileInputRef.value as any)?.files) {
+        for (const file of (fileInputRef.value as any).files) {
+          if (file.type !== 'application/json') continue
+          const reader = new FileReader()
+
+          try {
+            reader.readAsText(file)
+          } catch {
+            ElMessage({
+              showClose: true,
+              message: `There was an error when loading ${file.name}`,
+              type: 'error',
+              duration: 3000
+            })
+          }
+
+          reader.onabort = () =>
+            ElMessage({
+              showClose: true,
+              message: 'File reading was aborted',
+              type: 'error',
+              duration: 3000
+            })
+          reader.onerror = () =>
+            ElMessage({
+              showClose: true,
+              message: 'File reading has failed',
+              type: 'error',
+              duration: 3000
+            })
+          reader.onload = async (e) => {
+            try {
+              const keyfile = JSON.parse(
+                e!.target!.result as string
+              )
+              jwkFileName.value = formatFilename(file.name)
+              const arweave = Arweave.init({})
+              arAddress = await arweave.wallets.jwkToAddress(keyfile)
+              arJwk = keyfile
+              isJwkValid.value = true
+              console.log('arAddress', arAddress)
+            } catch {
+              arAddress = ''
+              arJwk = {}
+              isJwkValid.value = false
+              // ElMessage({
+              //   showClose: true,
+              //   message: 'There was an error when loading a keyfile',
+              //   type: 'error',
+              //   duration: 3000
+              // })
+            }
+          }
+        }
+      }
+    }
+
+    onMounted(() => {
+      (fileInputRef.value as any).addEventListener('change', loadFiles)
+    })
+
     const hidenRegisterModal = () => store.commit('updateRegisterModalVisible', false)
-    const handleRegister = () => {
-      if (!isPrivateKeyValid.value) {
+    const handleRegister = async () => {
+      if ((selectedFormat.value === 'Ethereum' && !isPrivateKeyValid.value) ||
+        (selectedFormat.value === 'Arweave' && !isJwkValid.value)) {
         return
       }
-      const wallet = new Wallet(privateKey.value)
       const holderToNFTs = store.state.holderToNFTs
+      let address = ''
+      if (selectedFormat.value === 'Ethereum') {
+        const wallet = new Wallet(privateKey.value)
+        address = wallet.address
+      } else if (selectedFormat.value === 'Arweave') {
+        address = arAddress
+      }
 
-      if (!holderToNFTs[wallet.address]) {
+      // TODO: 测试 去掉感叹号
+      if (holderToNFTs[address]) {
         ElMessage({
           showClose: true,
           message: t('need_nft'),
@@ -46,14 +145,20 @@ export default defineComponent({
           console.log('open', data)
         },
         async handleSalt (data: any) {
-          const signer = new ethers.Wallet(wallet.privateKey)
           console.log('salt', data.salt)
-          const sig = await ethereumLib.signMessageAsync(signer, wallet.address, data.salt)
+          let sig = ''
+          if (selectedFormat.value === 'Ethereum') {
+            const signer = new Wallet(privateKey.value)
+            sig = await ethereumLib.signMessageAsync(signer, signer.address, data.salt)
+          } else if (selectedFormat.value === 'Arweave') {
+            sig = await arweaveLib.signMessageAsync(arJwk as any, address, data.salt)
+          }
+
           sendRegister({
-            address: wallet.address,
+            address,
             sig
           })
-          store.commit('updateAccount', wallet.address)
+          store.commit('updateAccount', address)
           store.commit('updatePrivateKey', privateKey.value)
           store.commit('updateRegisterModalVisible', false)
         },
@@ -65,11 +170,11 @@ export default defineComponent({
               if (!stack[pathData.lpId]) {
                 stack[pathData.lpId] = {}
               }
-              if (pathData.to.toLowerCase() === wallet.address.toLowerCase()) {
+              if (pathData.to.toLowerCase() === address.toLowerCase()) {
                 stack[pathData.lpId].amountIn = pathData.amount
                 stack[pathData.lpId].tokenTagIn = pathData.tokenTag
               }
-              if (pathData.from.toLowerCase() === wallet.address.toLowerCase()) {
+              if (pathData.from.toLowerCase() === address.toLowerCase()) {
                 stack[pathData.lpId].amountOut = pathData.amount
                 stack[pathData.lpId].tokenTagOut = pathData.tokenTag
               }
@@ -120,17 +225,27 @@ export default defineComponent({
           const validate = validatePathsData(data.paths)
           console.log('validate', validate)
           if (validate) {
-            const signer = new ethers.Wallet(privateKey.value)
-            const everpayWithAccount = new Everpay({
-              account: signer.address,
-              ethConnectedSigner: signer,
-              chainType: 'ethereum' as any,
-              debug: !isProd
-            })
+            let everpayWithAccount: any
+            if (selectedFormat.value === 'Ethereum') {
+              const signer = new ethers.Wallet(privateKey.value)
+              everpayWithAccount = new Everpay({
+                account: signer.address,
+                ethConnectedSigner: signer,
+                chainType: 'ethereum' as any,
+                debug: !isProd
+              })
+            } else if (selectedFormat.value === 'Arweave') {
+              everpayWithAccount = new Everpay({
+                account: address,
+                arJWK: arJwk as any,
+                chainType: 'arweave' as any,
+                debug: !isProd
+              })
+            }
 
             const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
             sendSign({
-              address: wallet.address,
+              address: address,
               bundle: bundleDataWithSigs
             })
           }
@@ -139,6 +254,11 @@ export default defineComponent({
     }
     return {
       t,
+      isJwkValid,
+      jwkFileName,
+      triggerFileInput,
+      fileInputRef,
+      selectedFormat,
       locale,
       registerModalVisible,
       privateKey,
@@ -184,15 +304,28 @@ export default defineComponent({
         <div class="mb-4">
           {{ t('select_format') }}
         </div>
-        <div
-          class="border-box pl-6 text-sm cursor-pointer"
-          style="color: #79D483;width: 196px;height: 38px;line-height:38px;background: #000A06;border: 1px solid #79D483;border-radius: 8px;">
-          Ethereum
+        <div class="flex flex-row items-center justify-between">
+          <div
+            class="border-box pl-6 text-sm cursor-pointer"
+            style="width: 196px;height: 38px;line-height:38px;background: #000A06;border-radius: 8px;"
+            :style="selectedFormat === 'Ethereum' ? 'color: #79D483;border: 1px solid #79D483;' : 'color: rgba(255, 255, 255, 0.65);border: 1px solid rgba(255, 255, 255, 0.65);'"
+            @click="selectedFormat = 'Ethereum'"
+          >
+            Ethereum
+          </div>
+          <div
+            class="border-box pl-6 text-sm cursor-pointer"
+            style="width: 196px;height: 38px;line-height:38px;background: #000A06;border-radius: 8px;"
+            :style="selectedFormat === 'Arweave' ? 'color: #79D483;border: 1px solid #79D483;' : 'color: rgba(255, 255, 255, 0.65);border: 1px solid rgba(255, 255, 255, 0.65);'"
+            @click="selectedFormat = 'Arweave'"
+          >
+            Arweave
+          </div>
         </div>
       </div>
       <div class="mb-8">
         <div class="mb-4 flex flex-row items-center">
-          <div>{{ t('import_pk') }}</div>
+          <div>{{ t(selectedFormat === 'Ethereum' ? 'import_pk' : 'import_keyfile') }}</div>
           <div class="ml-2 relative flex flex-row items-center" @mouseover="importNoticeVisible = true" @mouseleave="importNoticeVisible = false">
             <img src="@/images/warning.png" class="cursor-pointer" style="width:13px;">
             <div
@@ -206,7 +339,7 @@ export default defineComponent({
                 left: -30px;
                 line-height:18px;
               "
-              :style="locale === 'en' ? 'top:-160px;' : 'top:-110px;'"
+              :style="locale === 'en' ? 'top:-180px;' : 'top:-110px;'"
             >
               {{ t('import_notice') }}
               <img
@@ -217,12 +350,46 @@ export default defineComponent({
           </div>
         </div>
         <textarea
+          v-if="selectedFormat === 'Ethereum'"
           v-model="privateKey"
           class="privatekey-area p-3 block m-0"
           style="resize: none;width: 416px;height: 68px;background: #000A06;border-radius: 12px;"
           placeholder="Please paste your private key" />
-        <span v-if="privateKey && !isPrivateKeyValid" style="color: #FF7D69;" class="text-xs">
+        <div
+          v-if="selectedFormat === 'Arweave'"
+          class="px-4 py-3 flex flex-row items-center border-box w-full cursor-pointer"
+          style="background: #161E1B;border-radius: 12px;"
+          @click="triggerFileInput"
+        >
+          <img v-if="jwkFileName" src="@/images/keyfile-green.png" class="mr-3">
+          <img v-else src="@/images/keyfile.png" class="mr-3">
+          <div>
+            <div class="text-sm text-left" :style="jwkFileName ? 'rgba(255, 255, 255, 0.85);' : 'color: rgba(255, 255, 255, 0.45);'">
+              {{ jwkFileName ? jwkFileName : 'Load Keyfile from system' }}
+            </div>
+            <div class="text-xs text-left" :style="jwkFileName ? 'rgba(255, 255, 255, 0.65);' : 'color: rgba(255, 255, 255, 0.3);'">
+              Private key JSON file
+            </div>
+          </div>
+        </div>
+        <input
+          ref="fileInputRef"
+          type="file"
+          style="position: fixed;top: -1em;left: -1em;width: 1px;height: 1px;opacity: 0"
+          accept=".json,application/json"
+          :multiple="false"
+        >
+        <span
+          v-if="selectedFormat === 'Ethereum' && privateKey && !isPrivateKeyValid"
+          style="color: #FF7D69;"
+          class="text-xs">
           {{ t('pk_notice') }}
+        </span>
+        <span
+          v-if="selectedFormat === 'Arweave' && jwkFileName && !isJwkValid"
+          style="color: #FF7D69;"
+          class="text-xs">
+          {{ t('jwk_notice') }}
         </span>
       </div>
       <div class="flex flex-row items-center justify-between">
@@ -233,7 +400,7 @@ export default defineComponent({
           {{ t('cancel') }}
         </div>
         <div
-          :class="isPrivateKeyValid ? 'primary-btn' : 'disable-btn'"
+          :class="((selectedFormat === 'Ethereum' && isPrivateKeyValid) || (selectedFormat === 'Arweave' && isJwkValid)) ? 'primary-btn' : 'disable-btn'"
           style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
           @click="handleRegister">
           {{ t('sign_up') }}
@@ -242,6 +409,11 @@ export default defineComponent({
     </div>
   </div>
 </template>
+<style>
+.el-upload {
+  width: 100% !important;
+}
+</style>
 
 <style lang="scss" scoped>
   .privatekey-area {

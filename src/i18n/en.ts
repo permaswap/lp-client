@@ -30,6 +30,8 @@ const messages = {
   new_position: 'New Position',
   disconnect: 'Disconnect',
   import_pk: 'Import Private Key',
+  import_keyfile: 'Import Keyfile',
+  jwk_notice: 'Invalid JSON file',
   close_anyway: 'Close Anyway',
   invalid_range_selected: 'Invalid range selected. The min price must be lower than the max price.',
   invalid_out_range: 'Your position will not be used in trades until the market price moves into your range.',

@@ -130,6 +130,7 @@ export const sendAdd = (params: SendAddParams): void => {
   }
   console.log('data', data)
   socket.send(JSON.stringify(data))
+  console.log(22222)
 }
 
 interface SendRemoveParams {
@@ -174,7 +175,7 @@ export const getLpId = (poolId: string, address: string, jsonConfig: any): strin
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   const msg = 'PoolID:' + poolId + '\n' +
   // 需要 checksum 地址
-    'Address:' + ethers.utils.getAddress(address) + '\n' +
+    'Address:' + (address.startsWith('0x') ? ethers.utils.getAddress(address) : address) + '\n' +
     'LowSqrtPrice:' + jsonConfig.lowSqrtPrice.toString() + '\n' +
     'HighSqrtPrice:' + jsonConfig.highSqrtPrice.toString() + '\n' +
     'PriceDirection:' + jsonConfig.priceDirection

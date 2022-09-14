@@ -2,8 +2,9 @@
 import { initSocket, sendRegister, sendSign, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
-import ethereumLib from 'everpay/esm/lib/ethereum'
-import arweaveLib from 'everpay/esm/lib/arweave'
+// import ethereumLib from 'everpay/esm/lib/ethereum'
+// import arweaveLib from 'everpay/esm/lib/arweave'
+import { signMessageAsync } from 'everpay/esm/lib/sign'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { ethers, Wallet } from 'ethers'
 import { toBN } from '@/lib/util'
@@ -149,9 +150,19 @@ export default defineComponent({
           let sig = ''
           if (selectedFormat.value === 'Ethereum') {
             const signer = new Wallet(privateKey.value)
-            sig = await ethereumLib.signMessageAsync(signer, signer.address, data.salt)
+            const signResult = await signMessageAsync({
+              account: signer.address,
+              ethConnectedSigner: signer,
+              chainType: 'ethereum' as any
+            }, data.salt)
+            sig = signResult.sig
           } else if (selectedFormat.value === 'Arweave') {
-            sig = await arweaveLib.signMessageAsync(arJwk as any, address, data.salt)
+            const signResult = await signMessageAsync({
+              account: arAddress,
+              arJWK: arJwk as any,
+              chainType: 'arweave' as any
+            }, data.salt)
+            sig = signResult.sig
           }
 
           sendRegister({

@@ -84,8 +84,8 @@ const swapY = (amountIn: string, lowSqrtPrice: string, currentSqrtPrice: string,
 
 const swapAmountUp = (startSqrtPrice: string, endSqrtPrice: string, liquidity: string): [any, any] => {
   // end_price >= start_price
-// token_in is y; y = l * (e - s); round_up;
-// token_out is x; x = l * (1/s - 1/e); round_down.
+  // token_in is y; y = l * (e - s); round_up;
+  // token_out is x; x = l * (1/s - 1/e); round_down.
   if (+(new Decimal(startSqrtPrice)).cmp(endSqrtPrice) === 1) {
     throw new Error('invalid price: endSqrtPrice should be greater than startSqrtPrice')
   }
@@ -101,8 +101,8 @@ const swapAmountUp = (startSqrtPrice: string, endSqrtPrice: string, liquidity: s
 
 const swapAmountDown = (startSqrtPrice: string, endSqrtPrice: string, liquidity: string): [any, any] => {
   // end_price <= start_price
-// token_in is x; x = l * (1/e - 1/s); round_up;
-// token_out is y; y = l * (s - e); round_down.
+  // token_in is x; x = l * (1/e - 1/s); round_up;
+  // token_out is y; y = l * (s - e); round_down.
   if (+(new Decimal(startSqrtPrice)).cmp(endSqrtPrice) === -1) {
     throw new Error('invalid price: endSqrtPrice should be greater than startSqrtPrice')
   }
@@ -116,22 +116,90 @@ const swapAmountDown = (startSqrtPrice: string, endSqrtPrice: string, liquidity:
   return [amountIn, amountOut]
 }
 
-const getAmountXY = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, liquidity: string): [string, string] => {
+interface GetAmountXYResult {
+  amountX: string
+  amountY: string
+}
+
+const getAmountXY = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, liquidity: string): GetAmountXYResult => {
   let amountX = '0'
   let amountY = '0'
   if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(lowSqrtPrice)) === 0) {
-    const [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    amountX_ = RoundUpDec.add(amountX_, 1)
     amountX = amountX_.toFixed(0, Decimal.ROUND_UP)
   } else if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(highSqrtPrice)) === 0) {
-    const [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    amountY_ = RoundUpDec.add(amountY_, 1)
     amountY = amountY_.toFixed(0, Decimal.ROUND_UP)
   } else {
-    const [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    amountX_ = RoundUpDec.add(amountX_, 1)
     amountX = amountX_.toFixed(0, Decimal.ROUND_UP)
-    const [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    amountY_ = RoundUpDec.add(amountY_, 1)
     amountY = amountY_.toFixed(0, Decimal.ROUND_UP)
   }
-  return [amountX, amountY]
+  return {
+    amountX: amountX,
+    amountY: amountY
+  }
 }
 
-export { sqrtPrice, getNewSqrtPriceFromAmountXRoundUp, getNewSqrtPriceFromAmountYRoundingDown, swapOut, swap, swapX, swapY, swapAmountDown, getAmountXY }
+const getLiquidityFromAmountY = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, amountY: string): string => {
+  // l = y /(c - l); round_down.
+
+  if ((new Decimal(currentSqrtPrice)).cmp(lowSqrtPrice) !== 1) {
+    throw new Error('invalid price: currentSqrtPrice should be greater than lowSqrtPrice')
+  }
+  const difference = RoundUpDec.sub(currentSqrtPrice, lowSqrtPrice)
+  const liquidity = RoundDownDec.div(amountY, difference)
+  return liquidity.toFixed(0, Decimal.ROUND_DOWN)
+}
+
+interface GetAmountXAndLiquidityResult {
+  liquidity: string
+  amountX: string
+}
+
+const getAmountXAndLiquidity = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, amountY: string): GetAmountXAndLiquidityResult => {
+  const liquidity = getLiquidityFromAmountY(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, amountY)
+  const { amountX } = getAmountXY(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, liquidity)
+  return {
+    liquidity: liquidity,
+    amountX: amountX
+  }
+}
+
+const getLiquidityFromAmountX = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, amountX: string): string => {
+  // l = x /(1/c - 1/h) = x * c*h/(h-c); round_down.
+
+  if ((new Decimal(highSqrtPrice)).cmp(currentSqrtPrice) !== 1) {
+    throw new Error('invalid price: highSqrtPrice should be greater than currentSqrtPrice')
+  }
+  const product = RoundDownDec.mul(currentSqrtPrice, highSqrtPrice)
+  const difference = RoundUpDec.sub(highSqrtPrice, currentSqrtPrice)
+  const quotient = RoundDownDec.div(product, difference)
+  const liquidity = RoundDownDec.mul(quotient, amountX)
+  return liquidity.toFixed(0, Decimal.ROUND_DOWN)
+}
+
+interface GetAmountYAndLiquidityResult {
+  liquidity: string
+  amountY: string
+}
+
+const getAmountYAndLiquidity = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPrice: string, amountX: string): GetAmountYAndLiquidityResult => {
+  const liquidity = getLiquidityFromAmountX(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, amountX)
+  const { amountY } = getAmountXY(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, liquidity)
+  return {
+    liquidity: liquidity,
+    amountY: amountY
+  }
+}
+
+export {
+  sqrtPrice, getNewSqrtPriceFromAmountXRoundUp, getNewSqrtPriceFromAmountYRoundingDown,
+  swapOut, swap, swapX, swapY, swapAmountDown,
+  getAmountXY, getAmountXAndLiquidity, getAmountYAndLiquidity
+}

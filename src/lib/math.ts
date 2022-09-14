@@ -84,8 +84,8 @@ const swapY = (amountIn: string, lowSqrtPrice: string, currentSqrtPrice: string,
 
 const swapAmountUp = (startSqrtPrice: string, endSqrtPrice: string, liquidity: string): [any, any] => {
   // end_price >= start_price
-// token_in is y; y = l * (e - s); round_up;
-// token_out is x; x = l * (1/s - 1/e); round_down.
+  // token_in is y; y = l * (e - s); round_up;
+  // token_out is x; x = l * (1/s - 1/e); round_down.
   if (+(new Decimal(startSqrtPrice)).cmp(endSqrtPrice) === 1) {
     throw new Error('invalid price: endSqrtPrice should be greater than startSqrtPrice')
   }
@@ -101,8 +101,8 @@ const swapAmountUp = (startSqrtPrice: string, endSqrtPrice: string, liquidity: s
 
 const swapAmountDown = (startSqrtPrice: string, endSqrtPrice: string, liquidity: string): [any, any] => {
   // end_price <= start_price
-// token_in is x; x = l * (1/e - 1/s); round_up;
-// token_out is y; y = l * (s - e); round_down.
+  // token_in is x; x = l * (1/e - 1/s); round_up;
+  // token_out is y; y = l * (s - e); round_down.
   if (+(new Decimal(startSqrtPrice)).cmp(endSqrtPrice) === -1) {
     throw new Error('invalid price: endSqrtPrice should be greater than startSqrtPrice')
   }
@@ -120,15 +120,19 @@ const getAmountXY = (lowSqrtPrice: string, currentSqrtPrice: string, highSqrtPri
   let amountX = '0'
   let amountY = '0'
   if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(lowSqrtPrice)) === 0) {
-    const [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    amountX_ = RoundUpDec.add(amountX_, 1)
     amountX = amountX_.toFixed(0, Decimal.ROUND_UP)
   } else if (+(new Decimal(currentSqrtPrice)).cmp(new Decimal(highSqrtPrice)) === 0) {
-    const [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    amountY_ = RoundUpDec.add(amountY_, 1)
     amountY = amountY_.toFixed(0, Decimal.ROUND_UP)
   } else {
-    const [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountX_] = swapAmountDown(highSqrtPrice, currentSqrtPrice, liquidity)
+    amountX_ = RoundUpDec.add(amountX_, 1)
     amountX = amountX_.toFixed(0, Decimal.ROUND_UP)
-    const [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    let [amountY_] = swapAmountUp(lowSqrtPrice, currentSqrtPrice, liquidity)
+    amountY_ = RoundUpDec.add(amountY_, 1)
     amountY = amountY_.toFixed(0, Decimal.ROUND_UP)
   }
   return [amountX, amountY]

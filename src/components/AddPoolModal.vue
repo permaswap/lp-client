@@ -4,7 +4,8 @@ import Everpay from 'everpay'
 import { getLpId, getPoolPrice, getSwapInfo, sendAdd, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
 import { formatInputPrecision, toBN } from '@/lib/util'
-import { getAmountXAndLiquidity, getAmountYAndLiquidity, getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
+import { getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
+import { getAmountXAndLiquidity, getAmountYAndLiquidity } from '@/lib/math'
 import PairModal from './PairModal.vue'
 import PreviewModal from './PreviewModal.vue'
 import TokenLogo from './TokenLogo.vue'
@@ -163,7 +164,7 @@ export default defineComponent({
       }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenXAmountDecimal = toBN(tokenXAmount.value).times(toBN(10).pow((tokenX as any).value?.decimals))
-      const { amountY, liquidity } = getAmountYAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenXAmountDecimal as any)
+      const { amountY, liquidity } = getAmountYAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenXAmountDecimal.toString() as any)
       tokenYAmount.value = toBN(amountY).dividedBy(toBN(10).pow((tokenY as any).value?.decimals)).toString()
       const { feeRatio } = getPoolData(swapInfo.poolList)
       jsonConfig = {
@@ -191,7 +192,7 @@ export default defineComponent({
       }
       const { lowSqrtPrice, highSqrtPrice, currentSqrtPrice } = getSqrtPrice()
       const tokenYAmountDecimal = toBN(tokenYAmount.value).times(toBN(10).pow((tokenY as any).value?.decimals))
-      const { amountX, liquidity } = getAmountXAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenYAmountDecimal as any)
+      const { amountX, liquidity } = getAmountXAndLiquidity(lowSqrtPrice, currentSqrtPrice, highSqrtPrice, tokenYAmountDecimal.toString() as any)
       tokenXAmount.value = toBN(amountX).dividedBy(toBN(10).pow((tokenX as any).value?.decimals)).toString()
       const { feeRatio } = getPoolData(swapInfo.poolList)
       jsonConfig = {

@@ -1,5 +1,5 @@
 <script>
-import { getAmountXY } from '@/lib/lp'
+import { getAmountXY } from '@/lib/math'
 import { getPoolPrice, sendRemove } from '@/lib/swap'
 import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 import { useStore } from '@/store'
@@ -50,7 +50,7 @@ export default defineComponent({
     // const totalPrice = ref('')
 
     onMounted(async () => {
-      const amountXY = getAmountXY(props.lp.liquidity, props.lp.lowSqrtPrice, props.lp.currentSqrtPrice, props.lp.highSqrtPrice)
+      const amountXY = getAmountXY(props.lp.lowSqrtPrice, props.lp.currentSqrtPrice, props.lp.highSqrtPrice, props.lp.liquidity)
       amountX.value = toBN(amountXY.amountX).dividedBy(toBN(10).pow(props.lp.tokenXDecimal))
       amountY.value = toBN(amountXY.amountY).dividedBy(toBN(10).pow(props.lp.tokenYDecimal))
       // const marketPrices = await getMarketPrices('USD', [props.lp.tokenXSymbol, props.lp.tokenYSymbol])
@@ -146,7 +146,7 @@ export default defineComponent({
         <div
           class="flex flex-row items-center justify-between text-sm p-4"
           style="background: #161E1B;border-radius: 12px;">
-          <span>{{ t('volume') }}(24h)</span>
+          <span>{{ t('volume') }} (24h)</span>
           <span>{{ volume }}</span>
         </div>
       </div>

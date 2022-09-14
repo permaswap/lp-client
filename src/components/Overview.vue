@@ -83,7 +83,7 @@ export default defineComponent({
             </div>
             <div class="mr-8" style="width:160px;" />
             <div class="text-right mr-8" style="width:100px;">
-              {{ t('volume') }}(24h)
+              {{ t('volume') }} (24h)
             </div>
             <div class="text-right mr-8" style="width:100px;">
               TVL

@@ -127,8 +127,7 @@ export default defineComponent({
         address = arAddress
       }
 
-      // TODO: 测试 去掉感叹号
-      if (holderToNFTs[address]) {
+      if (!holderToNFTs[address]) {
         ElMessage({
           showClose: true,
           message: t('need_nft'),

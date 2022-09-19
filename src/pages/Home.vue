@@ -9,6 +9,7 @@ import Overview from '@/components/Overview.vue'
 import { computed } from '@vue/reactivity'
 import AddPoolModal from '../components/AddPoolModal.vue'
 import ClosePoolModal from '../components/closePoolModal.vue'
+import NoticeBoard from '../components/NoticeBoard.vue'
 import { getNfts } from '@/lib/swap'
 
 const store = useStore()
@@ -17,6 +18,7 @@ const addPoolModalVisible = computed(() => store.state.addPoolModalVisible)
 const selectedLp = ref(null)
 const selectedVolume = ref('-')
 const selectedTvl = ref('-')
+const noticeBoardVisible = ref(false)
 const selectLp = (lp: any, volume: string, tvl: string) => {
   selectedLp.value = lp
   selectedVolume.value = volume
@@ -41,6 +43,9 @@ watch(account, () => {
 <template>
   <div class="text-white" style="background: #000a06;">
     <Header :select-overview="!addPoolModalVisible && !selectedLp" />
+    <NoticeBoard v-if="noticeBoardVisible" :duration="15" @close="noticeBoardVisible = false">
+      The connection address is the same as the LP node address, transaction is prohibited, please switch account！
+    </NoticeBoard>
     <AccountModal />
     <RigisterModal />
     <div style="min-height:700px;" class="mt-20">

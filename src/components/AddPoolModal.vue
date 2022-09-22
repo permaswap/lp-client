@@ -3,7 +3,7 @@ import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
 import { getLpId, getPoolPrice, getSwapInfo, sendAdd, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
-import { formatInputPrecision, toBN } from '@/lib/util'
+import { formatInputPrecision, toBN, getAmountFromLps } from '@/lib/util'
 import { getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity } from '@/lib/math'
 import PairModal from './PairModal.vue'
@@ -104,8 +104,10 @@ export default defineComponent({
       })
     }
     const updateBalances = async () => {
-      tokenXBalance.value = await everpay.balance({ account: account.value, symbol: (tokenX.value as any).symbol })
-      tokenYBalance.value = await everpay.balance({ account: account.value, symbol: (tokenY.value as any).symbol })
+      const totalBalanceX = await everpay.balance({ account: account.value, symbol: (tokenX.value as any).symbol })
+      const totalBalanceY = await everpay.balance({ account: account.value, symbol: (tokenY.value as any).symbol })
+      tokenXBalance.value = toBN(totalBalanceX).minus(getAmountFromLps(store.state.lps, tokenX.value)).toString()
+      tokenYBalance.value = toBN(totalBalanceY).minus(getAmountFromLps(store.state.lps, tokenY.value)).toString()
     }
     onMounted(async () => {
       dataLoading.value = true

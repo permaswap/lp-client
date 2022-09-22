@@ -1,5 +1,7 @@
 import BN from 'bignumber.js'
+import { Token } from 'everpay'
 import isString from 'lodash/isString'
+import { getAmountXY } from './math'
 
 BN.config({
   EXPONENTIAL_AT: 1000
@@ -75,4 +77,17 @@ export const checkParentsHas = (classname: string) => {
     }
     return false
   }
+}
+
+export const getAmountFromLps = (lps: any[], token: Token): string => {
+  let balances = toBN(0)
+  lps.forEach((lp) => {
+    const { amountX, amountY } = getAmountXY(lp.lowSqrtPrice, lp.currentSqrtPrice, lp.highSqrtPrice, lp.liquidity)
+    if (token.symbol === lp.tokenXSymbol) {
+      balances = balances.plus(amountX)
+    } else if (token.symbol === lp.tokenYSymbol) {
+      balances = balances.plus(amountY)
+    }
+  })
+  return fromDecimalToUnit(balances, token.decimals)
 }

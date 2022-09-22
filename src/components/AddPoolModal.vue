@@ -232,7 +232,7 @@ export default defineComponent({
       currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
     }
     const showPreviewModal = () => {
-      if (btnMessage.value === 'preview') {
+      if (btnMessage.value === 'preview' && !invalidRange.value) {
         previewModalVisible.value = true
       }
     }
@@ -531,7 +531,7 @@ export default defineComponent({
         <div
           class="py-3 text-center"
           style="border-radius: 8px;"
-          :style="btnMessage === 'preview' || btnMessage === 'sign_up' ?
+          :style="(btnMessage === 'preview' && !invalidRange) || btnMessage === 'sign_up' ?
             'background: #79D483;color:#000;cursor:pointer' :
             'background: rgba(255, 255, 255, 0.12);color: rgba(255, 255, 255, 0.3);cursor:not-allowed'"
           @click="btnMessage === 'sign_up' ? showRegisterModal() : showPreviewModal()"

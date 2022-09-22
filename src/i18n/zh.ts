@@ -24,7 +24,7 @@ const messages = {
   deposit: '充值',
   deposit_2: '充值  ↗︎',
   disconnect_notice: '关闭 LP 节点后，您将无法获得 PSN 奖励！',
-  close_lp_notice: '关闭 LP 节点后，您将无法获得 PSN 奖励！但您可以再次新增仓位',
+  close_lp_notice: '请谨慎操作：断开后，所有流动性池将自动关闭！',
   max: '最大',
   add_liquidity: '增加流动性',
   new_position: '新仓位',

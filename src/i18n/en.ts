@@ -24,7 +24,7 @@ const messages = {
   deposit: 'Deposit',
   deposit_2: 'Deposit  ↗︎',
   disconnect_notice: "You won't get PSN bonus, after closing the Node!",
-  close_lp_notice: "After closing LP node, you won't get PSN bonus! But you could add new position next time.",
+  close_lp_notice: 'Please be cautious：When disconnected, all liquidity pools will automatically close！',
   max: 'Max',
   add_liquidity: 'Add Liquidity',
   new_position: 'New Position',

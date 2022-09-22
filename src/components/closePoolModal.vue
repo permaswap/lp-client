@@ -126,7 +126,7 @@ export default defineComponent({
             class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
             <span>{{ t('liquidity') }}</span>
-            <span>{{ tvl }}</span>
+            <span>{{ tvl !== '-' ? `${tvl} USD` : tvl }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">
@@ -147,7 +147,7 @@ export default defineComponent({
           class="flex flex-row items-center justify-between text-sm p-4"
           style="background: #161E1B;border-radius: 12px;">
           <span>{{ t('volume') }} (24h)</span>
-          <span>{{ volume }}</span>
+          <span>{{ volume !== '-' ? `${volume} USD` : volume }}</span>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ export default defineComponent({
     <div>
       <img class="h-8 mb-3" src="@/images/logo.png">
       <div class="text-xs font-light" style="color: rgba(255, 255, 255, 0.65);">
-        ©2022 everFinance. All rights reserved
+        ©2022 Permaswap. All rights reserved
       </div>
     </div>
     <div class="flex flex-row items-center">

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -137,130 +137,142 @@ export default defineComponent({
         return
       }
 
-      initSocket({
-        handleError (error: any) {
-          console.log('error', error)
-        },
-        handleOpen (data: any) {
-          console.log('open', data)
-        },
-        async handleSalt (data: any) {
-          console.log('salt', data.salt)
-          let sig = ''
-          if (selectedFormat.value === 'Ethereum') {
-            const signer = new Wallet(privateKey.value)
-            const signResult = await signMessageAsync({
-              account: signer.address,
-              ethConnectedSigner: signer,
-              chainType: 'ethereum' as any
-            }, data.salt)
-            sig = signResult.sig
-          } else if (selectedFormat.value === 'Arweave') {
-            const signResult = await signMessageAsync({
-              account: arAddress,
-              arJWK: arJwk as any,
-              chainType: 'arweave' as any
-            }, data.salt)
-            sig = signResult.sig
-          }
-
-          sendRegister({
-            address,
-            sig
-          })
-          store.commit('updateAccount', address)
-          store.commit('updatePrivateKey', privateKey.value)
-          store.commit('updateRegisterModalVisible', false)
-        },
-        async handleOrder (data: any) {
-          const validatePathsData = (paths: any): boolean => {
-            const stack = {} as any
-            let result: boolean = true
-            paths.forEach((pathData: any) => {
-              if (!stack[pathData.lpId]) {
-                stack[pathData.lpId] = {}
-              }
-              if (pathData.to.toLowerCase() === address.toLowerCase()) {
-                stack[pathData.lpId].amountIn = pathData.amount
-                stack[pathData.lpId].tokenTagIn = pathData.tokenTag
-              }
-              if (pathData.from.toLowerCase() === address.toLowerCase()) {
-                stack[pathData.lpId].amountOut = pathData.amount
-                stack[pathData.lpId].tokenTagOut = pathData.tokenTag
-              }
-            })
-            console.log('stack', stack)
-            Object.entries(stack).forEach(([lpId, amountData]) => {
-              const jsonConfig = store.state.lps.find(jsonConfig => {
-                return jsonConfig.lpId === lpId
-              })
-              console.log('jsonConfig', jsonConfig)
-              if (jsonConfig) {
-                if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
-                  try {
-                    const [newCurrentSqrtPrice, amountOutY] = swapX((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
-                    console.log('amountOutY', amountOutY)
-                    if (toBN(amountOutY).gte((amountData as any).amountOut)) {
-                      store.commit('updateLp', {
-                        ...jsonConfig,
-                        currentSqrtPrice: newCurrentSqrtPrice
-                      })
-                    } else {
-                      result = false
-                    }
-                  } catch (e) { console.log('errr', e) }
-                } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
-                  try {
-                    const [newCurrentSqrtPrice, amountOutX] = swapY((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
-                    console.log('amountOutY', amountOutX)
-                    console.log('amountOutPath', amountOutX)
-                    if (toBN(amountOutX).gte((amountData as any).amountOut)) {
-                      store.commit('updateLp', {
-                        ...jsonConfig,
-                        currentSqrtPrice: newCurrentSqrtPrice
-                      })
-                    } else {
-                      result = false
-                    }
-                  } catch (e) {
-                    console.log('errr', e)
-                  }
-                }
-              }
-            })
-            return result
-          }
-
-          console.log('order', data)
-          const validate = validatePathsData(data.paths)
-          console.log('validate', validate)
-          if (validate) {
-            let everpayWithAccount: any
+      const tryConnect = (reconnect: boolean) => {
+        initSocket({
+          handleError (error: any) {
+            console.log('error', error)
+            tryConnect(true)
+          },
+          handleOpen (data: any) {
+            console.log('open', data)
+          },
+          async handleSalt (data: any) {
+            console.log('salt', data.salt)
+            let sig = ''
             if (selectedFormat.value === 'Ethereum') {
-              const signer = new ethers.Wallet(privateKey.value)
-              everpayWithAccount = new Everpay({
+              const signer = new Wallet(privateKey.value)
+              const signResult = await signMessageAsync({
                 account: signer.address,
                 ethConnectedSigner: signer,
-                chainType: 'ethereum' as any,
-                debug: !isProd
-              })
+                chainType: 'ethereum' as any
+              }, data.salt)
+              sig = signResult.sig
             } else if (selectedFormat.value === 'Arweave') {
-              everpayWithAccount = new Everpay({
-                account: address,
+              const signResult = await signMessageAsync({
+                account: arAddress,
                 arJWK: arJwk as any,
-                chainType: 'arweave' as any,
-                debug: !isProd
-              })
+                chainType: 'arweave' as any
+              }, data.salt)
+              sig = signResult.sig
             }
 
-            const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
-            sendSign({
-              address: address,
-              bundle: bundleDataWithSigs
+            sendRegister({
+              address,
+              sig
             })
+            store.commit('updateAccount', address)
+            store.commit('updatePrivateKey', privateKey.value)
+            store.commit('updateRegisterModalVisible', false)
+
+            if (reconnect) {
+              console.log('reconnect')
+              store.state.lps.forEach((lp) => {
+                sendAdd(lp)
+              })
+            }
+          },
+          async handleOrder (data: any) {
+            const validatePathsData = (paths: any): boolean => {
+              const stack = {} as any
+              let result: boolean = true
+              paths.forEach((pathData: any) => {
+                if (!stack[pathData.lpId]) {
+                  stack[pathData.lpId] = {}
+                }
+                if (pathData.to.toLowerCase() === address.toLowerCase()) {
+                  stack[pathData.lpId].amountIn = pathData.amount
+                  stack[pathData.lpId].tokenTagIn = pathData.tokenTag
+                }
+                if (pathData.from.toLowerCase() === address.toLowerCase()) {
+                  stack[pathData.lpId].amountOut = pathData.amount
+                  stack[pathData.lpId].tokenTagOut = pathData.tokenTag
+                }
+              })
+              console.log('stack', stack)
+              Object.entries(stack).forEach(([lpId, amountData]) => {
+                const jsonConfig = store.state.lps.find(jsonConfig => {
+                  return jsonConfig.lpId === lpId
+                })
+                console.log('jsonConfig', jsonConfig)
+                if (jsonConfig) {
+                  if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
+                    try {
+                      const [newCurrentSqrtPrice, amountOutY] = swapX((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                      console.log('amountOutY', amountOutY)
+                      if (toBN(amountOutY).gte((amountData as any).amountOut)) {
+                        store.commit('updateLp', {
+                          ...jsonConfig,
+                          currentSqrtPrice: newCurrentSqrtPrice
+                        })
+                      } else {
+                        result = false
+                      }
+                    } catch (e) { console.log('errr', e) }
+                  } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
+                    try {
+                      const [newCurrentSqrtPrice, amountOutX] = swapY((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                      console.log('amountOutY', amountOutX)
+                      console.log('amountOutPath', amountOutX)
+                      if (toBN(amountOutX).gte((amountData as any).amountOut)) {
+                        store.commit('updateLp', {
+                          ...jsonConfig,
+                          currentSqrtPrice: newCurrentSqrtPrice
+                        })
+                      } else {
+                        result = false
+                      }
+                    } catch (e) {
+                      console.log('errr', e)
+                    }
+                  }
+                }
+              })
+              return result
+            }
+
+            console.log('order', data)
+            const validate = validatePathsData(data.paths)
+            console.log('validate', validate)
+            if (validate) {
+              let everpayWithAccount: any
+              if (selectedFormat.value === 'Ethereum') {
+                const signer = new ethers.Wallet(privateKey.value)
+                everpayWithAccount = new Everpay({
+                  account: signer.address,
+                  ethConnectedSigner: signer,
+                  chainType: 'ethereum' as any,
+                  debug: !isProd
+                })
+              } else if (selectedFormat.value === 'Arweave') {
+                everpayWithAccount = new Everpay({
+                  account: address,
+                  arJWK: arJwk as any,
+                  chainType: 'arweave' as any,
+                  debug: !isProd
+                })
+              }
+
+              const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
+              sendSign({
+                address: address,
+                bundle: bundleDataWithSigs
+              })
+            }
           }
-        }
-      })
+        })
+      }
+
+      tryConnect(false)
     }
     return {
       t,

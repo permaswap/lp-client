@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+// import Footer from '@/components/Footer.vue'
 import AccountModal from '@/components/AccountModal.vue'
 import RigisterModal from '@/components/RigisterModal.vue'
 import { useStore } from '@/store'
@@ -59,6 +59,6 @@ watch(account, () => {
       <Overview v-else-if="!addPoolModalVisible" @selectLp="selectLp" />
       <AddPoolModal v-else />
     </div>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>

@@ -30,6 +30,7 @@ store.commit('clearLps')
 onMounted(async () => {
   const nftsResult = await getNfts()
   store.commit('updateHolderToNFTs', nftsResult.holderToNFTs)
+  store.commit('updateWhitelist', nftsResult.whitelist)
 })
 
 watch(account, () => {

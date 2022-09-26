@@ -119,6 +119,7 @@ export default defineComponent({
         return
       }
       const holderToNFTs = store.state.holderToNFTs
+      const whitelist = store.state.whitelist
       let address = ''
       if (selectedFormat.value === 'Ethereum') {
         const wallet = new Wallet(privateKey.value)
@@ -127,7 +128,7 @@ export default defineComponent({
         address = arAddress
       }
 
-      if (!holderToNFTs[address]) {
+      if (!holderToNFTs[address] && !whitelist.includes(address)) {
         ElMessage({
           showClose: true,
           message: t('need_nft'),

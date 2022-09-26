@@ -33,6 +33,13 @@ export default createStore<State>({
         state.holderToNFTs = {}
       }
     },
+    updateWhitelist (state, whitelist: string[]) {
+      if (whitelist != null) {
+        state.whitelist = whitelist
+      } else {
+        state.whitelist = []
+      }
+    },
     // 相同 lpId 只能有一个
     addLp (state, lp) {
       const foundIndex = state.lps.findIndex(l => l.lpId === lp.lpId)

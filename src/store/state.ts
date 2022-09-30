@@ -7,6 +7,7 @@ export interface State {
   lps: any[]
   holderToNFTs: any
   whitelist: string[]
+  manualConnect: boolean
 }
 
 export const defaultState = {
@@ -17,5 +18,6 @@ export const defaultState = {
   addPoolModalVisible: false,
   lps: [],
   holderToNFTs: {},
-  whitelist: []
+  whitelist: [],
+  manualConnect: false
 }

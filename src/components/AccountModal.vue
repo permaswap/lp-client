@@ -67,6 +67,7 @@ export default defineComponent({
       })
       store.commit('updateAccountModalVisible', false)
       store.commit('updateAccount', '')
+      store.commit('updateManualConnect', false)
       closeSocket()
     }
 

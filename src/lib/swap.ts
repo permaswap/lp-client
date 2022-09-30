@@ -88,6 +88,7 @@ export const initSocket = (params: InitSocketParams): void => {
     }
   })
   socket.addEventListener('open', params.handleOpen)
+  return socket
 }
 
 interface SendRegisterParams {

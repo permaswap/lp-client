@@ -58,6 +58,9 @@ export default createStore<State>({
     },
     clearLps (state) {
       state.lps = []
+    },
+    updateManualConnect (state, manualConnect) {
+      state.manualConnect = manualConnect
     }
   },
 

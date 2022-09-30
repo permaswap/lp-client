@@ -113,6 +113,8 @@ export default defineComponent({
     })
 
     const hidenRegisterModal = () => store.commit('updateRegisterModalVisible', false)
+    let timer = null as any
+    let socket = null as any
     const handleRegister = async () => {
       if ((selectedFormat.value === 'Ethereum' && !isPrivateKeyValid.value) ||
         (selectedFormat.value === 'Arweave' && !isJwkValid.value)) {
@@ -139,13 +141,13 @@ export default defineComponent({
       }
 
       const tryConnect = (reconnect: boolean) => {
-        initSocket({
+        socket = initSocket({
           handleError (error: any) {
             console.log('error', error)
-            tryConnect(true)
           },
           handleOpen (data: any) {
             console.log('open', data)
+            store.commit('updateManualConnect', true)
           },
           async handleSalt (data: any) {
             console.log('salt', data.salt)
@@ -177,9 +179,11 @@ export default defineComponent({
 
             if (reconnect) {
               console.log('reconnect')
-              store.state.lps.forEach((lp) => {
-                sendAdd(lp)
-              })
+              setTimeout(() => {
+                store.state.lps.forEach((lp) => {
+                  sendAdd(lp)
+                })
+              }, 3000)
             }
           },
           async handleOrder (data: any) {
@@ -273,7 +277,22 @@ export default defineComponent({
         })
       }
 
+      const checkSocket = () => {
+        if (timer != null) {
+          clearTimeout(timer as any)
+        }
+        timer = setTimeout(() => {
+          console.log('socket.readyState', (socket as any).readyState)
+          const readyState = (socket as any).readyState
+          if (readyState !== 0 && readyState !== 1 && store.state.manualConnect) {
+            tryConnect(true)
+          }
+          checkSocket()
+        }, 2000)
+      }
+
       tryConnect(false)
+      checkSocket()
     }
     return {
       t,

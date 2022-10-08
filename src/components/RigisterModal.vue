@@ -403,8 +403,16 @@ export default defineComponent({
           style="background: #161E1B;border-radius: 12px;"
           @click="triggerFileInput"
         >
-          <img v-if="jwkFileName" src="@/images/keyfile-green.png" class="mr-3">
-          <img v-else src="@/images/keyfile.png" class="mr-3">
+          <img
+            v-if="jwkFileName"
+            src="@/images/keyfile-green.png"
+            class="mr-3"
+            style="height:28px;">
+          <img
+            v-else
+            src="@/images/keyfile.png"
+            class="mr-3"
+            style="height:28px;">
           <div>
             <div class="text-sm text-left" :style="jwkFileName ? 'rgba(255, 255, 255, 0.85);' : 'color: rgba(255, 255, 255, 0.45);'">
               {{ jwkFileName ? jwkFileName : 'Load Keyfile from system' }}

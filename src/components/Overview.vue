@@ -125,13 +125,13 @@ export default defineComponent({
       </div>
       <div v-if="!account" class="flex flex-row items-center justify-center pb-4">
         <a
-          class="text-sm px-4 py-1 border-box"
-          style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
+          class="text-sm py-1 border-box text-center"
+          style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;width:108px;"
           href="https://permaswap.network/#/nft"
           target="_blank">{{ t('collect_nft') }}</a>
         <div
-          class="text-sm px-4 py-1 border-box ml-12 cursor-pointer"
-          style="color: #000;background: #79D483;border-radius: 8px;"
+          class="text-sm py-1 border-box text-center ml-12 cursor-pointer"
+          style="color: #000;background: #79D483;border-radius: 8px;width:108px;"
           @click="showRegisterModal"
         >
           {{ t('sign_up') }}

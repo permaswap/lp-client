@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd, sendAdd } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd, getSwapInfo } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -281,14 +281,21 @@ export default defineComponent({
         if (timer != null) {
           clearTimeout(timer as any)
         }
-        timer = setTimeout(() => {
+        timer = setTimeout(async () => {
           console.log('socket.readyState', (socket as any).readyState)
           const readyState = (socket as any).readyState
-          if (readyState !== 0 && readyState !== 1 && store.state.manualConnect) {
+          let networkError = false
+          try {
+            await getSwapInfo()
+          } catch {
+            networkError = true
+          }
+          if (((readyState !== 0 && readyState !== 1) || networkError) && store.state.manualConnect) {
+            socket.close()
             tryConnect(true)
           }
           checkSocket()
-        }, 2000)
+        }, 5000)
       }
 
       tryConnect(false)

@@ -35,12 +35,16 @@ export default defineComponent({
     currentPrice: {
       type: String,
       default: ''
+    },
+    duplicateLpId: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['confirm', 'closeModal'],
   setup (props) {
     console.log(props.pairs)
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
     const inRange = computed(() => {
       return isInRange(props.currentPrice, props.lowPrice, props.highPrice)
     })
@@ -49,6 +53,7 @@ export default defineComponent({
     })
     return {
       t,
+      locale,
       oppositePrice,
       inRange
     }
@@ -65,16 +70,19 @@ export default defineComponent({
     box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);
     border-radius: 24px;
     width:480px;
-    height:612px;
     top:160px;
     left:50%;
     transform: translateX(-50%);
     box-sizing: border-box;
-    padding:32px;">
+    padding:32px;"
+      :style="duplicateLpId ? (locale === 'zh' ? 'height:650px;' : 'height:680px;') : 'height:612px;'">
       <div class="flex flex-row items-center justify-between pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span style="font-size:20px;">{{ t('add_liquidity') }}</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">
       </div>
+      <ul v-if="duplicateLpId" class="list-disc mb-6 text-sm ml-4" style="color: #FFC53D;line-height: 22px;">
+        <li>{{ t('duplicate_pool') }}</li>
+      </ul>
       <div class="mb-4 flex flex-row items-center justify-between" style="font-size:20px;">
         <div class="flex flex-row items-center">
           <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-6 h-6 -mr-2" />

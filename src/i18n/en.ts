@@ -62,7 +62,8 @@ const messages = {
   price_reached_$symbol: 'Your position will be 100% {symbol} at this price.',
   add_successful: 'Add successful!',
   close_lp_successful: 'LP Node Closed!',
-  need_nft: 'Need NFT to register'
+  need_nft: 'Need NFT to register',
+  duplicate_pool: 'This pool has been built, do you want to replace the original amount of the pool?'
 }
 
 export default messages

@@ -44,6 +44,7 @@ export default defineComponent({
     const tokenYAmount = ref('')
     const account = computed(() => store.state.account)
     const previewModalVisible = ref(false)
+    const duplicateLpId = ref(false)
     const btnMessage = computed(() => {
       if (!account.value) {
         return 'sign_up'
@@ -235,6 +236,9 @@ export default defineComponent({
     }
     const showPreviewModal = () => {
       if (btnMessage.value === 'preview' && !invalidRange.value) {
+        const { poolId } = getPoolData(swapInfo.poolList)
+        const lpId = getLpId(poolId, account.value, jsonConfig)
+        duplicateLpId.value = store.state.lps.some(lp => lp.lpId === lpId)
         previewModalVisible.value = true
       }
     }
@@ -327,7 +331,8 @@ export default defineComponent({
       invalidRange,
       showRegisterModal,
       oppositePrice,
-      t
+      t,
+      duplicateLpId
     }
   }
 })
@@ -555,6 +560,7 @@ export default defineComponent({
       @closePairModal="pairModalVisible = false" />
     <PreviewModal
       :class="previewModalVisible ? 'block' : 'hidden'"
+      :duplicate-lp-id="duplicateLpId"
       :low-price="lowPrice"
       :high-price="highPrice"
       :token-x="tokenX"

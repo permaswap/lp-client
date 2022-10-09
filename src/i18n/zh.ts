@@ -62,7 +62,8 @@ const messages = {
   price_reached_$symbol: '当达到此兑换率时，您的仓位流动资金将 100% 由 {symbol} 代币所组成。',
   add_successful: '添加成功！',
   close_lp_successful: 'LP Node 关闭！',
-  need_nft: '需持有NFT才能注册'
+  need_nft: '需持有NFT才能注册',
+  duplicate_pool: '该流动性池已存在，是否替换该池的原数额？'
 }
 
 export default messages

@@ -19,6 +19,9 @@ export default defineComponent({
     const lps = computed(() => store.state.lps)
     const volumesStack = ref({})
     const tvlsStack = ref({})
+    const successConnect = computed(() => store.state.successConnect)
+    const manualConnect = computed(() => store.state.manualConnect)
+    const showConnectTip = ref(false)
 
     onMounted(async () => {
       if (lps.value.length) {
@@ -39,6 +42,9 @@ export default defineComponent({
       t,
       lps,
       isInRange,
+      successConnect,
+      manualConnect,
+      showConnectTip,
       account,
       volumesStack,
       tvlsStack,
@@ -74,6 +80,39 @@ export default defineComponent({
     <div style="background: #161E1B;border-radius: 24px;" class="p-4">
       <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span>{{ t('my_pool') }} {{ lps.length ? `(${lps.length})` : '' }}</span>
+        <div
+          v-if="manualConnect"
+          class="flex flex-row items-center justify-end">
+          <div
+            v-if="showConnectTip"
+            class="flex flex-row items-center justify-end text-xs mr-2"
+            style="padding: 4px 8px;border-radius: 6px;"
+            :style="successConnect ? 'background: rgba(82, 199, 99, 0.25);' : 'background: rgba(255, 125, 105, 0.25);'"
+          >
+            <div>{{ successConnect ? t('normal_connect') : t('connecting') }}</div>
+            <img
+              src="@/images/cancel.png"
+              class="w-4 h-4 ml-2 cursor-pointer"
+              @click="showConnectTip = false"
+            >
+          </div>
+          <div
+            class="relative cursor-pointer"
+            style="width: 14px;height: 14px;"
+            @click="showConnectTip = true"
+          >
+            <div
+              class="absolute rounded-full breath"
+              style="width: 14px;height: 14px;opacity: 0.45;"
+              :style="successConnect ? 'background: #52C763;' : 'background: #FF7D69;'"
+            />
+            <div
+              class="absolute rounded-full"
+              style="width: 8px;height: 8px;top:3px;left:3px;"
+              :style="successConnect ? 'background: #52C763;' : 'background: #FF7D69;'"
+            />
+          </div>
+        </div>
       </div>
       <div class="text-sm my-8 text-center" style="color: rgba(255, 255, 255, 0.45);">
         <ul v-if="lps.length && account" class="text-left">
@@ -146,5 +185,18 @@ export default defineComponent({
     &:hover {
       background: rgba(54, 63, 59, 0.3);
     }
+  }
+  @keyframes breath {
+    from {
+      transform: scale(0.8);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .breath {
+    animation-name: breath;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
   }
 </style>

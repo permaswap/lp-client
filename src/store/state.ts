@@ -8,6 +8,7 @@ export interface State {
   holderToNFTs: any
   whitelist: string[]
   manualConnect: boolean
+  successConnect: boolean
 }
 
 export const defaultState = {
@@ -19,5 +20,6 @@ export const defaultState = {
   lps: [],
   holderToNFTs: {},
   whitelist: [],
-  manualConnect: false
+  manualConnect: false,
+  successConnect: false
 }

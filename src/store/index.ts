@@ -61,6 +61,9 @@ export default createStore<State>({
     },
     updateManualConnect (state, manualConnect) {
       state.manualConnect = manualConnect
+    },
+    updateSuccessConnect (state, successConnect) {
+      state.successConnect = successConnect
     }
   },
 

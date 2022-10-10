@@ -63,7 +63,9 @@ const messages = {
   add_successful: 'Add successful!',
   close_lp_successful: 'LP Node Closed!',
   need_nft: 'Need NFT to register',
-  duplicate_pool: 'This pool has been built, do you want to replace the original amount of the pool?'
+  duplicate_pool: 'This pool has been built, do you want to replace the original amount of the pool?',
+  normal_connect: 'Normal connection with the Router.',
+  connecting: 'Connecting...'
 }
 
 export default messages

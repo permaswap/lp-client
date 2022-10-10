@@ -38,7 +38,7 @@ export default defineComponent({
         <span
           class="text-xs ml-2 border rounded px-1 leading-5"
           style="color:rgba(255, 255, 255, 0.65);border-color:rgba(121, 212, 131, 0.25)"
-        >TestNet</span>
+        >Beta</span>
       </div>
       <div class="text-base" :style="selectOverview ? 'color: #79D483;' : 'color: rgba(255, 255, 255, 0.85);'">
         {{ t('pool_overview') }}

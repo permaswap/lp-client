@@ -290,10 +290,12 @@ export default defineComponent({
           } catch {
             networkError = true
           }
-          if (((readyState !== 0 && readyState !== 1) || networkError) && store.state.manualConnect) {
+          const successConnect = !((readyState !== 0 && readyState !== 1) || networkError)
+          if (!successConnect && store.state.manualConnect) {
             socket.close()
             tryConnect(true)
           }
+          store.commit('updateSuccessConnect', successConnect)
           checkSocket()
         }, 5000)
       }

@@ -9,6 +9,7 @@ import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
 import { ElMessage } from 'element-plus'
+import permaBack from '../images/perma-back.png'
 
 export default defineComponent({
   components: { CloseConfirmModal, Range, TokenLogo },
@@ -74,6 +75,7 @@ export default defineComponent({
 
     return {
       oppositePrice,
+      permaBack,
       amountX,
       amountY,
       inRange,
@@ -111,8 +113,21 @@ export default defineComponent({
         {{ t('close_lp_node') }}
       </div>
     </div>
-    <div class="flex flex-row justify-between mb-6">
-      <div class="border-box px-4" style="width: 424px;height: 222px;background: #161E1B;border-radius: 12px;">
+    <div
+      class="flex flex-row justify-between mb-6"
+    >
+      <div
+        class="border-box px-4"
+        :style="`
+          width: 424px;
+          height: 222px;
+          background-image:url(${permaBack});
+          background-position:top right;
+          background-color: #161E1B;
+          border-radius: 12px;
+        `
+        "
+      >
         <div class="pt-4 pb-2 mb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
           {{ t('contribution_value') }}
         </div>
@@ -121,7 +136,7 @@ export default defineComponent({
         </div>
       </div>
       <div>
-        <div class="border-box px-4 mb-6" style="width: 424px;height: 144px;background: #161E1B;border-radius: 12px;">
+        <div class="border-box px-4 mb-4" style="width: 424px;height: 144px;background: #161E1B;border-radius: 12px;">
           <div
             class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">

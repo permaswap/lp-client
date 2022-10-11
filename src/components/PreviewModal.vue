@@ -138,7 +138,7 @@ export default defineComponent({
           <div class="text-xs" style="opacity:0.65">
             {{ t('max_price') }}
           </div>
-          <div style="font-size:20px;" class="my-1">
+          <div :style="highPrice === '∞' ? 'font-size:24px;' : 'font-size:20px;'" class="my-1">
             {{ highPrice }}
           </div>
           <div class="text-xs" style="opacity:0.65">

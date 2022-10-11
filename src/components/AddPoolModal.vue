@@ -468,6 +468,7 @@ export default defineComponent({
               <div
                 class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
                 style="background: #161E1B;border-radius: 6px;"
+                :style="lowPrice === '0' ? 'opacity:0.3;' : 'opacity:1;'"
                 @click="reduceLowPrice"
               >
                 -
@@ -481,6 +482,7 @@ export default defineComponent({
               <div
                 class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
                 style="background: #161E1B;border-radius: 6px;"
+                :style="lowPrice === '0' ? 'opacity:0.3;' : 'opacity:1;'"
                 @click="plusLowPirce"
               >
                 +
@@ -498,6 +500,7 @@ export default defineComponent({
               <div
                 class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
                 style="background: #161E1B;border-radius: 6px;"
+                :style="highPrice === '∞' ? 'opacity:0.3;' : 'opacity:1;'"
                 @click="reduceHighPrice"
               >
                 -
@@ -511,6 +514,7 @@ export default defineComponent({
               <div
                 class="w-6 h-6 flex flex-row items-center justify-center cursor-pointer"
                 style="background: #161E1B;border-radius: 6px;"
+                :style="highPrice === '∞' ? 'opacity:0.3;' : 'opacity:1;'"
                 @click="plusHighPrice"
               >
                 +

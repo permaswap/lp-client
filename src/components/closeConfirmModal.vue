@@ -34,7 +34,7 @@ export default defineComponent({
     <div
       style="
     position: fixed;
-    background: #363F3B;
+    background: #242D2A;
     box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);
     border-radius: 24px;
     width:480px;

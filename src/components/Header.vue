@@ -32,7 +32,7 @@ export default defineComponent({
   <div class="h-20">
     <div
       class="flex flex-row items-center justify-between px-16 py-6 fixed w-full"
-      style="background: #000A06;z-index: 20;">
+      style="background: #000A06;z-index: 9;">
       <div class="flex flex-row items-end">
         <img class="h-8" src="@/images/logo.png">
         <span

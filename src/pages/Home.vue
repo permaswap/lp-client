@@ -26,6 +26,8 @@ const selectLp = (lp: any, volume: string, tvl: string) => {
 }
 store.commit('updateAccount', '')
 store.commit('clearLps')
+store.commit('updateManualConnect', false)
+store.commit('updateSuccessConnect', false)
 
 onMounted(async () => {
   const nftsResult = await getNfts()

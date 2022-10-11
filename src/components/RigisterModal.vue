@@ -148,6 +148,7 @@ export default defineComponent({
           handleOpen (data: any) {
             console.log('open', data)
             store.commit('updateManualConnect', true)
+            store.commit('updateSuccessConnect', true)
           },
           async handleSalt (data: any) {
             console.log('salt', data.salt)

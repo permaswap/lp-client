@@ -243,7 +243,7 @@ export default defineComponent({
         </li>
         <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="showDisconnectModal">
           <div class="flex flex-col items-center mr-3" style="width: 18px;">
-            <img src="@/images/disconnect.png" style="height:16px;">
+            <img src="@/images/disconnect.png" style="height:16px;margin-left: 3px;">
           </div>
           <span>{{ t('disconnect') }}</span>
         </li>

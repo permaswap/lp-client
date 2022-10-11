@@ -329,27 +329,34 @@ export default defineComponent({
     :class="registerModalVisible ? 'block' : 'hidden'">
     <div
       class="absolute border-box p-8"
-      style="width:480px;height: 610px; top: 162px;left:50%;transform: translateX(-50%);background: #242D2A;
+      style="width:480px;height: 590px; top: 162px;left:50%;transform: translateX(-50%);background: #242D2A;
   border-radius: 24px;z-index: 9;box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);">
       <div class="pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="flex flex-row items-center justify-between">
           <span style="font-size: 20px;" class="mb-2">{{ t('registration_node') }}</span>
-          <img class="cursor-pointer" src="@/images/close.png" @click="hidenRegisterModal">
+          <img
+            class="cursor-pointer"
+            style="opacity:0.65;"
+            src="@/images/close.png"
+            @click="hidenRegisterModal"
+          >
         </div>
         <div>
           <span class="text-sm" style="color: rgba(255, 255, 255, 0.65);">{{ t('hold_nft_register_1') }}</span>
           <a
-            class="text-sm ml-2"
+            class="text-xs ml-2"
             style="color: #D3B078;"
             href="https://permaswap.network/#/nft"
             target="_blank">{{ t('buy_nfts') }}</a>
         </div>
       </div>
-      <ul class="text-sm mb-6" style="color: rgba(255, 255, 255, 0.65); list-style-type: disc;margin-left: 16px;">
+      <ul class="text-xs mb-6" style="color: rgba(255, 255, 255, 0.65); list-style-type: disc;margin-left: 16px;">
         <li class="mb-2" style="color: #FFC53D;">
           {{ t('import_warn_1') }}
         </li>
-        <li>{{ t('import_warn_2') }}</li>
+        <li class="text-xs">
+          {{ t('import_warn_2') }}
+        </li>
       </ul>
       <div class="mb-6">
         <div class="mb-4">
@@ -358,7 +365,7 @@ export default defineComponent({
         <div class="flex flex-row items-center justify-between">
           <div
             class="border-box pl-6 text-sm cursor-pointer"
-            style="width: 196px;height: 38px;line-height:38px;background: #000A06;border-radius: 8px;"
+            style="width: 196px;height: 38px;line-height:38px;background: #161e1b;border-radius: 8px;"
             :style="selectedFormat === 'Ethereum' ? 'color: #79D483;border: 1px solid #79D483;' : 'color: rgba(255, 255, 255, 0.65);border: 1px solid rgba(255, 255, 255, 0.65);'"
             @click="selectedFormat = 'Ethereum'"
           >
@@ -366,7 +373,7 @@ export default defineComponent({
           </div>
           <div
             class="border-box pl-6 text-sm cursor-pointer"
-            style="width: 196px;height: 38px;line-height:38px;background: #000A06;border-radius: 8px;"
+            style="width: 196px;height: 38px;line-height:38px;background: #161e1b;border-radius: 8px;"
             :style="selectedFormat === 'Arweave' ? 'color: #79D483;border: 1px solid #79D483;' : 'color: rgba(255, 255, 255, 0.65);border: 1px solid rgba(255, 255, 255, 0.65);'"
             @click="selectedFormat = 'Arweave'"
           >
@@ -404,7 +411,7 @@ export default defineComponent({
           v-if="selectedFormat === 'Ethereum'"
           v-model="privateKey"
           class="privatekey-area p-3 block m-0"
-          style="resize: none;width: 416px;height: 68px;background: #000A06;border-radius: 12px;"
+          style="resize: none;width: 416px;height: 68px;background: #161e1b;border-radius: 12px;"
           placeholder="Please paste your private key" />
         <div
           v-if="selectedFormat === 'Arweave'"
@@ -440,21 +447,21 @@ export default defineComponent({
         >
         <span
           v-if="selectedFormat === 'Ethereum' && privateKey && !isPrivateKeyValid"
-          style="color: #FF7D69;"
+          style="color: #FF7D69;line-height:20px;"
           class="text-xs">
           {{ t('pk_notice') }}
         </span>
         <span
           v-if="selectedFormat === 'Arweave' && jwkFileName && !isJwkValid"
-          style="color: #FF7D69;"
+          style="color: #FF7D69;line-height:20px;"
           class="text-xs">
           {{ t('jwk_notice') }}
         </span>
       </div>
-      <div class="flex flex-row items-center justify-between">
+      <div class="flex flex-row items-center justify-between absolute" style="width:416px;bottom:32px;left:32px;">
         <div
           class="border-box cursor-pointer"
-          style="border: 1px solid #183B21;color: #79D483;border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
+          style="border: 1px solid rgba(121, 212, 131, 0.25);color: #79D483;border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
           @click="hidenRegisterModal">
           {{ t('cancel') }}
         </div>

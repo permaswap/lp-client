@@ -175,7 +175,7 @@ export default defineComponent({
               sig
             })
             store.commit('updateAccount', address)
-            store.commit('updatePrivateKey', privateKey.value)
+            store.commit('updatePrivateKey', '')
             store.commit('updateRegisterModalVisible', false)
 
             if (reconnect) {

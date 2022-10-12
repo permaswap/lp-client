@@ -54,7 +54,7 @@ const messages = {
   name: 'Name',
   clear_all: 'Clear All',
   set_price_range: 'Set Price Range',
-  become_lp: 'Become LP Node',
+  become_lp: 'Run a Node',
   preview: 'Preview',
   insufficient_$symbol: 'Insufficient {symbol} Balance',
   back_to_overview: 'Back to Pool Overview',

@@ -1,13 +1,11 @@
 <template>
-  <div class="text-center h-12 w-full flex items-center relative justify-end" style="background: rgba(255, 197, 61, 0.2);backdrop-filter: blur(5px);top: 20px;">
+  <div class="text-center h-12 w-full flex items-center relative justify-end" style="background: rgba(255, 197, 61, 0.2);backdrop-filter: blur(5px);">
     <div ref="boxInfo" class="relative flex-1 overflow-hidden h-full cursor-pointer flex justify-center items-center">
       <div ref="info" class="whitespace-nowrap absolute leading-5" :class="isAnimation ? 'infoAnimation' : ''">
         <slot />
       </div>
     </div>
-    <el-icon class="cursor-pointer text-xl sm:ml-6 sm:mr-20 mr-10 ml-4" @click="emits('close')">
-      <Close />
-    </el-icon>
+    <i class="el-icon-close cursor-pointer text-xl sm:ml-6 sm:mr-20 mr-10 ml-4" @click="emits('close')" />
   </div>
 </template>
 

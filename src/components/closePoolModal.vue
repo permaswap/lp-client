@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n'
 import CloseConfirmModal from './closeConfirmModal.vue'
 import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
-import { ElMessage } from 'element-plus'
+import { permaMessage } from './Message'
 import permaBack from '../images/perma-back.png'
 
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
       sendRemove(props.lp)
       store.commit('removeLp', props.lp)
       context.emit('back')
-      ElMessage({
+      permaMessage({
         showClose: true,
         message: t('close_lp_successful'),
         type: 'success',

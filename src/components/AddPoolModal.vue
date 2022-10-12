@@ -10,7 +10,7 @@ import PairModal from './PairModal.vue'
 import PreviewModal from './PreviewModal.vue'
 import TokenLogo from './TokenLogo.vue'
 import InputArea from './InputArea.vue'
-import { ElMessage } from 'element-plus'
+import { permaMessage } from './Message'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
@@ -259,7 +259,7 @@ export default defineComponent({
         highPrice: highPrice.value
       })
       store.commit('updateAddPoolModalVisible', false)
-      ElMessage({
+      permaMessage({
         showClose: true,
         message: t('add_successful'),
         type: 'success',

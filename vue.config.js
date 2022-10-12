@@ -6,7 +6,12 @@ module.exports = {
         include: /node_modules/,
         type: 'javascript/auto'
       }]
-    }
+    },
+    plugins: [
+      require('unplugin-element-plus/webpack')({
+        // options
+      })
+    ]
   },
   pluginOptions: {
     electronBuilder: {

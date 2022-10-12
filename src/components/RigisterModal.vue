@@ -11,7 +11,7 @@ import { toBN } from '@/lib/util'
 import { swapX, swapY } from '@/lib/math'
 import Everpay from 'everpay'
 import { useI18n } from 'vue-i18n'
-import { ElMessage } from 'element-plus/lib/components'
+import { permaMessage } from './Message'
 
 const formatFilename = (name: string) => {
   if (name.length < 30) {
@@ -59,7 +59,7 @@ export default defineComponent({
           try {
             reader.readAsText(file)
           } catch {
-            ElMessage({
+            permaMessage({
               showClose: true,
               message: `There was an error when loading ${file.name}`,
               type: 'error',
@@ -68,14 +68,14 @@ export default defineComponent({
           }
 
           reader.onabort = () =>
-            ElMessage({
+            permaMessage({
               showClose: true,
               message: 'File reading was aborted',
               type: 'error',
               duration: 3000
             })
           reader.onerror = () =>
-            ElMessage({
+            permaMessage({
               showClose: true,
               message: 'File reading has failed',
               type: 'error',
@@ -96,7 +96,7 @@ export default defineComponent({
               arAddress = ''
               arJwk = {}
               isJwkValid.value = false
-              // ElMessage({
+              // permaMessage({
               //   showClose: true,
               //   message: 'There was an error when loading a keyfile',
               //   type: 'error',
@@ -131,7 +131,7 @@ export default defineComponent({
       }
 
       if (!holderToNFTs[address] && !whitelist.includes(address)) {
-        ElMessage({
+        permaMessage({
           showClose: true,
           message: t('need_nft'),
           type: 'error',

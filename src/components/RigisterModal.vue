@@ -326,7 +326,7 @@ export default defineComponent({
 <template>
   <div
     class="fixed"
-    style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;z-index: 10;"
+    style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;z-index: 20;"
     :class="registerModalVisible ? 'block' : 'hidden'">
     <div
       class="absolute border-box p-8"

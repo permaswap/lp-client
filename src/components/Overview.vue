@@ -145,7 +145,7 @@ export default defineComponent({
             </div>
             <div class="mr-8 text-xs" style="width:160px;">
               <div>Min:{{ lp.lowPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
-              <img src="@/images/arrow-both.png">
+              <img src="@/images/arrow-both.png" class="w-3 h-3">
               <div>Max:{{ lp.highPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
             </div>
             <div class="text-right mr-8 text-white" style="width:100px;">

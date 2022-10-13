@@ -92,7 +92,7 @@ export default defineComponent({
 <template>
   <div style="width:864px;margin-top: 60px;" class="mx-auto">
     <div class="flex flex-row items-center mb-7">
-      <img src="@/images/back.png" class="cursor-pointer" @click="$emit('back')">
+      <img src="@/images/back2.png" class="w-6 h-6 cursor-pointer" @click="$emit('back')">
       <div style="color: rgba(255, 255, 255, 0.65);" class="text-sm ml-2 cursor-pointer" @click="$emit('back')">
         {{ t('back_to_overview') }}
       </div>
@@ -159,8 +159,8 @@ export default defineComponent({
           </div>
         </div>
         <div
-          class="flex flex-row items-center justify-between text-sm p-4"
-          style="background: #161E1B;border-radius: 12px;">
+          class="flex flex-row items-center justify-between text-sm"
+          style="background: #161E1B;border-radius: 12px;padding: 21px 16px;">
           <span>{{ t('volume') }} (24h)</span>
           <span>{{ volume !== '-' ? `${volume} USD` : volume }}</span>
         </div>

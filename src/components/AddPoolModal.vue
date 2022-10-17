@@ -157,11 +157,11 @@ export default defineComponent({
       if (amount != null) {
         tokenXAmount.value = amount
       }
-      if (amount === '' || !amount) {
+      if (amount === '') {
         tokenYAmount.value = ''
         return
       }
-      if (+amount === 0) {
+      if (+(amount as any) === 0) {
         tokenYAmount.value = '0'
         return
       }
@@ -185,11 +185,11 @@ export default defineComponent({
       if (amount != null) {
         tokenYAmount.value = amount
       }
-      if (amount === '' || !amount) {
+      if (amount === '') {
         tokenXAmount.value = ''
         return
       }
-      if (+amount === 0) {
+      if (+(amount as any) === 0) {
         tokenXAmount.value = '0'
         return
       }

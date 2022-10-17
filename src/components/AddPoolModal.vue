@@ -161,7 +161,7 @@ export default defineComponent({
         tokenYAmount.value = ''
         return
       }
-      if (+(amount as any) === 0) {
+      if (+(amount as any) === 0 || +tokenXAmount.value === 0) {
         tokenYAmount.value = '0'
         return
       }
@@ -189,7 +189,7 @@ export default defineComponent({
         tokenXAmount.value = ''
         return
       }
-      if (+(amount as any) === 0) {
+      if (+(amount as any) === 0 || +tokenYAmount.value === 0) {
         tokenXAmount.value = '0'
         return
       }

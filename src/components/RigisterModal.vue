@@ -177,6 +177,8 @@ export default defineComponent({
             store.commit('updateAccount', address)
             store.commit('updatePrivateKey', '')
             store.commit('updateRegisterModalVisible', false)
+            jwkFileName.value = ''
+            isJwkValid.value = false
 
             if (reconnect) {
               console.log('reconnect')

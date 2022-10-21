@@ -66,6 +66,7 @@ export interface InitSocketParams {
   handleSalt: any
   handleOrder: any
   handleOpen: any
+  handleStatus: any
 }
 
 export const initSocket = (params: InitSocketParams): void => {
@@ -84,6 +85,10 @@ export const initSocket = (params: InitSocketParams): void => {
     } else if (data.event === 'error') {
       if (params.handleError != null) {
         params.handleError(data)
+      }
+    } else if (data.event === 'status') {
+      if (params.handleStatus != null) {
+        params.handleStatus(data)
       }
     }
   })
@@ -184,4 +189,9 @@ export const getLpId = (poolId: string, address: string, jsonConfig: any): strin
   const lpId = uint8ArrayToHex(hashPersonalMessage(Buffer.from(msg)))
   console.log('lpId', lpId)
   return lpId
+}
+
+export const getOrderHash = (bundle: any): string => {
+  const orderHash = uint8ArrayToHex(hashPersonalMessage(Buffer.from(JSON.stringify(bundle))))
+  return orderHash
 }

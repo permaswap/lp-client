@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd, sendAdd, getSwapInfo } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd, getSwapInfo, getOrderHash } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -140,7 +140,11 @@ export default defineComponent({
         return
       }
 
+      const orderHandlers = [] as any[]
+      const orderHashHandleStack = {} as any
+
       const tryConnect = (reconnect: boolean) => {
+        let isProcessingOrder = false
         socket = initSocket({
           handleError (error: any) {
             console.log('error', error)
@@ -190,91 +194,125 @@ export default defineComponent({
             }
           },
           async handleOrder (data: any) {
-            const validatePathsData = (paths: any): boolean => {
-              const stack = {} as any
-              let result: boolean = true
-              paths.forEach((pathData: any) => {
-                if (!stack[pathData.lpId]) {
-                  stack[pathData.lpId] = {}
-                }
-                if (pathData.to.toLowerCase() === address.toLowerCase()) {
-                  stack[pathData.lpId].amountIn = pathData.amount
-                  stack[pathData.lpId].tokenTagIn = pathData.tokenTag
-                }
-                if (pathData.from.toLowerCase() === address.toLowerCase()) {
-                  stack[pathData.lpId].amountOut = pathData.amount
-                  stack[pathData.lpId].tokenTagOut = pathData.tokenTag
-                }
-              })
-              console.log('stack', stack)
-              Object.entries(stack).forEach(([lpId, amountData]) => {
-                const jsonConfig = store.state.lps.find(jsonConfig => {
-                  return jsonConfig.lpId === lpId
+            const handler = async () => {
+              const validatePathsData = (paths: any): boolean => {
+                const stack = {} as any
+                let result: boolean = true
+                paths.forEach((pathData: any) => {
+                  if (!stack[pathData.lpId]) {
+                    stack[pathData.lpId] = {}
+                  }
+                  if (pathData.to.toLowerCase() === address.toLowerCase()) {
+                    stack[pathData.lpId].amountIn = pathData.amount
+                    stack[pathData.lpId].tokenTagIn = pathData.tokenTag
+                  }
+                  if (pathData.from.toLowerCase() === address.toLowerCase()) {
+                    stack[pathData.lpId].amountOut = pathData.amount
+                    stack[pathData.lpId].tokenTagOut = pathData.tokenTag
+                  }
                 })
-                console.log('jsonConfig', jsonConfig)
-                if (jsonConfig) {
-                  if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
-                    try {
-                      const [newCurrentSqrtPrice, amountOutY] = swapX((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
-                      console.log('amountOutY', amountOutY)
-                      if (toBN(amountOutY).gte((amountData as any).amountOut)) {
-                        store.commit('updateLp', {
-                          ...jsonConfig,
-                          currentSqrtPrice: newCurrentSqrtPrice
-                        })
-                      } else {
-                        result = false
+                console.log('stack', stack)
+                Object.entries(stack).forEach(([lpId, amountData]) => {
+                  const jsonConfig = store.state.lps.find(jsonConfig => {
+                    return jsonConfig.lpId === lpId
+                  })
+                  console.log('jsonConfig', jsonConfig)
+                  if (jsonConfig) {
+                    if ((amountData as any).tokenTagIn === jsonConfig.tokenX) {
+                      try {
+                        const [newCurrentSqrtPrice, amountOutY] = swapX((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                        console.log('amountOutY', amountOutY)
+                        console.log('amountOutPath', (amountData as any).amountOut)
+                        if (toBN(amountOutY).gte((amountData as any).amountOut)) {
+                          orderHashHandleStack[orderHash] = () => {
+                            store.commit('updateLp', {
+                              ...jsonConfig,
+                              currentSqrtPrice: newCurrentSqrtPrice
+                            })
+                          }
+                        } else {
+                          result = false
+                        }
+                      } catch (e) { console.log('errr', e) }
+                    } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
+                      try {
+                        const [newCurrentSqrtPrice, amountOutX] = swapY((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
+                        console.log('amountOutX', amountOutX)
+                        console.log('amountOutPath', (amountData as any).amountOut)
+                        if (toBN(amountOutX).gte((amountData as any).amountOut)) {
+                          orderHashHandleStack[orderHash] = () => {
+                            store.commit('updateLp', {
+                              ...jsonConfig,
+                              currentSqrtPrice: newCurrentSqrtPrice
+                            })
+                          }
+                        } else {
+                          result = false
+                        }
+                      } catch (e) {
+                        console.log('errr', e)
                       }
-                    } catch (e) { console.log('errr', e) }
-                  } else if ((amountData as any).tokenTagOut === jsonConfig.tokenX) {
-                    try {
-                      const [newCurrentSqrtPrice, amountOutX] = swapY((amountData as any).amountIn, jsonConfig.lowSqrtPrice, jsonConfig.currentSqrtPrice, jsonConfig.highSqrtPrice, jsonConfig.liquidity, jsonConfig.feeRatio)
-                      console.log('amountOutY', amountOutX)
-                      console.log('amountOutPath', amountOutX)
-                      if (toBN(amountOutX).gte((amountData as any).amountOut)) {
-                        store.commit('updateLp', {
-                          ...jsonConfig,
-                          currentSqrtPrice: newCurrentSqrtPrice
-                        })
-                      } else {
-                        result = false
-                      }
-                    } catch (e) {
-                      console.log('errr', e)
                     }
                   }
-                }
-              })
-              return result
-            }
-
-            console.log('order', data)
-            const validate = validatePathsData(data.paths)
-            console.log('validate', validate)
-            if (validate) {
-              let everpayWithAccount: any
-              if (selectedFormat.value === 'Ethereum') {
-                const signer = new ethers.Wallet(privateKey.value)
-                everpayWithAccount = new Everpay({
-                  account: signer.address,
-                  ethConnectedSigner: signer,
-                  chainType: 'ethereum' as any,
-                  debug: !isProd
                 })
-              } else if (selectedFormat.value === 'Arweave') {
-                everpayWithAccount = new Everpay({
-                  account: address,
-                  arJWK: arJwk as any,
-                  chainType: 'arweave' as any,
-                  debug: !isProd
-                })
+                return result
               }
 
-              const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
-              sendSign({
-                address: address,
-                bundle: bundleDataWithSigs
-              })
+              console.log('order', data)
+              const orderHash = getOrderHash(data.bundle)
+              console.log('orderHash', orderHash)
+              const validate = validatePathsData(data.paths)
+              console.log('validate', validate)
+              if (validate) {
+                let everpayWithAccount: any
+                if (selectedFormat.value === 'Ethereum') {
+                  const signer = new ethers.Wallet(privateKey.value)
+                  everpayWithAccount = new Everpay({
+                    account: signer.address,
+                    ethConnectedSigner: signer,
+                    chainType: 'ethereum' as any,
+                    debug: !isProd
+                  })
+                } else if (selectedFormat.value === 'Arweave') {
+                  everpayWithAccount = new Everpay({
+                    account: address,
+                    arJWK: arJwk as any,
+                    chainType: 'arweave' as any,
+                    debug: !isProd
+                  })
+                }
+                isProcessingOrder = true
+                const bundleDataWithSigs = await everpayWithAccount.signBundleData(data.bundle)
+                sendSign({
+                  address: address,
+                  bundle: bundleDataWithSigs
+                })
+              }
+            }
+
+            orderHandlers.push(handler)
+            if (!isProcessingOrder) {
+              const handle = orderHandlers[0]
+              handle()
+              orderHandlers.shift()
+            }
+          },
+          async handleStatus (data: any) {
+            const orderHash = data.orderHash
+            if (orderHashHandleStack[orderHash]) {
+              if (data.status === 'success') {
+                console.log('update new current price')
+                orderHashHandleStack[orderHash]()
+              } else {
+                console.log('failed')
+              }
+              delete orderHashHandleStack[orderHash]
+            }
+            isProcessingOrder = false
+            if (orderHandlers.length) {
+              const handle = orderHandlers[0]
+              handle()
+              orderHandlers.shift()
             }
           }
         })

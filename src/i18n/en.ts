@@ -13,7 +13,7 @@ const messages = {
   pk_notice: 'Expected private key to be a string with length 64 and a-f, 0-9 characters',
   max_price: 'Max Price',
   select_pair: 'Select a Pair',
-  my_pool: 'My LP',
+  my_pool: 'My Position',
   out_price_range: 'The market price is outside your specified price range.',
   hold_nft_register_1: 'Holding certified NFT to register as a node.',
   hold_nft_register: 'Holding certified NFT to register as a node and get more rewards!',

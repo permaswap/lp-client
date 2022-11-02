@@ -11,6 +11,7 @@ import AddPoolModal from '../components/AddPoolModal.vue'
 import ClosePoolModal from '../components/closePoolModal.vue'
 import NoticeBoard from '../components/NoticeBoard.vue'
 import { getNfts } from '@/lib/swap'
+import DownloadModal from '@/components/DownloadModal.vue'
 
 const store = useStore()
 const account = computed(() => store.state.account)
@@ -33,6 +34,7 @@ onMounted(async () => {
   const nftsResult = await getNfts()
   store.commit('updateHolderToNFTs', nftsResult.holderToNFTs)
   store.commit('updateWhitelist', nftsResult.whitelist)
+  store.dispatch('updateInfoAsync')
 })
 
 watch(account, () => {
@@ -60,6 +62,7 @@ watch(account, () => {
         @back="selectedLp = null" />
       <Overview v-else-if="!addPoolModalVisible" @selectLp="selectLp" />
       <AddPoolModal v-else />
+      <DownloadModal />
     </div>
     <!-- <Footer /> -->
   </div>

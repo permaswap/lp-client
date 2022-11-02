@@ -1,9 +1,9 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
-import { getLpId, getPoolPrice, getSwapInfo, sendAdd, isProd } from '@/lib/swap'
+import { getLpId, getPoolPrice, sendAdd, isProd } from '@/lib/swap'
 import { useStore } from '@/store'
-import { formatInputPrecision, toBN, getAmountFromLps } from '@/lib/util'
+import { formatInputPrecision, toBN, getAmountFromLps, isValidVersion } from '@/lib/util'
 import { getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
 import { getAmountXAndLiquidity, getAmountYAndLiquidity } from '@/lib/math'
 import PairModal from './PairModal.vue'
@@ -113,7 +113,8 @@ export default defineComponent({
     onMounted(async () => {
       dataLoading.value = true
       info = await everpay.info()
-      swapInfo = await getSwapInfo()
+      await store.dispatch('updateInfoAsync')
+      swapInfo = store.state.info
       pairs.value = getPairs(info.tokenList, swapInfo.poolList) as any
       console.log('pairs.value', pairs.value)
       tokenXs.value = getTokenXs(info.tokenList, swapInfo.poolList)
@@ -295,7 +296,11 @@ export default defineComponent({
       }
     }
     const showRegisterModal = () => {
-      store.commit('updateRegisterModalVisible', true)
+      if (!isValidVersion(store.state.info.version)) {
+        store.commit('updateDownloadModalVisible', true)
+      } else {
+        store.commit('updateRegisterModalVisible', true)
+      }
     }
     const oppositePrice = computed(() => {
       return formatInputPrecision(toBN(1).dividedBy(currentPrice.value).toString(), 8)

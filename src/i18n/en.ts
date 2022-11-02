@@ -5,7 +5,8 @@ const messages = {
   volume: 'Volume',
   out_of_range: 'Out of range',
   liquidity: 'Liquidity',
-  pool_overview: 'LP Overview',
+  pool_overview: 'Pool',
+  pool_overview_2: 'Pools',
   balance_on_everpay: 'Balance on everPay',
   collect_nft: 'Collect NFT',
   pls_paste_pk: 'Please paste your private key',
@@ -19,7 +20,7 @@ const messages = {
   hold_nft_register: 'Holding certified NFT to register as a node and get more rewards!',
   think_again: 'Think Again',
   deposit_amounts: 'Deposit Amounts',
-  registration_node: 'Registration node',
+  registration_node: 'Add Wallet',
   close_lp_node: 'Close LP Node',
   deposit: 'Deposit',
   deposit_2: 'Deposit  ↗︎',
@@ -29,6 +30,7 @@ const messages = {
   add_liquidity: 'Add Liquidity',
   new_position: 'New Position',
   disconnect: 'Disconnect',
+  import: 'Import',
   import_pk: 'Import Private Key',
   import_keyfile: 'Import Keyfile',
   jwk_notice: 'Invalid JSON file',
@@ -37,7 +39,7 @@ const messages = {
   invalid_out_range: 'Your position will not be used in trades until the market price moves into your range.',
   in_range: 'In range',
   enter_amount: 'Enter an Amount',
-  sign_up: 'Sign Up',
+  sign_up: 'Add Wallet',
   min_price: 'Min Price',
   your_at_liq_appr: 'Your active liquidity positions will appear here.',
   current_price: 'Current Price',
@@ -65,7 +67,9 @@ const messages = {
   need_nft: 'Need NFT to register',
   duplicate_pool: 'This pool has been built, do you want to replace the original amount of the pool?',
   normal_connect: 'Normal connection with the Router.',
-  connecting: 'Connecting...'
+  connecting: 'Connecting...',
+  download: 'Download',
+  download_tip: 'Please download the latest version of the client, otherwise the client will not work properly.'
 }
 
 export default messages

@@ -5,7 +5,8 @@ const messages = {
   volume: '交易量',
   out_of_range: '超出范围',
   liquidity: '流动性',
-  pool_overview: '流动性池概览',
+  pool_overview: '流动性池',
+  pool_overview_2: '流动性池',
   balance_on_everpay: 'everPay 上的余额',
   collect_nft: '收藏 NFT',
   pls_paste_pk: '请输入或粘贴私钥',
@@ -13,13 +14,13 @@ const messages = {
   pk_notice: '私钥为长度64位的 a-f, 0-9 字符串',
   max_price: '最高兑换率',
   select_pair: '选择交易对',
-  my_pool: '我的流动性池',
+  my_pool: '我的仓位',
   out_price_range: '市场兑换率超出您指定的范围。',
   hold_nft_register_1: '持有认证 NFT，成为 LP 节点。',
   hold_nft_register: '持有认证 NFT，成为 LP 节点，获取更多奖励！',
   think_again: '再想想',
   deposit_amounts: '充值数额',
-  registration_node: '注册节点',
+  registration_node: '添加钱包',
   close_lp_node: '关闭 LP 节点',
   deposit: '充值',
   deposit_2: '充值  ↗︎',
@@ -29,6 +30,7 @@ const messages = {
   add_liquidity: '增加流动性',
   new_position: '新仓位',
   disconnect: '断开',
+  import: '导入',
   import_pk: '导入私钥',
   import_keyfile: '导入 Keyfile',
   jwk_notice: '不符合 JWK File 格式',
@@ -37,7 +39,7 @@ const messages = {
   invalid_out_range: '您的仓位在市场兑换率变化进入到您设置的范围内之前不被用于进行兑换交易。',
   in_range: '在范围内',
   enter_amount: '输入数额',
-  sign_up: '注册',
+  sign_up: '添加钱包',
   min_price: '最低兑换率',
   your_at_liq_appr: '您的流动性仓位在此展示',
   current_price: '当前价格',
@@ -65,7 +67,9 @@ const messages = {
   need_nft: '需持有NFT才能注册',
   duplicate_pool: '该流动性池已存在，是否替换该池的原数额？',
   normal_connect: '与 Router 正常连接。',
-  connecting: '连接中...'
+  connecting: '连接中...',
+  download: '去下载',
+  download_tip: '请下载最新版本的客户端，否则客户端将无法正常运行。'
 }
 
 export default messages

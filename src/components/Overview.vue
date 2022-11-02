@@ -3,7 +3,7 @@ import { useStore } from '@/store'
 import { ref, computed, defineComponent, onMounted } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
-import { toBN, isInRange } from '@/lib/util'
+import { toBN, isInRange, isValidVersion } from '@/lib/util'
 import { useI18n } from 'vue-i18n'
 import { getStats } from '@/lib/swap'
 
@@ -14,7 +14,13 @@ export default defineComponent({
     const store = useStore()
     const { t } = useI18n()
     const account = computed(() => store.state.account)
-    const showRegisterModal = () => store.commit('updateRegisterModalVisible', true)
+    const showRegisterModal = () => {
+      if (!isValidVersion(store.state.info.version)) {
+        store.commit('updateDownloadModalVisible', true)
+      } else {
+        store.commit('updateRegisterModalVisible', true)
+      }
+    }
     const showAddPoolModal = () => store.commit('updateAddPoolModalVisible', true)
     const lps = computed(() => store.state.lps)
     const volumesStack = ref({})
@@ -58,7 +64,7 @@ export default defineComponent({
 <template>
   <div style="width:864px;" class="mx-auto">
     <div style="font-size: 20px;" class="mb-6 flex flex-row items-center justify-between">
-      <div>{{ t('pool_overview') }}</div>
+      <div>{{ t('pool_overview_2') }}</div>
 
       <div class="flex flex-row items-center">
         <a

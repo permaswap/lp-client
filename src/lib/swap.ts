@@ -40,6 +40,8 @@ export const getSwapInfo = async (): Promise<string[]> => {
     url,
     method: 'GET'
   })
+  // TODO: for test
+  result.data.version = 'v0.1.0'
   return result.data
 }
 
@@ -97,6 +99,8 @@ export const initSocket = (params: InitSocketParams): void => {
 }
 
 interface SendRegisterParams {
+  lpClientVerison: string
+  lpClientName: string
   address: string
   sig: string
 }
@@ -108,10 +112,12 @@ export const closeSocket = (): void => {
 }
 
 export const sendRegister = (params: SendRegisterParams): void => {
-  const { sig, address } = params
+  const { sig, address, lpClientName, lpClientVerison } = params
   const data = {
     event: 'register',
     address: address,
+    lpClientName,
+    lpClientVerison,
     sig
   }
   console.log('data', data)

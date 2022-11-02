@@ -14,6 +14,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@types/semver": "^7.3.13",
     "arweave": "^1.11.6",
     "bignumber.js": "^9.0.2",
     "clipboard": "^2.0.11",
@@ -22,6 +23,7 @@
     "everpay": "^0.5.1",
     "lodash": "^4.17.21",
     "redstone-api": "^0.4.11",
+    "semver": "^7.3.8",
     "vue": "^3.2.37",
     "vue-i18n": "^9.1.7",
     "vue-router": "4.0.10",
@@ -65,9 +67,9 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.3.5",
     "unplugin-auto-import": "^0.11.2",
+    "unplugin-element-plus": "0.1.0",
     "unplugin-vue-components": "^0.22.4",
-    "vue-cli-plugin-electron-builder": "~2.1.1",
-    "unplugin-element-plus": "0.1.0"
+    "vue-cli-plugin-electron-builder": "~2.1.1"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

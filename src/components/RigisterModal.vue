@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd, sendAdd, getSwapInfo, getOrderHash } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd, getOrderHash } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -12,6 +12,7 @@ import { swapX, swapY } from '@/lib/math'
 import Everpay from 'everpay'
 import { useI18n } from 'vue-i18n'
 import { permaMessage } from './Message'
+import { lpClientName, lpClientVerison } from '@/constants'
 
 const formatFilename = (name: string) => {
   if (name.length < 30) {
@@ -176,6 +177,8 @@ export default defineComponent({
 
             sendRegister({
               address,
+              lpClientName,
+              lpClientVerison,
               sig
             })
             store.commit('updateAccount', address)
@@ -327,7 +330,7 @@ export default defineComponent({
           const readyState = (socket as any).readyState
           let networkError = false
           try {
-            await getSwapInfo()
+            await store.dispatch('updateInfoAsync')
           } catch {
             networkError = true
           }
@@ -510,7 +513,7 @@ export default defineComponent({
           :class="((selectedFormat === 'Ethereum' && isPrivateKeyValid) || (selectedFormat === 'Arweave' && isJwkValid)) ? 'primary-btn' : 'disable-btn'"
           style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
           @click="handleRegister">
-          {{ t('sign_up') }}
+          {{ t('import') }}
         </div>
       </div>
     </div>

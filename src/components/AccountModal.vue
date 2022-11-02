@@ -6,7 +6,7 @@ import ClipboardJS from 'clipboard'
 import { useI18n } from 'vue-i18n'
 import { savedI18nStorageKey } from '@/constants'
 import DisconnectModal from './DisconnectModal.vue'
-import { checkParentsHas } from '@/lib/util'
+import { checkParentsHas, isValidVersion } from '@/lib/util'
 
 export default defineComponent({
   components: { DisconnectModal },
@@ -56,8 +56,13 @@ export default defineComponent({
     ]
     const hidenAccountModal = () => store.commit('updateAccountModalVisible', false)
     const showRegisterModal = () => {
-      store.commit('updateAccountModalVisible', false)
-      store.commit('updateRegisterModalVisible', true)
+      if (!isValidVersion(store.state.info.version)) {
+        store.commit('updateDownloadModalVisible', true)
+        store.commit('updateAccountModalVisible', false)
+      } else {
+        store.commit('updateAccountModalVisible', false)
+        store.commit('updateRegisterModalVisible', true)
+      }
     }
     const disconnect = () => {
       disconnectConfirmModalVisible.value = false
@@ -106,6 +111,8 @@ export default defineComponent({
           hidenAccountModal()
         }
       })
+
+      store.dispatch('updateInfoAsync')
     })
 
     onUnmounted(() => {

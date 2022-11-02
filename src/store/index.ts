@@ -2,6 +2,7 @@ import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { InjectionKey } from 'vue'
 import createPersistedState from 'vuex-persistedstate'
 import { State, defaultState } from './state'
+import { getSwapInfo } from '@/lib/swap'
 
 // define injection key
 // eslint-disable-next-line symbol-description
@@ -16,6 +17,12 @@ export default createStore<State>({
     },
     updatePrivateKey (state, privateKey) {
       state.privateKey = privateKey
+    },
+    updateInfo (state, info) {
+      state.info = info
+    },
+    updateDownloadModalVisible (state, visible) {
+      state.downloadModalVisible = visible
     },
     updateAccountModalVisible (state, visible) {
       state.accountModalVisible = visible
@@ -72,7 +79,10 @@ export default createStore<State>({
   },
 
   actions: {
-
+    async updateInfoAsync ({ commit }) {
+      const info = await getSwapInfo()
+      commit('updateInfo', info)
+    }
   },
 
   modules: {},

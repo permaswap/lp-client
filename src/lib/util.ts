@@ -1,7 +1,9 @@
+import { lpClientVerison } from '@/constants'
 import BN from 'bignumber.js'
 import { Token } from 'everpay'
 import isString from 'lodash/isString'
 import { getAmountXY } from './math'
+import semver from 'semver'
 
 BN.config({
   EXPONENTIAL_AT: 1000
@@ -90,4 +92,10 @@ export const getAmountFromLps = (lps: any[], token: Token): string => {
     }
   })
   return fromDecimalToUnit(balances, token.decimals)
+}
+
+export const isValidVersion = (serverVision: string): boolean => {
+  const curV = lpClientVerison.slice(1)
+  const serV = serverVision.slice(1)
+  return semver.gte(curV, serV)
 }

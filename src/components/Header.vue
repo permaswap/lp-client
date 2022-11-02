@@ -48,7 +48,8 @@ export default defineComponent({
         style="background: #183B21;border: 1px solid rgba(121, 212, 131, 0.25);"
         @click="showAccountModal">
         <img v-if="!account" class="h-4" src="@/images/person.png">
-        <img v-else class="h-5" src="@/images/ethereum.png">
+        <img v-else-if="account.startsWith('0x')" class="h-5" src="@/images/ethereum.png">
+        <img v-else class="h-5" src="@/images/arweave.png">
         <span class="px-2" style="color: rgba(255, 255, 255, 0.85);">
           {{ account ? account.slice(0, 6) + '...' + account.slice(-4) : t('sign_up') }}
         </span>

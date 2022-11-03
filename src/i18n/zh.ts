@@ -69,7 +69,26 @@ const messages = {
   normal_connect: '与 Router 正常连接。',
   connecting: '连接中...',
   download: '去下载',
-  download_tip: '请下载最新版本的客户端，否则客户端将无法正常运行。'
+  download_tip: '请下载最新版本的客户端，否则客户端将无法正常运行。',
+  trade_overview: {
+    trading: '交易大赛',
+    trading_tip: '仅统计活动期间的交易数据。每 1 分钟更新一次。',
+    countdown: '倒计时：',
+    total_rewards: '总奖励',
+    total_rewards_tip: '周期内总奖励量',
+    total_volume: '总交易量',
+    total_volume_tip: '指定代币对应交易对的交易量。',
+    my_volume: '我的交易量',
+    my_volume_tip: '指定代幣的對應交易對的交易量。',
+    my_volume_share: '我的交易量占比',
+    my_volume_share_tip: '我的交易量占比 = 日交易量占比之和 / 活动天数 *100%。每 1 分钟更新一次。仅为预估值，准确数据以最终结算为准。',
+    my_est_rewards: '我的预估奖励',
+    my_est_rewards_tip: '我的预估总奖励= 总奖励 x 我的交易量占比；仅为预估值，准确数据以最终结算为准；',
+    address: '地址',
+    est_rewards: '预估奖励',
+    tutorial: '教程  ↗︎',
+    no_data: '暂无数据'
+  }
 }
 
 export default messages

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import NoticeTip from './NoticeTip.vue'
 import Top5Modal from './Top5Modal.vue'
 
@@ -13,8 +14,10 @@ export default defineComponent({
     const tip4Visible = ref(false)
     const tip5Visible = ref(false)
     const top5Visible = ref(false)
+    const { t } = useI18n()
 
     return {
+      t,
       tip0Visible,
       tip1Visible,
       tip2Visible,
@@ -42,9 +45,9 @@ export default defineComponent({
           class="cursor-pointer relative"
           @mouseover="tip0Visible = true"
           @mouseleave="tip0Visible = false">
-          Trading
+          {{ t('trade_overview.trading') }}
           <NoticeTip v-if="tip0Visible">
-            Only transaction data from the campaign period are counted. Updated every 1 minutes.
+            {{ t('trade_overview.trading_tip') }}
           </NoticeTip>
         </div>
         <a
@@ -53,7 +56,7 @@ export default defineComponent({
           class="text-xs"
           style="color: #79D483;"
         >
-          Tutorial  ↗︎
+          {{ t('trade_overview.tutorial') }}
         </a>
       </div>
       <div>
@@ -61,7 +64,7 @@ export default defineComponent({
           2022.12.12  ~ 2023.01.12
         </div>
         <div class="text-xs text-right" style="color: rgba(255, 255, 255, 0.65);">
-          End In: 7d 5h 25m 45s
+          {{ t('trade_overview.countdown') }} 7d 5h 25m 45s
         </div>
       </div>
     </div>
@@ -73,9 +76,9 @@ export default defineComponent({
           @mouseover="tip1Visible = true"
           @mouseleave="tip1Visible = false"
         >
-          Total Rewards
+          {{ t('trade_overview.total_rewards') }}
           <NoticeTip v-if="tip1Visible">
-            Only transaction data from the campaign period are counted. Updated every 1 minutes.
+            {{ t('trade_overview.total_rewards_tip') }}
           </NoticeTip>
         </div>
         <div style="color: #79D483;text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);font-size: 20px;">
@@ -89,9 +92,9 @@ export default defineComponent({
           @mouseover="tip2Visible = true"
           @mouseleave="tip2Visible = false"
         >
-          Total Volume
+          {{ t('trade_overview.total_volume') }}
           <NoticeTip v-if="tip2Visible">
-            Only transaction data from the campaign period are counted. Updated every 1 minutes.
+            {{ t('trade_overview.total_volume_tip') }}
           </NoticeTip>
         </div>
         <div style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);font-size: 20px;">
@@ -105,9 +108,9 @@ export default defineComponent({
           @mouseover="tip3Visible = true"
           @mouseleave="tip3Visible = false"
         >
-          My Volume
+          {{ t('trade_overview.my_volume') }}
           <NoticeTip v-if="tip3Visible">
-            Only transaction data from the campaign period are counted. Updated every 1 minutes.
+            {{ t('trade_overview.my_volume_tip') }}
           </NoticeTip>
         </div>
         <div style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);font-size: 20px;">
@@ -121,9 +124,9 @@ export default defineComponent({
           @mouseover="tip4Visible = true"
           @mouseleave="tip4Visible = false"
         >
-          My Volume Share
+          {{ t('trade_overview.my_volume_share') }}
           <NoticeTip v-if="tip4Visible">
-            Only transaction data from the campaign period are counted. Updated every 1 minutes.
+            {{ t('trade_overview.my_volume_share_tip') }}
           </NoticeTip>
         </div>
         <div style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);font-size: 20px;">
@@ -138,9 +141,9 @@ export default defineComponent({
           @mouseleave="tip5Visible = false"
         >
           <NoticeTip v-if="tip5Visible">
-            My Est. rewards = Total reward * My volume share; Provide only current est. reward, real data is based on official data. Provide only current est. reward, real data is based on official data
+            {{ t('trade_overview.my_est_rewards_tip') }}
           </NoticeTip>
-          <div>My Est. Rewards</div>
+          <div>{{ t('trade_overview.my_est_rewards') }}</div>
           <img src="@/images/award.png" class="w-4 h-4" @click="top5Visible = true">
         </div>
         <div style="text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);font-size: 20px;">

@@ -69,7 +69,26 @@ const messages = {
   normal_connect: 'Normal connection with the Router.',
   connecting: 'Connecting...',
   download: 'Download',
-  download_tip: 'Please download the latest version of the client, otherwise the client will not work properly.'
+  download_tip: 'Please download the latest version of the client, otherwise the client will not work properly.',
+  trade_overview: {
+    trading: 'Trading',
+    trading_tip: 'Only transaction data from the campaign period are counted. Updated every 1 minutes.',
+    countdown: 'End In: ',
+    total_rewards: 'Total Rewards',
+    total_rewards_tip: 'Total rewards in this period.',
+    total_volume: 'Total Volume',
+    total_volume_tip: "The Trading volume of the specified token's corresponding trading pairs.",
+    my_volume: 'My Volume',
+    my_volume_tip: "The Trading volume of the specified token's corresponding trading pairs",
+    my_volume_share: 'My Volume Share',
+    my_volume_share_tip: 'My Volume Share = Sum of Daily Volume Share / Amount of activity days * 100%. Where there are multiple liquidity pools, the average share of trading volume is taken. Updated every 1 minutes. Real data is based on official data.',
+    my_est_rewards: 'My Est. Rewards',
+    my_est_rewards_tip: 'My Est. rewards = Total reward * My volume share; Provide only current est. reward, real data is based on official data. Provide only current est. reward, real data is based on official data',
+    address: 'Address',
+    est_rewards: 'Est. Rewards',
+    tutorial: 'Tutorial  ↗︎',
+    no_data: 'No Data'
+  }
 }
 
 export default messages

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   props: {
@@ -10,7 +11,10 @@ export default defineComponent({
   },
   emits: ['close'],
   setup () {
-
+    const { t } = useI18n()
+    return {
+      t
+    }
   }
 })
 </script>
@@ -34,8 +38,8 @@ export default defineComponent({
       <img src="@/images/cancel2.png" class="w-4 h-4 cursor-pointer" @click="$emit('close')">
     </div>
     <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.65);">
-      <div>Address</div>
-      <div>Est. Rewards</div>
+      <div>{{ t('trade_overview.address') }}</div>
+      <div>{{ t('trade_overview.est_rewards') }}</div>
     </div>
     <ul v-if="items.length" class="text-sm">
       <li v-for="(item, index) in items" :key="index" class="mt-2 flex flex-row items-center justify-between">
@@ -44,7 +48,7 @@ export default defineComponent({
       </li>
     </ul>
     <div v-else class="mt-12 text-sm text-center" style="color:rgba(255, 255, 255, 0.45)">
-      No Data
+      {{ t('trade_overview.no_data') }}
     </div>
   </div>
 </template>

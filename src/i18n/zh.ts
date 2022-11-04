@@ -71,7 +71,7 @@ const messages = {
   download: '去下载',
   download_tip: '请下载最新版本的客户端，否则客户端将无法正常运行。',
   trade_overview: {
-    trading: '交易大赛',
+    trading: '极限测试',
     trading_tip: '仅统计活动期间的交易数据。每 1 分钟更新一次。',
     countdown: '倒计时：',
     total_rewards: '总奖励',

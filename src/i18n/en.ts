@@ -71,7 +71,7 @@ const messages = {
   download: 'Download',
   download_tip: 'Please download the latest version of the client, otherwise the client will not work properly.',
   trade_overview: {
-    trading: 'Trading',
+    trading: 'Stress Test',
     trading_tip: 'Only transaction data from the campaign period are counted. Updated every 1 minutes.',
     countdown: 'End In: ',
     total_rewards: 'Total Rewards',

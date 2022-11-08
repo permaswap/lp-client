@@ -43,7 +43,7 @@ export default defineComponent({
     </div>
     <ul v-if="items.length" class="text-sm">
       <li v-for="(item, index) in items" :key="index" class="mt-2 flex flex-row items-center justify-between">
-        <div>{{ item.addr }}</div>
+        <div>{{ item.accid }}</div>
         <div>{{ item.reward }}</div>
       </li>
     </ul>

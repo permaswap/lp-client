@@ -23,6 +23,7 @@ export default defineComponent({
   <div
     class="absolute p-4"
     style="
+      z-index: 2;
       height:242px;
       width:320px;
       background: #242D2A;

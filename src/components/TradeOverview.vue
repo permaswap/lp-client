@@ -119,7 +119,7 @@ export default defineComponent({
         }
       }
       timer()
-      intervalUpdateTimer = setTimeout(fetchData, 5000)
+      intervalUpdateTimer = setTimeout(fetchData, 60000)
     }
 
     watch(account, fetchData)
@@ -159,11 +159,10 @@ export default defineComponent({
     class="mx-auto p-8 mb-8"
   >
     <div
-      class="flex flex-row items-start justify-between pb-4 mb-4"
+      class="pb-4 mb-4"
       style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);"
     >
-      <div
-      >
+      <div class="flex flex-row items-start justify-between">
         <div
           class="cursor-pointer relative"
           @mouseover="tip0Visible = true"
@@ -173,6 +172,11 @@ export default defineComponent({
             {{ t('trade_overview.trading_tip') }}
           </NoticeTip>
         </div>
+        <div class="text-sm">
+          {{ eventTimeStr }}
+        </div>
+      </div>
+      <div class="flex flex-row items-start justify-between">
         <a
           target="_blank"
           href="https://medium.com/@Permaswap/limitless-stress-test-6f2bd738aa74"
@@ -181,11 +185,6 @@ export default defineComponent({
         >
           {{ t('trade_overview.tutorial') }}
         </a>
-      </div>
-      <div>
-        <div class="text-sm">
-          {{ eventTimeStr }}
-        </div>
         <div class="text-xs text-right" style="color: rgba(255, 255, 255, 0.65);">
           {{ t('trade_overview.countdown') }} {{ countdownStr }}
         </div>

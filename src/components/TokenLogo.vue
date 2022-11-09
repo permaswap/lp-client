@@ -27,7 +27,10 @@ const tokenListHasLogo = [
   'fox',
   'bnb',
   'lat',
-  'xsgd'
+  'xsgd',
+  'tar',
+  'tusdc',
+  'tardrive'
 ]
 
 export default defineComponent({

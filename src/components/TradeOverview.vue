@@ -67,9 +67,11 @@ export default defineComponent({
     const rewardSymbol = ref('')
     const top5Items = ref([])
     let countdownTimer = null as any
+    let intervalUpdateTimer = null as any
     let everpayInfo = null as any
 
     const fetchData = async () => {
+      clearTimeout(intervalUpdateTimer)
       const promises = [getTradingInfo()]
       if (store.state.account) {
         promises.push(getTradingStats(store.state.account))
@@ -117,6 +119,7 @@ export default defineComponent({
         }
       }
       timer()
+      intervalUpdateTimer = setTimeout(fetchData, 5000)
     }
 
     watch(account, fetchData)
@@ -172,7 +175,7 @@ export default defineComponent({
         </div>
         <a
           target="_blank"
-          href="https://baidu.com"
+          href="https://medium.com/@Permaswap/limitless-stress-test-6f2bd738aa74"
           class="text-xs"
           style="color: #79D483;"
         >

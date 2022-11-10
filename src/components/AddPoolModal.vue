@@ -296,7 +296,7 @@ export default defineComponent({
       }
     }
     const showRegisterModal = () => {
-      if (!isValidVersion(store.state.info.version)) {
+      if (!isValidVersion(store.state.info.lpClientInfo['lp-javascript'].version)) {
         store.commit('updateDownloadModalVisible', true)
       } else {
         store.commit('updateRegisterModalVisible', true)

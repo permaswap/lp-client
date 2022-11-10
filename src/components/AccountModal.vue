@@ -56,7 +56,7 @@ export default defineComponent({
     ]
     const hidenAccountModal = () => store.commit('updateAccountModalVisible', false)
     const showRegisterModal = () => {
-      if (!isValidVersion(store.state.info.version)) {
+      if (!isValidVersion(store.state.info.lpClientInfo['lp-javascript'].version)) {
         store.commit('updateDownloadModalVisible', true)
         store.commit('updateAccountModalVisible', false)
       } else {

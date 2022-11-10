@@ -94,17 +94,23 @@ export default defineComponent({
         myPercent.value = '—'
         myAstReward.value = '—'
       } else {
-        if (stats.volume < 0.01) {
+        if (+stats.volume === 0) {
+          myVolume.value = '—'
+        } else if (stats.volume < 0.01) {
           myVolume.value = '<$0.01'
         } else {
           myVolume.value = `$${toBN(stats.volume).toFixed(2)}`
         }
-        if (stats.percent < 0.01) {
+        if (+stats.percent === 0) {
+          myPercent.value = '—'
+        } else if (stats.percent < 0.01) {
           myPercent.value = '<0.01%'
         } else {
           myPercent.value = `${toBN(stats.percent).toFixed(2)}%`
         }
-        if (stats.reward < 0.01) {
+        if (+stats.reward === 0) {
+          myAstReward.value = '—'
+        } else if (stats.reward < 0.01) {
           myAstReward.value = `<0.01${rewardSymbol.value}`
         } else {
           myAstReward.value = `${toBN(stats.reward).toFixed(2)}${rewardSymbol.value}`

@@ -103,10 +103,10 @@ export default defineComponent({
         }
         if (+stats.percent === 0) {
           myPercent.value = '—'
-        } else if (stats.percent < 0.01) {
+        } else if (stats.percent * 100 < 0.01) {
           myPercent.value = '<0.01%'
         } else {
-          myPercent.value = `${toBN(stats.percent).toFixed(2)}%`
+          myPercent.value = `${toBN(stats.percent * 100).toFixed(2)}%`
         }
         if (+stats.reward === 0) {
           myAstReward.value = '—'

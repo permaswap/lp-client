@@ -1,6 +1,6 @@
 {
   "name": "perma-website",
-  "version": "0.0.0",
+  "version": "0.1.2",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

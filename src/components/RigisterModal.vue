@@ -293,7 +293,9 @@ export default defineComponent({
               }
             }
 
-            orderHandlers.push(handler)
+            if (orderHandlers.length === 0) {
+              orderHandlers.push(handler)
+            }
             if (!isProcessingOrder) {
               const handle = orderHandlers[0]
               handle()

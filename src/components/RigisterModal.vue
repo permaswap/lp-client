@@ -141,7 +141,6 @@ export default defineComponent({
         return
       }
 
-      const orderHandlers = [] as any[]
       const orderHashHandleStack = {} as any
 
       const tryConnect = (reconnect: boolean) => {
@@ -293,13 +292,8 @@ export default defineComponent({
               }
             }
 
-            if (orderHandlers.length === 0) {
-              orderHandlers.push(handler)
-            }
             if (!isProcessingOrder) {
-              const handle = orderHandlers[0]
-              handle()
-              orderHandlers.shift()
+              handler()
             }
           },
           async handleStatus (data: any) {
@@ -314,11 +308,6 @@ export default defineComponent({
               delete orderHashHandleStack[orderHash]
             }
             isProcessingOrder = false
-            if (orderHandlers.length) {
-              const handle = orderHandlers[0]
-              handle()
-              orderHandlers.shift()
-            }
           }
         })
       }

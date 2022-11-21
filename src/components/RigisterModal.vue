@@ -242,11 +242,16 @@ export default defineComponent({
                         console.log('amountOutX', amountOutX)
                         console.log('amountOutPath', (amountData as any).amountOut)
                         if (toBN(amountOutX).gte((amountData as any).amountOut)) {
-                          orderHashHandleStack[orderHash] = () => {
+                          const orderHashHandler = () => {
                             store.commit('updateLp', {
                               ...jsonConfig,
                               currentSqrtPrice: newCurrentSqrtPrice
                             })
+                          }
+                          if (!orderHashHandleStack[orderHash]) {
+                            orderHashHandleStack[orderHash] = [orderHashHandler]
+                          } else {
+                            orderHashHandleStack[orderHash].push(orderHashHandler)
                           }
                         } else {
                           result = false
@@ -301,7 +306,9 @@ export default defineComponent({
             if (orderHashHandleStack[orderHash]) {
               if (data.status === 'success') {
                 console.log('update new current price')
-                orderHashHandleStack[orderHash]()
+                for (const func of orderHashHandleStack[orderHash]) {
+                  func()
+                }
               } else {
                 console.log('failed')
               }

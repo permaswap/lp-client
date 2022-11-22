@@ -25,6 +25,15 @@ export const getMarketPrices = async (currency: string, symbols: string[]): Prom
 
 let socket = null as any
 
+export const getTxsByCursor = async (account: string, cursor: number): Promise<any> => {
+  const url = `https://api${isProd ? '' : '-dev'}.everpay.io/${account}?cursor=${cursor}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data.txs
+}
+
 export const getNfts = async (): Promise<any> => {
   const url = `https://${host}/nft`
   const result = await sendRequest({

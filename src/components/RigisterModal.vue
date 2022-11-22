@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd, sendAdd, getOrderHash } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd, getOrderHash, getTxsByCursor } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -142,9 +142,37 @@ export default defineComponent({
       }
 
       const orderHashHandleStack = {} as any
+      let lastEverHash = null as any
 
-      const tryConnect = (reconnect: boolean) => {
+      const tryConnect = async (reconnect: boolean) => {
         let isProcessingOrder = false
+
+        // 处理 status 还没返回，断开连接的情况
+        if (reconnect && lastEverHash && Object.keys(orderHashHandleStack).length) {
+          const everpay = new Everpay({ debug: !isProd })
+          const txResult = await everpay.txByHash(lastEverHash)
+          const rawId = (txResult as any).rawId
+          const txs = await getTxsByCursor(store.state.account, rawId)
+          txs.forEach((tx: any) => {
+            try {
+              const internalStatus = JSON.parse(tx.internalStatus)
+              if (internalStatus.status !== 'success') {
+                return
+              }
+              const bundleData = JSON.parse(tx.data).bundle
+              const orderHash = getOrderHash(bundleData)
+              if (orderHashHandleStack[orderHash]) {
+                for (const func of orderHashHandleStack[orderHash]) {
+                  func()
+                }
+                delete orderHashHandleStack[orderHash]
+              }
+            } catch (e) {
+              console.log(e)
+            }
+          })
+        }
+
         socket = initSocket({
           handleError (error: any) {
             console.log('error', error)
@@ -188,6 +216,7 @@ export default defineComponent({
 
             if (reconnect) {
               console.log('reconnect')
+              // TODO: 计算 token 余额
               setTimeout(() => {
                 store.state.lps.forEach((lp) => {
                   sendAdd(lp)
@@ -303,6 +332,7 @@ export default defineComponent({
           },
           async handleStatus (data: any) {
             const orderHash = data.orderHash
+            lastEverHash = data.everHash
             if (orderHashHandleStack[orderHash]) {
               if (data.status === 'success') {
                 console.log('update new current price')

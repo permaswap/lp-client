@@ -156,11 +156,12 @@ export default defineComponent({
           txs.forEach((tx: any) => {
             try {
               const internalStatus = JSON.parse(tx.internalStatus)
-              if (internalStatus.status !== 'success') {
-                return
-              }
               const bundleData = JSON.parse(tx.data).bundle
               const orderHash = getOrderHash(bundleData)
+              if (internalStatus.status !== 'success') {
+                delete orderHashHandleStack[orderHash]
+                return
+              }
               if (orderHashHandleStack[orderHash]) {
                 for (const func of orderHashHandleStack[orderHash]) {
                   func()

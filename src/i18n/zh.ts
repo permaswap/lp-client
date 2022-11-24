@@ -70,6 +70,7 @@ const messages = {
   connecting: '连接中...',
   download: '去下载',
   download_tip: '请下载最新版本的客户端，否则客户端将无法正常运行。',
+  balance_not_enough: '余额不足',
   trade_overview: {
     trading: '极限测试',
     trading_tip: '仅统计活动期间的交易数据。每 1 分钟更新一次。',

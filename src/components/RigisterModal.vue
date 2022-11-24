@@ -8,17 +8,47 @@ import { signMessageAsync } from 'everpay/esm/lib/sign'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { ethers, Wallet } from 'ethers'
 import { toBN } from '@/lib/util'
-import { swapX, swapY } from '@/lib/math'
+import { getAmountXY, swapX, swapY } from '@/lib/math'
 import Everpay from 'everpay'
 import { useI18n } from 'vue-i18n'
 import { permaMessage } from './Message'
 import { lpClientName, lpClientVerison } from '@/constants'
+import { Token } from 'everpay/esm/types'
+import { getTokenByTag } from 'everpay/esm/utils/util'
 
 const formatFilename = (name: string) => {
   if (name.length < 30) {
     return name
   }
   return `${name.slice(0, 15)}...${name.slice(-15)}`
+}
+
+const getTotalLpAmountsStack = (lps: any[]) => {
+  const stack = {} as any
+  lps.forEach((lp: any) => {
+    const amountXY = getAmountXY(lp.lowSqrtPrice, lp.currentSqrtPrice, lp.highSqrtPrice, lp.liquidity)
+    const amountX = toBN(amountXY.amountX).dividedBy(toBN(10).pow(lp.tokenXDecimal))
+    const amountY = toBN(amountXY.amountY).dividedBy(toBN(10).pow(lp.tokenYDecimal))
+    if (stack[lp.tokenX]) {
+      stack[lp.tokenX] = toBN(stack[lp.tokenX]).plus(amountX).toString()
+    } else {
+      stack[lp.tokenX] = amountX.toString()
+    }
+    if (stack[lp.tokenY]) {
+      stack[lp.tokenY] = toBN(stack[lp.tokenY]).plus(amountY).toString()
+    } else {
+      stack[lp.tokenY] = amountY.toString()
+    }
+  })
+  return stack
+}
+
+const checkBalanceEnough = (lpAmountsStack: any, tokens: Token[], balances: any[]) => {
+  return Object.entries(lpAmountsStack).every(([tag, amount]): boolean => {
+    const token = getTokenByTag(tag, tokens)
+    const balanceItem = balances.find(b => b.symbol.toUpperCase() === token?.symbol.toUpperCase())
+    return toBN(balanceItem.balance).gte(toBN(amount as string))
+  })
 }
 
 export default defineComponent({
@@ -217,12 +247,32 @@ export default defineComponent({
 
             if (reconnect) {
               console.log('reconnect')
-              // TODO: 计算 token 余额
-              setTimeout(() => {
-                store.state.lps.forEach((lp) => {
-                  sendAdd(lp)
+              const everpay = new Everpay({ debug: !isProd })
+              const [balances, info] = await Promise.all([
+                everpay.balances({
+                  account: store.state.account
+                }),
+                everpay.info()
+              ])
+              const lpAmountsStack = getTotalLpAmountsStack(store.state.lps)
+              if (checkBalanceEnough(lpAmountsStack, info.tokenList, balances)) {
+                setTimeout(() => {
+                  store.state.lps.forEach((lp) => {
+                    sendAdd(lp)
+                  })
+                }, 3000)
+              } else {
+                permaMessage({
+                  showClose: true,
+                  message: t('balance_not_enough'),
+                  type: 'error',
+                  duration: 3000
                 })
-              }, 3000)
+                const lps = [...store.state.lps]
+                lps.forEach((lp) => {
+                  store.commit('removeLp', lp)
+                })
+              }
             }
           },
           async handleOrder (data: any) {

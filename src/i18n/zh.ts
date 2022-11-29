@@ -21,7 +21,7 @@ const messages = {
   think_again: '再想想',
   deposit_amounts: '充值数额',
   registration_node: '添加钱包',
-  close_lp_node: '关闭 LP 节点',
+  close_lp_node: '关闭仓位',
   deposit: '充值',
   deposit_2: '充值  ↗︎',
   disconnect_notice: '请谨慎操作：断开后，所有流动性池将自动关闭！',

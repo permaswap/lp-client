@@ -21,7 +21,7 @@ const messages = {
   think_again: 'Think Again',
   deposit_amounts: 'Deposit Amounts',
   registration_node: 'Add Wallet',
-  close_lp_node: 'Close LP Node',
+  close_lp_node: 'Close Position',
   deposit: 'Deposit',
   deposit_2: 'Deposit  ↗︎',
   disconnect_notice: 'Please be cautious：When disconnected, all liquidity pools will automatically close！',

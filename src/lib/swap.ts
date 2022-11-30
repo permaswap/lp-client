@@ -25,13 +25,25 @@ export const getMarketPrices = async (currency: string, symbols: string[]): Prom
 
 let socket = null as any
 
-export const getTxsByCursor = async (account: string, cursor: number): Promise<any> => {
+export const getTxsByCursor = async (account: string, cursor: number): Promise<any[]> => {
   const url = `https://api${isProd ? '' : '-dev'}.everpay.io/${account}?cursor=${cursor}`
   const result = await sendRequest({
     url,
     method: 'GET'
   })
   return result.data.txs
+}
+
+export const getTotalTxsByCursor = async (account: string, cursor: number): Promise<any[]> => {
+  let lastCursor = cursor
+  let txs = await getTxsByCursor(account, lastCursor)
+  let totalTxs = txs
+  while (txs.length > 0) {
+    lastCursor = txs[0].rawId
+    txs = await getTxsByCursor(account, lastCursor)
+    totalTxs = totalTxs.concat(txs)
+  }
+  return totalTxs
 }
 
 export const getNfts = async (): Promise<any> => {
@@ -49,8 +61,6 @@ export const getSwapInfo = async (): Promise<string[]> => {
     url,
     method: 'GET'
   })
-  // TODO: for test
-  result.data.version = 'v0.1.0'
   return result.data
 }
 

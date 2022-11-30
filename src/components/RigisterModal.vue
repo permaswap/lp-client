@@ -1,5 +1,5 @@
 <script lang="ts">
-import { initSocket, sendRegister, sendSign, isProd, sendAdd, getOrderHash, getTxsByCursor } from '@/lib/swap'
+import { initSocket, sendRegister, sendSign, isProd, sendAdd, getOrderHash, getTotalTxsByCursor } from '@/lib/swap'
 import { useStore } from '@/store'
 import Arweave from 'arweave'
 // import ethereumLib from 'everpay/esm/lib/ethereum'
@@ -182,7 +182,7 @@ export default defineComponent({
           const everpay = new Everpay({ debug: !isProd })
           const txResult = await everpay.txByHash(lastEverHash)
           const rawId = (txResult as any).rawId
-          const txs = await getTxsByCursor(store.state.account, rawId)
+          const txs = await getTotalTxsByCursor(store.state.account, rawId)
           txs.forEach((tx: any) => {
             try {
               const internalStatus = JSON.parse(tx.internalStatus)

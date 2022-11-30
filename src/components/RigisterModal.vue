@@ -306,11 +306,16 @@ export default defineComponent({
                         console.log('amountOutY', amountOutY)
                         console.log('amountOutPath', (amountData as any).amountOut)
                         if (toBN(amountOutY).gte((amountData as any).amountOut)) {
-                          orderHashHandleStack[orderHash] = () => {
+                          const orderHashHandler = () => {
                             store.commit('updateLp', {
                               ...jsonConfig,
                               currentSqrtPrice: newCurrentSqrtPrice
                             })
+                          }
+                          if (!orderHashHandleStack[orderHash]) {
+                            orderHashHandleStack[orderHash] = [orderHashHandler]
+                          } else {
+                            orderHashHandleStack[orderHash].push(orderHashHandler)
                           }
                         } else {
                           result = false

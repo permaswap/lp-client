@@ -66,7 +66,7 @@ const messages = {
   add_successful: '添加成功！ ',
   close_lp_successful: 'LP Node 關閉！ ',
   need_nft: '需持有NFT才能註冊',
-  duplicate_pool: '該流動性池已存在，是否替換該池的原數額？ ',
+  duplicate_pool: '該流動性池已存在，是否替換該池的原數額？',
   normal_connect: '與 Router 正常連接。 ',
   connecting: '連接中...',
   download: '去下載',

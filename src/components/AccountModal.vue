@@ -218,7 +218,7 @@ export default defineComponent({
               <img src="@/images/lang.png" style="width:17px;height:17px;">
             </div>
             <div class="flex flex-row items-center" @click="localesOpen = !localesOpen">
-              <span>{{ locale === 'zh' ? '中文' : 'English' }}</span>
+              <span>{{ locale === 'zh' ? '繁体中文' : 'English' }}</span>
               <img src="@/images/arrow-top.png" class="transform w-5 ml-1" :class="localesOpen ? '' : 'rotate-180'">
             </div>
           </div>
@@ -233,7 +233,7 @@ export default defineComponent({
               class="mt-2 cursor-pointer"
               :style="locale === 'zh' ? 'color:#79D483;' : ''"
               @click="changeLocale('zh')">
-              中文
+              繁体中文
             </div>
           </div>
         </li>

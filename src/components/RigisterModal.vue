@@ -244,6 +244,12 @@ export default defineComponent({
             store.commit('updateRegisterModalVisible', false)
             jwkFileName.value = ''
             isJwkValid.value = false
+            permaMessage({
+              showClose: true,
+              message: t('import_success'),
+              type: 'success',
+              duration: 3000
+            })
 
             if (reconnect) {
               console.log('reconnect')

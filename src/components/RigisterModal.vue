@@ -389,7 +389,10 @@ export default defineComponent({
             }
 
             if (!isProcessingOrder) {
+              store.state.lps.forEach((lp) => console.log('lp current price (handleOrder):', lp.lpId, lp.currentSqrtPrice))
               handler()
+            } else {
+              console.log('handling order. ignore new one.')
             }
           },
           async handleStatus (data: any) {
@@ -406,6 +409,7 @@ export default defineComponent({
               }
               delete orderHashHandleStack[orderHash]
             }
+            store.state.lps.forEach((lp) => console.log('lp current price (handleStatus):', lp.lpId, lp.currentSqrtPrice))
             isProcessingOrder = false
           }
         })

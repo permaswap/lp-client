@@ -7,9 +7,10 @@ import { useI18n } from 'vue-i18n'
 import { savedI18nStorageKey } from '@/constants'
 import DisconnectModal from './DisconnectModal.vue'
 import { checkParentsHas, isValidVersion } from '@/lib/util'
+import VersionModal from './VersionModal.vue'
 
 export default defineComponent({
-  components: { DisconnectModal },
+  components: { DisconnectModal, VersionModal },
   setup () {
     const store = useStore()
     const { t } = useI18n()
@@ -17,6 +18,7 @@ export default defineComponent({
     const account = computed(() => store.state.account)
     const accountModalVisible = computed(() => store.state.accountModalVisible)
     const copyedNoticeVisible = ref(false)
+    const versionModalVisible = ref(false)
     const { locale } = useI18n({ useScope: 'global' })
     const nftNums = computed(() => {
       const holderToNFTs = store.state.holderToNFTs
@@ -63,6 +65,10 @@ export default defineComponent({
         store.commit('updateAccountModalVisible', false)
         store.commit('updateRegisterModalVisible', true)
       }
+    }
+    const showVersisonModal = () => {
+      store.commit('updateAccountModalVisible', false)
+      versionModalVisible.value = true
     }
     const disconnect = () => {
       disconnectConfirmModalVisible.value = false
@@ -120,6 +126,7 @@ export default defineComponent({
     })
 
     return {
+      versionModalVisible,
       showDisconnectModal,
       t,
       nftNums,
@@ -134,7 +141,8 @@ export default defineComponent({
       copyedNoticeVisible,
       accountModalVisible,
       hidenAccountModal,
-      showRegisterModal
+      showRegisterModal,
+      showVersisonModal
     }
   }
 })
@@ -214,7 +222,7 @@ export default defineComponent({
       <ul class="p-6 text-sm" style="color: rgba(255, 255, 255, 0.85);">
         <li class="mb-4">
           <div class="flex flex-row items-center cursor-pointer">
-            <div class="flex flex-col items-center mr-3" style="width: 18px;">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
               <img src="@/images/lang.png" style="width:17px;height:17px;">
             </div>
             <div class="flex flex-row items-center" @click="localesOpen = !localesOpen">
@@ -237,16 +245,14 @@ export default defineComponent({
             </div>
           </div>
         </li>
-        <li :class="account ? 'mb-4' : ''">
-          <a
-            class="flex flex-row items-center"
-            href="https://mirror.xyz/permaswap.eth/ustZcDgavlm4xmYI26thEAj8W2cXlZpRkG5Jqz0iS14"
-            target="_blank">
-            <div class="flex flex-col items-center mr-3" style="width: 18px;">
-              <img src="@/images/paper.png" style="height:17px;width:14px;">
+        <li class="cursor-pointer" :class="account ? 'mb-4' : ''" @click="showVersisonModal">
+          <div
+            class="flex flex-row items-center">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
+              <img src="@/images/version.png" style="height:20px;width:20px;">
             </div>
-            <span>{{ t('whitepaper') }}</span>
-          </a>
+            <span>{{ t('version_update') }}</span>
+          </div>
         </li>
         <li v-if="account" class="flex flex-row items-center cursor-pointer" @click="showDisconnectModal">
           <div class="flex flex-col items-center mr-3" style="width: 18px;">
@@ -255,7 +261,42 @@ export default defineComponent({
           <span>{{ t('disconnect') }}</span>
         </li>
       </ul>
-      <div style="border-top: 1px solid rgba(0, 10, 5, 0.45);" class="p-6 flex flex-row items-center justify-between">
+      <ul class="p-6 text-sm" style="color: rgba(255, 255, 255, 0.85);border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <li class="mb-4">
+          <a
+            class="flex flex-row items-center"
+            href="https://mirror.xyz/permaswap.eth/ustZcDgavlm4xmYI26thEAj8W2cXlZpRkG5Jqz0iS14"
+            target="_blank">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
+              <img src="@/images/paper.png" style="height:17px;width:14px;">
+            </div>
+            <span>{{ t('whitepaper') }}</span>
+          </a>
+        </li>
+        <li class="mb-4">
+          <a
+            class="flex flex-row items-center"
+            href="https://www.notion.so/PermaSwap-WIKI-EN-485cd6623f954902b61775e4f1a86717"
+            target="_blank">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
+              <img src="@/images/wiki.png" style="height:20px;width:20px;">
+            </div>
+            <span>Wiki</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="flex flex-row items-center"
+            href="https://permadao.com"
+            target="_blank">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
+              <img src="@/images/permadao.png" style="height:20px;width:20px;">
+            </div>
+            <span>PermaDAO</span>
+          </a>
+        </li>
+      </ul>
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.08);" class="p-6 flex flex-row items-center justify-between">
         <div class="flex flex-row items-center">
           <a
             v-for="(link, index) in links1"
@@ -282,4 +323,5 @@ export default defineComponent({
     @closeModal="disconnectConfirmModalVisible = false"
     @confirmDisconnect="disconnect"
   />
+  <version-modal v-if="versionModalVisible" @close-modal="versionModalVisible = false" />
 </template>

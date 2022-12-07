@@ -72,6 +72,10 @@ const messages = {
   download: '去下載',
   download_tip: '請下載最新版本的客戶端，否則客戶端將無法正常運行。 ',
   balance_not_enough: '餘額不足',
+  version_update: '版本更新',
+  download_now: '立即下載',
+  download_later: '稍後下載',
+  no_update: '沒有更新',
   trade_overview: {
     trading: '極限測試',
     trading_tip: '僅統計活動期間的交易數據。每 1 分鐘更新一次。 ',

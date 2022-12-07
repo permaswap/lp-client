@@ -72,6 +72,10 @@ const messages = {
   download: 'Download',
   download_tip: 'Please download the latest version of the client, otherwise the client will not work properly.',
   balance_not_enough: 'Balance not enough',
+  version_update: 'Version Update',
+  download_now: 'Download Now',
+  download_later: 'Download Later',
+  no_update: 'No Update',
   trade_overview: {
     trading: 'Stress Test',
     trading_tip: 'Only count transaction data from the campaign period. It is updated every 1 minute.',

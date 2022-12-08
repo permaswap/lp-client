@@ -78,6 +78,7 @@ const messages = {
   no_update: '沒有更新',
   closed_title: '系統維護中…',
   closed_tip: '工程師們在奮力維護。不要著急，我們很快回來！',
+  deposit_tip: '前往 everPay ，將資產從其他鏈（如 Arweave，Ethereum，Moonbeam 等）充值至 everPay 上。',
   trade_overview: {
     trading: '極限測試',
     trading_tip: '僅統計活動期間的交易數據。每 1 分鐘更新一次。 ',

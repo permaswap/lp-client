@@ -78,6 +78,7 @@ const messages = {
   no_update: 'No Update',
   closed_title: 'System maintenance is in progress...',
   closed_tip: "Our engineers are working hard. Don't worry. We’ll be back soon!",
+  deposit_tip: 'Go to everPay and deposit on-chain assets such as Arweave, Ethereum, Moonbeam, etc. to everPay.',
   trade_overview: {
     trading: 'Stress Test',
     trading_tip: 'Only count transaction data from the campaign period. It is updated every 1 minute.',

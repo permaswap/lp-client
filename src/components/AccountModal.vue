@@ -19,6 +19,7 @@ export default defineComponent({
     const accountModalVisible = computed(() => store.state.accountModalVisible)
     const copyedNoticeVisible = ref(false)
     const versionModalVisible = ref(false)
+    const depositTipVisible = ref(false)
     const { locale } = useI18n({ useScope: 'global' })
     const nftNums = computed(() => {
       const holderToNFTs = store.state.holderToNFTs
@@ -126,6 +127,7 @@ export default defineComponent({
     })
 
     return {
+      depositTipVisible,
       versionModalVisible,
       showDisconnectModal,
       t,
@@ -202,13 +204,25 @@ export default defineComponent({
               {{ t('replicated') }}
             </div>
           </div>
-          <a
-            href="https://app.everpay.io/deposit"
-            target="_blank"
-            class="block rounded-lg h-8 text-center text-sm text-black leading-8 cursor-pointer"
-            style="width:188px;background: #79D483;">
-            {{ t('deposit') }}
-          </a>
+          <div class="relative" @mouseover="depositTipVisible = true" @mouseleave="depositTipVisible = false">
+            <a
+              href="https://app.everpay.io/deposit"
+              target="_blank"
+              class="block rounded-lg h-8 text-center text-sm text-black leading-8 cursor-pointer"
+              style="width:188px;background: #79D483;">
+              {{ t('deposit') }}
+            </a>
+            <div
+              v-if="depositTipVisible"
+              class="p-3 absolute text-xs border-box"
+              style="background: #363F3B;border-radius: 12px;width:320px;right:0;bottom:48px;color:#fff;">
+              {{ t('deposit_tip') }}
+              <img
+                src="@/images/arrow-2.png"
+                class="absolute"
+                style="width:18px;height:8px;bottom:-8px;right:32px;">
+            </div>
+          </div>
         </div>
       </div>
       <div v-else style="background:rgba(24, 59, 33, 0.3)" class="p-6">

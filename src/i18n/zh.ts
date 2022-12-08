@@ -76,6 +76,8 @@ const messages = {
   download_now: '立即下載',
   download_later: '稍後下載',
   no_update: '沒有更新',
+  closed_title: '系統維護中…',
+  closed_tip: '工程師們在奮力維護。不要著急，我們很快回來！',
   trade_overview: {
     trading: '極限測試',
     trading_tip: '僅統計活動期間的交易數據。每 1 分鐘更新一次。 ',

@@ -76,6 +76,8 @@ const messages = {
   download_now: 'Download Now',
   download_later: 'Download Later',
   no_update: 'No Update',
+  closed_title: 'System maintenance is in progress...',
+  closed_tip: "Our engineers are working hard. Don't worry. We’ll be back soon!",
   trade_overview: {
     trading: 'Stress Test',
     trading_tip: 'Only count transaction data from the campaign period. It is updated every 1 minute.',

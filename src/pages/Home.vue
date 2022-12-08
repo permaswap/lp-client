@@ -12,6 +12,7 @@ import ClosePoolModal from '../components/closePoolModal.vue'
 import NoticeBoard from '../components/NoticeBoard.vue'
 import { getNfts } from '@/lib/swap'
 import DownloadModal from '@/components/DownloadModal.vue'
+import SystemCloseModal from '@/components/SystemCloseModal.vue'
 
 const store = useStore()
 const account = computed(() => store.state.account)
@@ -64,6 +65,7 @@ watch(account, () => {
       <AddPoolModal v-else />
       <DownloadModal />
     </div>
+    <SystemCloseModal />
     <!-- <Footer /> -->
   </div>
 </template>

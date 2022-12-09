@@ -57,7 +57,7 @@ const messages = {
   name: '名稱',
   clear_all: '清空全部',
   set_price_range: '設置兌換率範圍',
-  become_lp: '成為 LP 節點',
+  become_lp: '確認添加',
   preview: '預覽',
   insufficient_$symbol: '{symbol} 餘額不足',
   back_to_overview: '返回流動性概覽',

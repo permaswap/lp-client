@@ -57,7 +57,7 @@ const messages = {
   name: 'Name',
   clear_all: 'Clear All',
   set_price_range: 'Set Price Range',
-  become_lp: 'Run a Node',
+  become_lp: 'Confirm Add',
   preview: 'Preview',
   insufficient_$symbol: 'Insufficient {symbol} Balance',
   back_to_overview: 'Back to LP Overview',

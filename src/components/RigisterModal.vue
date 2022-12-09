@@ -464,7 +464,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="fixed"
+    class="fixed scroll-area overflow-y-auto"
     style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;z-index: 20;"
     :class="registerModalVisible ? 'block' : 'hidden'">
     <div
@@ -641,5 +641,20 @@ export default defineComponent({
     background: rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.3);
     cursor: not-allowed;
+  }
+  .scroll-area {
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 10px;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+    }
   }
 </style>

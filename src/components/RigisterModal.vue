@@ -549,7 +549,7 @@ export default defineComponent({
         </div>
         <textarea
           v-if="selectedFormat === 'Ethereum'"
-          v-model="privateKey"
+          v-model.trim="privateKey"
           class="privatekey-area p-3 block m-0"
           style="resize: none;width: 416px;height: 68px;background: #161e1b;border-radius: 12px;"
           placeholder="Please paste your private key" />

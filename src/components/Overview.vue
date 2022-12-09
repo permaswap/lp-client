@@ -3,7 +3,7 @@ import { useStore } from '@/store'
 import { ref, computed, defineComponent, onMounted } from 'vue'
 import TokenLogo from './TokenLogo.vue'
 import Range from './Range.vue'
-import { toBN, isInRange, isValidVersion } from '@/lib/util'
+import { toBN, isSqrtInRange, isValidVersion } from '@/lib/util'
 import { useI18n } from 'vue-i18n'
 import { getStats } from '@/lib/swap'
 // import TradeOverview from './TradeOverview.vue'
@@ -48,7 +48,7 @@ export default defineComponent({
     return {
       t,
       lps,
-      isInRange,
+      isSqrtInRange,
       successConnect,
       manualConnect,
       showConnectTip,
@@ -163,7 +163,7 @@ export default defineComponent({
               {{ tvlsStack[lp.lpId] ? `${tvlsStack[lp.lpId]} USD` : '-' }}
             </div>
             <div class="flex flex-row items-center justify-end flex-1">
-              <Range :in-range="isInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />
+              <Range :in-range="isSqrtInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />
             </div>
           </li>
         </ul>

@@ -51,6 +51,18 @@ export const isInRange = (currentPrice: string, lowPrice: string, highPrice: str
   return lowInRange && highInRange
 }
 
+export const isSqrtInRange = (currentSqrtPrice: string, lowSqrtPrice: string, highSqrtPrice: string): boolean => {
+  let lowInRange = false
+  let highInRange = false
+  if (lowSqrtPrice === '0' || toBN(currentSqrtPrice).gte(toBN(lowSqrtPrice).times(1.00000001))) {
+    lowInRange = true
+  }
+  if (highSqrtPrice === '∞' || toBN(currentSqrtPrice).lte(toBN(highSqrtPrice).times(0.99999999))) {
+    highInRange = true
+  }
+  return lowInRange && highInRange
+}
+
 export const formatInputPrecision = (amount: string, precision: number): string => {
   if (amount === '' || amount === undefined || amount === null) return ''
   if (amount === '0') return '0'

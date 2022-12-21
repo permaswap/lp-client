@@ -67,6 +67,7 @@ export default defineComponent({
     const isJwkValid = ref(false)
     let arAddress = ''
     let arJwk = {}
+    const importing = ref(false)
 
     // watch(fileList, () => {
     //   console.log('fileList', fileList.value)
@@ -151,6 +152,9 @@ export default defineComponent({
         (selectedFormat.value === 'Arweave' && !isJwkValid.value)) {
         return
       }
+      if (importing.value) {
+        return
+      }
       const holderToNFTs = store.state.holderToNFTs
       const whitelist = store.state.whitelist
       let address = ''
@@ -170,6 +174,8 @@ export default defineComponent({
         })
         return
       }
+
+      importing.value = true
 
       const orderHashHandleStack = {} as any
       let lastEverHash = null as any
@@ -242,6 +248,7 @@ export default defineComponent({
             store.commit('updateAccount', address)
             store.commit('updatePrivateKey', '')
             store.commit('updateRegisterModalVisible', false)
+            importing.value = false
             jwkFileName.value = ''
             isJwkValid.value = false
             if (!reconnect) {
@@ -456,7 +463,8 @@ export default defineComponent({
       hidenRegisterModal,
       handleRegister,
       isPrivateKeyValid,
-      importNoticeVisible
+      importNoticeVisible,
+      importing
     }
   }
 })
@@ -608,8 +616,15 @@ export default defineComponent({
         <div
           :class="((selectedFormat === 'Ethereum' && isPrivateKeyValid) || (selectedFormat === 'Arweave' && isJwkValid)) ? 'primary-btn' : 'disable-btn'"
           style="border-radius: 8px;width: 196px;height:48px;line-height:48px;text-align:center;"
+          :style="importing ? 'background: #296135;cursor:not-allowed;' : ''"
           @click="handleRegister">
-          {{ t('import') }}
+          <div v-if="!importing">
+            {{ t('import') }}
+          </div>
+          <div v-else class="flex flex-row items-center justify-center">
+            <div>{{ t('importing') }}</div>
+            <img src="@/images/icon-loading.png" class="w-6 h-6 animate-spin ml-1">
+          </div>
         </div>
       </div>
     </div>

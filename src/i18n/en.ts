@@ -31,6 +31,7 @@ const messages = {
   new_position: 'New Position',
   disconnect: 'Disconnect',
   import: 'Import',
+  importing: 'Importing',
   import_success: 'Successful import!',
   import_pk: 'Import Private Key',
   import_keyfile: 'Import Keyfile',

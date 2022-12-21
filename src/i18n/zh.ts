@@ -31,6 +31,7 @@ const messages = {
   new_position: '新倉位',
   disconnect: '斷開',
   import: '導入',
+  importing: '導入中',
   import_success: '導入成功',
   import_pk: '導入私鑰',
   import_keyfile: '導入 Keyfile',

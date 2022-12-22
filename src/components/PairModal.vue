@@ -23,10 +23,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fixed" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;">
+  <div class="fixed scroll-area overflow-y-auto" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;">
     <div
       style="
-    position: fixed;
+    position: absolute;
     background: #363F3B;
     box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);
     border-radius: 24px;
@@ -62,3 +62,21 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.scroll-area {
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+</style>

@@ -7,7 +7,7 @@ export default defineComponent({
   setup () {
     const seconds = ref(5)
     const disable = ref(true)
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
     onMounted(() => {
       const timer = () => {
         setTimeout(() => {
@@ -26,6 +26,7 @@ export default defineComponent({
     })
     return {
       t,
+      locale,
       seconds,
       disable
     }
@@ -42,12 +43,12 @@ export default defineComponent({
     box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);
     border-radius: 24px;
     width:480px;
-    height:160px;
     top:160px;
     left:50%;
     transform: translateX(-50%);
     box-sizing: border-box;
-    padding:32px;">
+    padding:32px;"
+      :style="locale === 'zh' ? 'height:160px;' : 'height:180px;'">
       <div class="flex flex-row items-center mb-8">
         <img src="@/images/warn.png" class="mr-2">
         {{ t('disconnect_notice') }}

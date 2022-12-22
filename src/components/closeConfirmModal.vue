@@ -21,9 +21,10 @@ export default defineComponent({
   },
   emits: ['closeModal', 'confirmClose'],
   setup () {
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
     return {
-      t
+      t,
+      locale
     }
   }
 })
@@ -38,12 +39,12 @@ export default defineComponent({
     box-shadow: 0px 6px 16px -8px rgba(0, 10, 6, 0.08), 0px 9px 28px rgba(0, 10, 6, 0.05), 0px 12px 48px 16px rgba(0, 10, 6, 0.03);
     border-radius: 24px;
     width:480px;
-    height:332px;
     top:160px;
     left:50%;
     transform: translateX(-50%);
     box-sizing: border-box;
-    padding:32px;">
+    padding:32px;"
+      :style="locale === 'zh' ? 'height:332px;' : 'height:352px;'">
       <div class="flex flex-row items-center justify-between pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span style="font-size:20px;">{{ t('close_lp_node') }}</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closeModal')">

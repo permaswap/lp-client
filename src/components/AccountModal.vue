@@ -248,7 +248,7 @@ export default defineComponent({
               <img src="@/images/arrow-top.png" class="transform w-5 ml-1" :class="localesOpen ? '' : 'rotate-180'">
             </div>
           </div>
-          <div v-if="localesOpen" class="ml-7">
+          <div v-if="localesOpen" class="ml-8">
             <div
               class="mt-2 cursor-pointer"
               :style="locale === 'en' ? 'color:#79D483;' : ''"

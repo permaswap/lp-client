@@ -39,6 +39,10 @@ export default defineComponent({
         url: 'https://twitter.com/permaswap'
       },
       {
+        name: 'medium',
+        url: 'https://medium.com/permaswap'
+      },
+      {
         name: 'discord',
         url: 'https://discord.gg/WM5MQZGVPF'
       },

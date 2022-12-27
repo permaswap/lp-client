@@ -186,7 +186,7 @@ export default defineComponent({
               NFT
             </div>
             <a
-              href="https://permaswap.network/#/nft"
+              href="https://app.permaswap.network/#/nft"
               target="_blank"
               class="text-xs"
               style="color: #D3B078;">

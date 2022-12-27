@@ -73,7 +73,7 @@ export default defineComponent({
           v-if="account"
           class="text-sm px-4 py-1 border-box"
           style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;"
-          href="https://permaswap.network/#/nft"
+          href="https://app.permaswap.network/#/nft"
           target="_blank">{{ t('collect_nft') }}</a>
         <div
           class="text-sm px-4 py-1 border-box ml-6 cursor-pointer flex flex-row items-center"
@@ -174,7 +174,7 @@ export default defineComponent({
         <a
           class="text-sm py-1 border-box text-center"
           style="color: #79D483;border: 1px solid #183B21;border-radius: 8px;width:108px;"
-          href="https://permaswap.network/#/nft"
+          href="https://app.permaswap.network/#/nft"
           target="_blank">{{ t('collect_nft') }}</a>
         <div
           class="text-sm py-1 border-box text-center ml-12 cursor-pointer"

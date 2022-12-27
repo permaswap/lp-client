@@ -494,7 +494,7 @@ export default defineComponent({
           <a
             class="text-xs ml-2"
             style="color: #D3B078;"
-            href="https://permaswap.network/#/nft"
+            href="https://app.permaswap.network/#/nft"
             target="_blank">{{ t('buy_nfts') }}</a>
         </div>
       </div>

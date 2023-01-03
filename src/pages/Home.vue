@@ -30,6 +30,9 @@ store.commit('updateAccount', '')
 store.commit('clearLps')
 store.commit('updateManualConnect', false)
 store.commit('updateSuccessConnect', false)
+store.commit('updateAddPoolModalVisible', false)
+store.commit('updateAccountModalVisible', false)
+store.commit('updateRegisterModalVisible', false)
 
 onMounted(async () => {
   const nftsResult = await getNfts()

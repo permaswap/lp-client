@@ -98,7 +98,10 @@ const messages = {
     est_rewards: '預估獎勵',
     tutorial: '教程  ↗︎',
     no_data: '暫無數據'
-  }
+  },
+  full_range_tip_title: '效率對比',
+  full_range_tip_detail: '全範圍倉位可能比集中倉位賺取更少的交易貢獻值。 ',
+  full_range_tip_btn: '我已知曉'
 }
 
 export default messages

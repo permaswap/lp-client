@@ -98,7 +98,10 @@ const messages = {
     est_rewards: 'Est. Rewards',
     tutorial: 'Tutorial  ↗︎',
     no_data: 'No Data'
-  }
+  },
+  full_range_tip_title: 'Efficiency Comparison:',
+  full_range_tip_detail: 'Full range positions may earn less Offerings Value than concentrated positions.',
+  full_range_tip_btn: 'I understand'
 }
 
 export default messages

@@ -31,6 +31,15 @@ export default defineComponent({
       highPrice.value = '∞'
       tokenXAmount.value = ''
       tokenYAmount.value = ''
+      fullRangeNoticeVisible.value = false
+    }
+    const clearAll = () => {
+      tokenXAmount.value = ''
+      tokenYAmount.value = ''
+    }
+    const setLowHighPrice = () => {
+      lowPrice.value = formatInputPrecision(toBN(currentPrice.value).times(0.45).toString(), 8)
+      highPrice.value = formatInputPrecision(toBN(currentPrice.value).times(2).toString(), 8)
     }
     let jsonConfig = null as any
     const tokenX = ref(null) as Ref<any>
@@ -42,6 +51,7 @@ export default defineComponent({
     const tokenYBalance = ref('0')
     const tokenXAmount = ref('')
     const tokenYAmount = ref('')
+    const fullRangeNoticeVisible = ref(false)
     const account = computed(() => store.state.account)
     const previewModalVisible = ref(false)
     const duplicateLpId = ref(false)
@@ -124,6 +134,7 @@ export default defineComponent({
       updateBalances()
       const { poolId } = getPoolData(swapInfo.poolList)
       currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
+      setLowHighPrice()
       dataLoading.value = false
     })
     const getPoolData = (poolList: any) => {
@@ -230,10 +241,12 @@ export default defineComponent({
       tokenX.value = pair.tokenX
       tokenY.value = pair.tokenY
       pairModalVisible.value = false
-      setFullRange()
+      tokenXAmount.value = ''
+      tokenYAmount.value = ''
       updateBalances()
       const { poolId } = getPoolData(swapInfo.poolList)
       currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
+      setLowHighPrice()
     }
     const showPreviewModal = () => {
       if (btnMessage.value === 'preview' && !invalidRange.value) {
@@ -315,6 +328,7 @@ export default defineComponent({
       tokenYAmount,
       pairs,
       selectPair,
+      clearAll,
       pairModalVisible,
       lowPrice,
       highPrice,
@@ -324,6 +338,7 @@ export default defineComponent({
       handleAmountXInput,
       handleAmountYInput,
       handleAdd,
+      fullRangeNoticeVisible,
       previewModalVisible,
       setMaxTokenXAmount,
       setMaxTokenYAmount,
@@ -361,7 +376,7 @@ export default defineComponent({
         class="cursor-pointer"
         @click="hideAddPoolModal">
       <span style="font-size: 20px;">{{ t('add_liquidity') }}</span>
-      <span style="color: #79D483;" class="text-sm cursor-pointer" @click="setFullRange">{{ t('clear_all') }}</span>
+      <span style="color: #79D483;" class="text-sm cursor-pointer" @click="clearAll">{{ t('clear_all') }}</span>
     </div>
     <div class="flex flex-row">
       <div style="width:384px;" class="mr-8">
@@ -464,7 +479,7 @@ export default defineComponent({
             {{ oppositePrice }} {{ tokenX && tokenX.symbol }} {{ t('per') }} {{ tokenY && tokenY.symbol }}
           </div>
         </div>
-        <div class="flex flex-row items-center justify-between mb-4">
+        <div class="flex flex-row items-center justify-between mb-4 relative">
           <div class="p-2" style="background: #000A06;border-radius: 12px;width:182px;height:92px;box-sizing: border-box;">
             <div class="text-center text-xs" style="color: rgba(255, 255, 255, 0.65);">
               {{ t('min_price') }}
@@ -529,6 +544,31 @@ export default defineComponent({
               {{ tokenY && tokenY.symbol }} {{ t('per') }} {{ tokenX && tokenX.symbol }}
             </div>
           </div>
+          <div
+            v-if="fullRangeNoticeVisible"
+            class="absolute px-3 py-4"
+            style="background: rgba(67, 63, 33, 0.9);
+                border: 1px solid rgba(255, 197, 61, 0.2);
+                border-radius: 16px;
+                top: 0;
+                width: 100%;
+                left: 0;">
+            <div class="flex flex-row items-center text-xs mb-1">
+              <img src="@/images/warn-2.png" class="w-4 h-4 mr-2"> <div>{{ t('full_range_tip_title') }}</div>
+            </div>
+            <div style="color: rgba(255, 255, 255, 0.65);line-height: 20px;" class="text-xs mb-6">
+              {{ t('full_range_tip_detail') }}
+            </div>
+            <button
+              class="text-xs"
+              style="color:#000;background: #FFC53D;
+                border: 1px solid rgba(121, 212, 131, 0.08);
+                border-radius: 6px;padding: 1px 8px;"
+              @click="setFullRange"
+            >
+              {{ t('full_range_tip_btn') }}
+            </button>
+          </div>
         </div>
         <div
           v-if="invalidRange"
@@ -540,7 +580,7 @@ export default defineComponent({
         <div
           class="text-sm cursor-pointer"
           style="margin-bottom: 52px;padding: 6px 8px;background: rgba(24, 59, 33, 0.2);border: 1px solid #183B21;border-radius: 8px;text-align:center;"
-          @click="setFullRange"
+          @click="fullRangeNoticeVisible = true"
         >
           {{ t('full_range') }}
         </div>

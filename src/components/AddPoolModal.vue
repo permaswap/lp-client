@@ -361,13 +361,6 @@ export default defineComponent({
 <template>
   <div style="width:864px;background: #161E1B;border-radius: 24px;" class="mx-auto p-8 relative">
     <div
-      v-if="dataLoading"
-      class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center"
-      style="background: rgba(22, 30, 27, 0.6);z-index:11;"
-    >
-      <img src="@/images/icon-loading.png" class="w-10 h-10 animate-spin">
-    </div>
-    <div
       class="flex flex-row items-center justify-between pb-4 mb-6"
       style="border-bottom:1px solid rgba(255, 255, 255, 0.08);">
       <img
@@ -378,7 +371,14 @@ export default defineComponent({
       <span style="font-size: 20px;">{{ t('add_liquidity') }}</span>
       <span style="color: #79D483;" class="text-sm cursor-pointer" @click="clearAll">{{ t('clear_all') }}</span>
     </div>
-    <div class="flex flex-row">
+    <div class="flex flex-row relative">
+      <div
+        v-if="dataLoading"
+        class="w-full h-full absolute top-0 left-0 flex flex-row items-center justify-center"
+        style="background: rgba(22, 30, 27, 0.6);z-index:11;"
+      >
+        <img src="@/images/icon-loading.png" class="w-10 h-10 animate-spin">
+      </div>
       <div style="width:384px;" class="mr-8">
         <div class="mb-4">
           {{ t('select_pair') }}
@@ -547,7 +547,7 @@ export default defineComponent({
           <div
             v-if="fullRangeNoticeVisible"
             class="absolute px-3 py-4"
-            style="background: rgba(67, 63, 33, 0.9);
+            style="background: rgba(67, 63, 33, 0.98);
                 border: 1px solid rgba(255, 197, 61, 0.2);
                 border-radius: 16px;
                 top: 0;

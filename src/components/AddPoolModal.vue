@@ -22,7 +22,7 @@ export default defineComponent({
     const currentPrice = ref('')
     const pairModalVisible = ref(false)
     const dataLoading = ref(true)
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
     const hideAddPoolModal = () => {
       store.commit('updateAddPoolModalVisible', false)
     }
@@ -352,7 +352,8 @@ export default defineComponent({
       showRegisterModal,
       oppositePrice,
       t,
-      duplicateLpId
+      duplicateLpId,
+      locale
     }
   }
 })
@@ -552,7 +553,8 @@ export default defineComponent({
                 border-radius: 16px;
                 top: 0;
                 width: 100%;
-                left: 0;">
+                left: 0;"
+            :style="locale === 'zh' ? 'padding-bottom:36px;' : ''">
             <div class="flex flex-row items-center text-xs mb-1">
               <img src="@/images/warn-2.png" class="w-4 h-4 mr-2"> <div>{{ t('full_range_tip_title') }}</div>
             </div>

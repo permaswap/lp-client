@@ -36,6 +36,7 @@ export default defineComponent({
     const clearAll = () => {
       tokenXAmount.value = ''
       tokenYAmount.value = ''
+      setLowHighPrice()
     }
     const setLowHighPrice = () => {
       lowPrice.value = formatInputPrecision(toBN(currentPrice.value).times(0.45).toString(), 8)

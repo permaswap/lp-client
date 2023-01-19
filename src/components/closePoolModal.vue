@@ -1,6 +1,6 @@
 <script>
 import { getAmountXY } from '@/lib/math'
-import { getPoolPrice, sendRemove } from '@/lib/swap'
+import { getLpReward, getPoolPrice, sendRemove } from '@/lib/swap'
 import { formatInputPrecision, isInRange, toBN } from '@/lib/util'
 import { useStore } from '@/store'
 import { defineComponent, onMounted, ref, computed } from 'vue'
@@ -48,6 +48,8 @@ export default defineComponent({
     const inRange = ref(true)
     const amountX = ref('')
     const amountY = ref('')
+    const rewardX = ref('')
+    const rewardY = ref('')
     // const totalPrice = ref('')
 
     onMounted(async () => {
@@ -65,6 +67,10 @@ export default defineComponent({
       //   console.log('itemAmountPrice', itemAmountPrice)
       //   return memo + itemAmountPrice
       // }, 0)
+      const reward = await getLpReward(props.lp.lpId)
+      rewardX.value = reward.rewardX ? formatInputPrecision(reward.rewardX.toString(), props.lp.tokenXDecimal) : '0'
+      rewardY.value = reward.rewardY ? formatInputPrecision(reward.rewardY.toString(), props.lp.tokenYDecimal) : '0'
+
       currentPrice.value = await getPoolPrice(props.lp.poolId, props.lp.tokenXDecimal, props.lp.tokenYDecimal)
       inRange.value = isInRange(currentPrice.value, props.lp.lowPrice, props.lp.highPrice)
     })
@@ -74,6 +80,8 @@ export default defineComponent({
     })
 
     return {
+      rewardX,
+      rewardY,
       oppositePrice,
       permaBack,
       amountX,
@@ -120,19 +128,20 @@ export default defineComponent({
         class="border-box px-4"
         :style="`
           width: 424px;
-          height: 222px;
+          height: 308px;
           background-image:url(${permaBack});
           background-position:top right;
+          background-repeat: no-repeat;
           background-color: #161E1B;
           border-radius: 12px;
         `
         "
       >
         <div class="pt-4 pb-2 mb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-          {{ t('contribution_value') }}
+          {{ t('volume') }} (24h)
         </div>
-        <div style="color: rgba(255, 255, 255, 0.3);">
-          {{ t('coming_soon') }}
+        <div style="color: #FFFFFF;font-size: 28px;">
+          {{ volume !== '-' ? `${volume} USD` : volume }}
         </div>
       </div>
       <div>
@@ -158,12 +167,33 @@ export default defineComponent({
             <span>{{ amountY ? amountY : '-' }}</span>
           </div>
         </div>
-        <div
+        <div class="border-box px-4 mb-4" style="width: 424px;height: 144px;background: #161E1B;border-radius: 12px;">
+          <div
+            class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
+            style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+            <span>{{ t('fee') }}</span>
+          </div>
+          <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
+            <div class="flex flex-row items-center">
+              <TokenLogo :symbol="lp.tokenXSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <span>{{ lp.tokenXSymbol }}</span>
+            </div>
+            <span>{{ rewardX ? rewardX : '-' }}</span>
+          </div>
+          <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
+            <div class="flex flex-row items-center">
+              <TokenLogo :symbol="lp.tokenYSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <span>{{ lp.tokenYSymbol }}</span>
+            </div>
+            <span>{{ rewardY ? rewardY : '-' }}</span>
+          </div>
+        </div>
+        <!-- <div
           class="flex flex-row items-center justify-between text-sm"
           style="background: #161E1B;border-radius: 12px;padding: 21px 16px;">
           <span>{{ t('volume') }} (24h)</span>
           <span>{{ volume !== '-' ? `${volume} USD` : volume }}</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <div>

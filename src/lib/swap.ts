@@ -73,6 +73,16 @@ export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenY
   return formatInputPrecision(toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString(), 8)
 }
 
+export const getLpReward = async (lpId: string): Promise<any> => {
+  const url = `https://${host}/lpreward?lpid=${lpId}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  const reward = result.data.rewards[0]
+  return reward
+}
+
 export const getStats = async (account: string): Promise<any> => {
   const url = `https://${host}/stats?accid=${account}`
   const result = await sendRequest({

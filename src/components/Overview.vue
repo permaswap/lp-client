@@ -26,6 +26,7 @@ export default defineComponent({
     const lps = computed(() => store.state.lps)
     const volumesStack = ref({})
     const tvlsStack = ref({})
+    const rewardStack = ref({})
     const successConnect = computed(() => store.state.successConnect)
     const manualConnect = computed(() => store.state.manualConnect)
     const showConnectTip = ref(false)
@@ -38,6 +39,9 @@ export default defineComponent({
         tvlsStack.value = {}
         result.volumes.forEach(volumeData => {
           volumesStack.value[volumeData.lpID] = toBN(volumeData.volumeInUSD).toFixed(2)
+          rewardStack.value[volumeData.lpID] = volumeData.rewardInUSD > 0.01
+            ? toBN(volumeData.rewardInUSD).toFixed(2)
+            : '<0.01'
         })
         result.tvls.forEach(tvlData => {
           tvlsStack.value[tvlData.lpID] = toBN(tvlData.tvlInUSD).toFixed(2)
@@ -54,6 +58,7 @@ export default defineComponent({
       showConnectTip,
       account,
       volumesStack,
+      rewardStack,
       tvlsStack,
       showAddPoolModal,
       showRegisterModal
@@ -133,7 +138,7 @@ export default defineComponent({
               {{ t('volume') }} (24h)
             </div>
             <div class="text-right mr-8" style="width:100px;">
-              TVL
+              {{ t('fee') }} (24h)
             </div>
             <div />
           </li>
@@ -160,7 +165,7 @@ export default defineComponent({
               {{ volumesStack[lp.lpId] ? `${volumesStack[lp.lpId]} USD` : '-' }}
             </div>
             <div class="text-right mr-8 text-white" style="width:100px;">
-              {{ tvlsStack[lp.lpId] ? `${tvlsStack[lp.lpId]} USD` : '-' }}
+              {{ rewardStack[lp.lpId] ? `${rewardStack[lp.lpId]} USD` : '-' }}
             </div>
             <div class="flex flex-row items-center justify-end flex-1">
               <Range :in-range="isSqrtInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />

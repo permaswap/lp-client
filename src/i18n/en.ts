@@ -101,7 +101,8 @@ const messages = {
   },
   full_range_tip_title: 'Efficiency Comparison:',
   full_range_tip_detail: 'Full range positions may earn less Offerings Value than concentrated positions.',
-  full_range_tip_btn: 'I understand'
+  full_range_tip_btn: 'I understand',
+  fee: 'Fee'
 }
 
 export default messages

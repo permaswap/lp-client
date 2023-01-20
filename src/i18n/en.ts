@@ -102,7 +102,10 @@ const messages = {
   full_range_tip_title: 'Efficiency Comparison:',
   full_range_tip_detail: 'Full range positions may earn less Offerings Value than concentrated positions.',
   full_range_tip_btn: 'I understand',
-  fee: 'Fee'
+  fee: 'Fee',
+  fees: 'Fees',
+  fees_tip_1: 'Accumulated Income.',
+  fees_tip_2: 'Proceeds have been issued to your account address in real time upon completion of the transaction.'
 }
 
 export default messages

@@ -10,9 +10,10 @@ import Range from './Range.vue'
 import TokenLogo from './TokenLogo.vue'
 import { permaMessage } from './Message'
 import permaBack from '../images/perma-back.png'
+import NoticeTip from './NoticeTip.vue'
 
 export default defineComponent({
-  components: { CloseConfirmModal, Range, TokenLogo },
+  components: { CloseConfirmModal, Range, TokenLogo, NoticeTip },
   props: {
     lp: {
       type: Object,
@@ -50,6 +51,7 @@ export default defineComponent({
     const amountY = ref('')
     const rewardX = ref('')
     const rewardY = ref('')
+    const feesTipNoticeVisible = ref(false)
     // const totalPrice = ref('')
 
     onMounted(async () => {
@@ -91,6 +93,7 @@ export default defineComponent({
       confirmClose,
       closeConfirmModalVisible,
       currentPrice,
+      feesTipNoticeVisible,
       t
     }
   }
@@ -98,7 +101,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div style="width:864px;margin-top: 60px;" class="mx-auto">
+  <div style="width:864px;margin-top: 60px;padding-bottom:100px;" class="mx-auto">
     <div class="flex flex-row items-center mb-7">
       <img src="@/images/back2.png" class="w-6 h-6 cursor-pointer" @click="$emit('back')">
       <div style="color: rgba(255, 255, 255, 0.65);" class="text-sm ml-2 cursor-pointer" @click="$emit('back')">
@@ -171,7 +174,15 @@ export default defineComponent({
           <div
             class="pt-4 pb-2 mb-4 flex flex-row items-center justify-between"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-            <span>{{ t('fee') }}</span>
+            <span class="relative cursor-pointer" @mouseover="feesTipNoticeVisible = true" @mouseleave="feesTipNoticeVisible = false">
+              {{ t('fees') }}
+              <NoticeTip v-if="feesTipNoticeVisible" :arrow-left="24" :left="-16">
+                <ul style="list-style-type: disc;margin-left:20px;">
+                  <li>{{ t('fees_tip_1') }}</li>
+                  <li>{{ t('fees_tip_2') }}</li>
+                </ul>
+              </NoticeTip>
+            </span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">

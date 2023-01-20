@@ -102,7 +102,10 @@ const messages = {
   full_range_tip_title: '效率對比',
   full_range_tip_detail: '全範圍倉位可能比集中倉位賺取更少的交易貢獻值。 ',
   full_range_tip_btn: '我已知曉',
-  fee: '收益'
+  fee: '收益',
+  fees: '收益',
+  fees_tip_1: '累计收益。',
+  fees_tip_2: '收益在交易完成时即已实时发放到您的账户地址中。'
 }
 
 export default messages

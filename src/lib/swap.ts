@@ -92,6 +92,15 @@ export const getStats = async (account: string): Promise<any> => {
   return result.data
 }
 
+export const getAggregate = async (account: string): Promise<any> => {
+  const url = `https://stats${isProd ? '' : '-dev'}.permaswap.network/aggregate?accid=${account}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
 export interface InitSocketParams {
   handleError: any
   handleSalt: any

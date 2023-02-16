@@ -99,6 +99,16 @@ const messages = {
     tutorial: 'Tutorial  ↗︎',
     no_data: 'No Data'
   },
+  dashboard: {
+    dashboard: 'Dashboard',
+    total_volume: 'Total Volume',
+    total_volume_tip: 'Annual trading volume of all pairs',
+    my_volume: 'My Volume',
+    my_volume_tip: 'All my trading volumes for the year',
+    my_earnings: 'My Earnings',
+    my_earnings_tip_1: 'Annual earnings.',
+    my_earnings_tip_2: 'Earnings are credited to your account address in real time when the transaction is completed.'
+  },
   full_range_tip_title: 'Efficiency Comparison:',
   full_range_tip_detail: 'Full range positions may earn less Offerings Value than concentrated positions.',
   full_range_tip_btn: 'I understand',

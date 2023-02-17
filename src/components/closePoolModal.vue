@@ -101,7 +101,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div style="width:864px;margin-top: 60px;padding-bottom:100px;" class="mx-auto">
+  <div style="width:864px;margin-top: 60px;padding-bottom:100px;" class="mx-auto mt-20">
     <div class="flex flex-row items-center mb-7">
       <img src="@/images/back2.png" class="w-6 h-6 cursor-pointer" @click="$emit('back')">
       <div style="color: rgba(255, 255, 255, 0.65);" class="text-sm ml-2 cursor-pointer" @click="$emit('back')">

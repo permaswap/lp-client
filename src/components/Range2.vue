@@ -26,6 +26,8 @@ export default defineComponent({
       class="mr-1"
       style="width: 6px;height: 6px;border-radius: 50%;"
       :style="inRange ? 'background: #52C763;' : 'background: #FFC53D;'" />
-    <div>{{ inRange ? t('in_range') : t('out_of_range') }}</div>
+    <div :style="inRange ? 'color: #52C763;' : 'color: #FFC53D;'">
+      {{ inRange ? t('in_range') : t('out_of_range') }}
+    </div>
   </div>
 </template>

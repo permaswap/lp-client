@@ -361,7 +361,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div style="width:864px;background: #161E1B;border-radius: 24px;" class="mx-auto p-8 relative">
+  <div style="width:864px;background: #161E1B;border-radius: 24px;" class="mx-auto p-8 relative mt-20">
     <div
       class="flex flex-row items-center justify-between pb-4 mb-6"
       style="border-bottom:1px solid rgba(255, 255, 255, 0.08);">

@@ -57,7 +57,7 @@ watch(account, () => {
     </NoticeBoard>
     <AccountModal />
     <RigisterModal />
-    <div style="min-height:700px;" class="mt-10">
+    <div style="min-height:700px;">
       <ClosePoolModal
         v-if="selectedLp"
         :lp="selectedLp"

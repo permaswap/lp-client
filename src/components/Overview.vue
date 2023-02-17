@@ -92,8 +92,8 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <div style="background: #161E1B;border-radius: 24px;" class="p-4">
-      <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+    <div style="background: #161E1B;border-radius: 24px;" class="px-3 py-4">
+      <div class="my-3 mx-3 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span>{{ t('my_pool') }} {{ lps.length ? `(${lps.length})` : '' }}</span>
         <div
           v-if="manualConnect"
@@ -129,10 +129,10 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div class="text-sm my-8 text-center" style="color: rgba(255, 255, 255, 0.45);">
+      <div class="text-sm my-6 text-center" style="color: rgba(255, 255, 255, 0.45);">
         <ul v-if="lps.length && account" class="text-left">
           <li class="flex flex-row mb-4 px-3 text-xs">
-            <div style="width: 160px;" class="p-3">
+            <div style="width: 160px;" class="py-3">
               {{ t('name') }}
             </div>
             <div style="width:200px;" />
@@ -154,7 +154,7 @@ export default defineComponent({
             style="border-radius: 12px;"
             @click="$emit('selectLp', lp, volumesStack[lp.lpId] ? volumesStack[lp.lpId] : '-', tvlsStack[lp.lpId] ? tvlsStack[lp.lpId] : '-')"
           >
-            <div class="text-white flex flex-row items-center p-3 text-sm oneline" style="width: 160px;font-weight: 500;">
+            <div class="text-white flex flex-row items-center py-3 text-sm oneline" style="width: 160px;font-weight: 500;">
               <div style="width:32px;height:32px;" class="relative mr-2">
                 <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6" />
                 <TokenLogo :symbol="lp.tokenYSymbol" class="w-5 h-5 absolute bottom-0 right-0" />

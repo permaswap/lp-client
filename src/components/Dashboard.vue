@@ -1,5 +1,5 @@
 <template>
-  <div style="background: rgba(24, 59, 33, 0.2);height: 296px;" class="py-10 mb-10">
+  <div style="background: rgba(24, 59, 33, 0.2);height: 296px;" class="py-10 mb-16">
     <div style="width:864px;" class="mx-auto flex flex-row items-center justify-between">
       <div class="py-6 flex-1 mr-8">
         <div class="mb-12">

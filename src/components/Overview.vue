@@ -2,14 +2,15 @@
 import { useStore } from '@/store'
 import { ref, computed, defineComponent, onMounted } from 'vue'
 import TokenLogo from './TokenLogo.vue'
-import Range from './Range.vue'
+import Range from './Range2.vue'
 import { toBN, isSqrtInRange, isValidVersion } from '@/lib/util'
 import { useI18n } from 'vue-i18n'
 import { getStats } from '@/lib/swap'
+import Dashboard from './Dashboard.vue'
 // import TradeOverview from './TradeOverview.vue'
 
 export default defineComponent({
-  components: { TokenLogo, Range },
+  components: { TokenLogo, Range, Dashboard },
   emits: ['selectLp'],
   setup () {
     const store = useStore()
@@ -38,13 +39,13 @@ export default defineComponent({
         volumesStack.value = {}
         tvlsStack.value = {}
         result.volumes.forEach(volumeData => {
-          volumesStack.value[volumeData.lpID] = toBN(volumeData.volumeInUSD).toFixed(2)
-          rewardStack.value[volumeData.lpID] = volumeData.rewardInUSD > 0.01
-            ? toBN(volumeData.rewardInUSD).toFixed(2)
-            : '<0.01'
+          volumesStack.value[volumeData.lpID] = `$${toBN(volumeData.volumeInUSD).toFixed(2)}`
+          rewardStack.value[volumeData.lpID] = volumeData.rewardInUSD >= 0.01
+            ? `$${toBN(volumeData.rewardInUSD).toFixed(2)}`
+            : '<$0.01'
         })
         result.tvls.forEach(tvlData => {
-          tvlsStack.value[tvlData.lpID] = toBN(tvlData.tvlInUSD).toFixed(2)
+          tvlsStack.value[tvlData.lpID] = `$${toBN(tvlData.tvlInUSD).toFixed(2)}`
         })
       }
     })
@@ -69,6 +70,7 @@ export default defineComponent({
 
 <template>
   <!-- <TradeOverview /> -->
+  <Dashboard />
   <div style="width:864px;" class="mx-auto">
     <div style="font-size: 20px;" class="mb-6 flex flex-row items-center justify-between">
       <div>{{ t('pool_overview_2') }}</div>
@@ -90,8 +92,8 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <div style="background: #161E1B;border-radius: 24px;" class="p-4">
-      <div class="m-4 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+    <div style="background: #161E1B;border-radius: 24px;" class="px-3 py-4">
+      <div class="my-3 mx-3 pb-4 flex flex-row items-center justify-between" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <span>{{ t('my_pool') }} {{ lps.length ? `(${lps.length})` : '' }}</span>
         <div
           v-if="manualConnect"
@@ -127,47 +129,57 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div class="text-sm my-8 text-center" style="color: rgba(255, 255, 255, 0.45);">
+      <div class="text-sm my-6 text-center" style="color: rgba(255, 255, 255, 0.45);">
         <ul v-if="lps.length && account" class="text-left">
-          <li class="flex flex-row mb-4 px-4">
-            <div style="width: 160px;margin-right:35px;">
+          <li class="flex flex-row mb-4 px-3 text-xs">
+            <div style="width: 160px;" class="py-3">
               {{ t('name') }}
             </div>
-            <div class="mr-8" style="width:160px;" />
-            <div class="text-right mr-8" style="width:100px;">
+            <div style="width:200px;" />
+            <div class="text-right p-3" style="width:125px;">
+              TVL
+            </div>
+            <div class="text-right p-3" style="width:125px;">
               {{ t('volume') }} (24h)
             </div>
-            <div class="text-right mr-8" style="width:100px;">
+            <div class="text-right p-3" style="width:99px;">
               {{ t('fee') }} (24h)
             </div>
-            <div />
+            <div class="p-3" style="width:107px;" />
           </li>
           <li
             v-for="(lp, index) in lps"
             :key="index"
-            class="flex flex-row items-center p-4 mb-4 cursor-pointer item"
+            class="flex flex-row items-center p-3 mb-4 cursor-pointer item"
             style="border-radius: 12px;"
             @click="$emit('selectLp', lp, volumesStack[lp.lpId] ? volumesStack[lp.lpId] : '-', tvlsStack[lp.lpId] ? tvlsStack[lp.lpId] : '-')"
           >
-            <div class="text-white flex flex-row items-center" style="width: 160px;margin-right:35px;">
-              <div style="width:40px;height:40px;" class="relative mr-2">
-                <TokenLogo :symbol="lp.tokenXSymbol" class="w-8 h-8" />
+            <div class="text-white flex flex-row items-center py-3 text-sm oneline" style="width: 160px;font-weight: 500;">
+              <div style="width:32px;height:32px;" class="relative mr-2">
+                <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6" />
                 <TokenLogo :symbol="lp.tokenYSymbol" class="w-5 h-5 absolute bottom-0 right-0" />
               </div>
               {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
             </div>
-            <div class="mr-8 text-xs" style="width:160px;">
-              <div>Min:{{ lp.lowPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
+            <div class="text-xs" style="width:200px;color: rgba(255, 255, 255, 0.85);">
+              <div class="oneline">
+                Min: <span style="color:#fff;font-weight:500;">{{ lp.lowPrice }}</span> {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
+              </div>
               <img src="@/images/arrow-both.png" class="w-3 h-3">
-              <div>Max:{{ lp.highPrice }} {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}</div>
+              <div class="oneline">
+                Max: <span style="color:#fff;font-weight:500;">{{ lp.highPrice }}</span> {{ lp.tokenYSymbol }} per {{ lp.tokenXSymbol }}
+              </div>
             </div>
-            <div class="text-right mr-8 text-white" style="width:100px;">
-              {{ volumesStack[lp.lpId] ? `${volumesStack[lp.lpId]} USD` : '-' }}
+            <div class="text-right text-white p-3 oneline" style="width:125px;font-weight: 500;">
+              {{ tvlsStack[lp.lpId] ? `${tvlsStack[lp.lpId]}` : '-' }}
             </div>
-            <div class="text-right mr-8 text-white" style="width:100px;">
-              {{ rewardStack[lp.lpId] ? `${rewardStack[lp.lpId]} USD` : '-' }}
+            <div class="text-right text-white p-3 oneline" style="width:125px;font-weight: 500;">
+              {{ volumesStack[lp.lpId] ? `${volumesStack[lp.lpId]}` : '-' }}
             </div>
-            <div class="flex flex-row items-center justify-end flex-1">
+            <div class="text-right text-white p-3 oneline" style="width:99px;font-weight: 500;">
+              {{ rewardStack[lp.lpId] ? `${rewardStack[lp.lpId]}` : '-' }}
+            </div>
+            <div class="flex flex-row items-center justify-end flex-1 p-3 oneline" style="width:107px;">
               <Range :in-range="isSqrtInRange(lp.currentSqrtPrice, lp.lowSqrtPrice, lp.highSqrtPrice)" />
             </div>
           </li>
@@ -211,5 +223,10 @@ export default defineComponent({
     animation-name: breath;
     animation-duration: 2s;
     animation-iteration-count: infinite;
+  }
+  .oneline {
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
   }
 </style>

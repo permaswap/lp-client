@@ -99,6 +99,16 @@ const messages = {
     tutorial: '教程  ↗︎',
     no_data: '暫無數據'
   },
+  dashboard: {
+    dashboard: '數據看板',
+    total_volume: '總交易量',
+    total_volume_tip: '年度所有交易對的交易量',
+    my_volume: '我的交易量',
+    my_volume_tip: '年度我的所有的交易量',
+    my_earnings: '我的收益',
+    my_earnings_tip_1: '年度收益。 ',
+    my_earnings_tip_2: '收益在交易完成時即已實時發放到您的賬戶地址中。'
+  },
   full_range_tip_title: '效率對比',
   full_range_tip_detail: '全範圍倉位可能比集中倉位賺取更少的交易貢獻值。 ',
   full_range_tip_btn: '我已知曉',

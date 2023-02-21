@@ -111,3 +111,32 @@ export const isValidVersion = (serverVision: string): boolean => {
   const serV = serverVision.slice(1)
   return semver.gte(curV, serV)
 }
+
+/**
+ * we don't use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString here
+ * cause toLocalString will auto round bigNumber
+ * but now we used too many times bigNumber's method, this may caused some performance problem.
+ */
+export const thousandCommas = (num: number | string, place: number = 4): string => {
+  if (place < 0 || place > 20) {
+    console.warn('max must be less than 20')
+    return toBN(num).toString(10)
+  }
+
+  const n = toBN(num).toFormat(place, 1)
+  /**
+   *  小数位去零
+   * 3.14159000 =>  3.14159
+   * 3.00 => 3
+   * 3.00012 => 3.00012
+   * 3.0001200 => 3.00012
+   * 31415 => 31,415
+   */
+  // return n.replace(/\.0+$/g, '').replace(/\.(.*[^0])0+$/g, '.$1'
+  return n
+}
+
+// only format money
+export const formatMoney = (value: number | string, place: number = 2): string => {
+  return thousandCommas(value, place)
+}

@@ -23,7 +23,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fixed" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;">
+  <div class="fixed" style="width:100%;height:100%;background:rgba(0, 10, 6,0.65);top:0;left:0;z-index:50;">
     <div
       style="
     position: fixed;

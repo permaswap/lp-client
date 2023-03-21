@@ -134,7 +134,7 @@ export default defineComponent({
       tokenY.value = tokenYs.value[0]
       updateBalances()
       const { poolId } = getPoolData(swapInfo.poolList)
-      currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
+      currentPrice.value = await getPoolPrice(poolId)
       setLowHighPrice()
       dataLoading.value = false
     })
@@ -246,7 +246,7 @@ export default defineComponent({
       tokenYAmount.value = ''
       updateBalances()
       const { poolId } = getPoolData(swapInfo.poolList)
-      currentPrice.value = await getPoolPrice(poolId, tokenX.value.decimals, tokenY.value.decimals)
+      currentPrice.value = await getPoolPrice(poolId)
       setLowHighPrice()
     }
     const showPreviewModal = () => {

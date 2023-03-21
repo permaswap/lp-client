@@ -73,7 +73,7 @@ export default defineComponent({
       rewardX.value = reward.rewardX ? formatInputPrecision(reward.rewardX.toString(), props.lp.tokenXDecimal) : '0'
       rewardY.value = reward.rewardY ? formatInputPrecision(reward.rewardY.toString(), props.lp.tokenYDecimal) : '0'
 
-      currentPrice.value = await getPoolPrice(props.lp.poolId, props.lp.tokenXDecimal, props.lp.tokenYDecimal)
+      currentPrice.value = await getPoolPrice(props.lp.poolId)
       inRange.value = isInRange(currentPrice.value, props.lp.lowPrice, props.lp.highPrice)
     })
 

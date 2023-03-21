@@ -64,13 +64,13 @@ export const getSwapInfo = async (): Promise<string[]> => {
   return result.data
 }
 
-export const getPoolPrice = async (poolId: string, tokenXDecimal: number, tokenYDecimal: number): Promise<string> => {
+export const getPoolPrice = async (poolId: string): Promise<string> => {
   const url = `https://${host}/pool/${poolId}`
   const result = await sendRequest({
     url,
     method: 'GET'
   })
-  return formatInputPrecision(toBN(result.data.currentPriceDown).times(toBN(10).pow(tokenXDecimal - tokenYDecimal)).toString(), 8)
+  return formatInputPrecision(toBN(result.data.currentPriceDown).toString(), 8)
 }
 
 export const getLpReward = async (lpId: string): Promise<any> => {

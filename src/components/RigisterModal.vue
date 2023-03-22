@@ -211,8 +211,16 @@ export default defineComponent({
         }
 
         socket = initSocket({
-          handleError (error: any) {
-            console.log('error', error)
+          handleError (data: any) {
+            console.log('error', data)
+            if (data.msg === 'err_blacklisted') {
+              store.commit('updatePenaltyModalVisible', true)
+              const lps = [...store.state.lps]
+              lps.forEach((lp) => {
+                store.commit('removeLp', lp)
+              })
+              clearTimeout(timer as any)
+            }
           },
           handleOpen (data: any) {
             console.log('open', data)

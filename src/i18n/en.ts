@@ -115,7 +115,12 @@ const messages = {
   fee: 'Fee',
   fees: 'Fees',
   fees_tip_1: 'Accumulated Income.',
-  fees_tip_2: 'Proceeds have been issued to your account address in real time upon completion of the transaction.'
+  fees_tip_2: 'Proceeds have been issued to your account address in real time upon completion of the transaction.',
+  warning: 'Warning',
+  confirm: 'Confirm',
+  penalty_rule_1: 'In this account, your violation resulted in three failed order transactions and Router has disconnected all of your pool positions.',
+  penalty_rule_2: 'You can continue to Add Position with this account after ',
+  penalty_rule_3: '.'
 }
 
 export default messages

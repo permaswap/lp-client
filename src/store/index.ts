@@ -24,6 +24,9 @@ export default createStore<State>({
     updateDownloadModalVisible (state, visible) {
       state.downloadModalVisible = visible
     },
+    updatePenaltyModalVisible (state, visible) {
+      state.penaltyModalVisible = visible
+    },
     updateAccountModalVisible (state, visible) {
       state.accountModalVisible = visible
     },

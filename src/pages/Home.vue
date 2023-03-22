@@ -10,6 +10,7 @@ import { computed } from '@vue/reactivity'
 import AddPoolModal from '../components/AddPoolModal.vue'
 import ClosePoolModal from '../components/closePoolModal.vue'
 import NoticeBoard from '../components/NoticeBoard.vue'
+import PenaltyModal from '../components/PenaltyModal.vue'
 import { getNfts } from '@/lib/swap'
 import DownloadModal from '@/components/DownloadModal.vue'
 import SystemCloseModal from '@/components/SystemCloseModal.vue'
@@ -33,6 +34,7 @@ store.commit('updateSuccessConnect', false)
 store.commit('updateAddPoolModalVisible', false)
 store.commit('updateAccountModalVisible', false)
 store.commit('updateRegisterModalVisible', false)
+store.commit('updatePenaltyModalVisible', false)
 
 onMounted(async () => {
   const nftsResult = await getNfts()
@@ -69,6 +71,7 @@ watch(account, () => {
       <DownloadModal />
     </div>
     <SystemCloseModal />
+    <penalty-modal />
     <!-- <Footer /> -->
   </div>
 </template>

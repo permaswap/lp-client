@@ -115,7 +115,12 @@ const messages = {
   fee: '收益',
   fees: '收益',
   fees_tip_1: '累计收益。',
-  fees_tip_2: '收益在交易完成时即已实时发放到您的账户地址中。'
+  fees_tip_2: '收益在交易完成时即已实时发放到您的账户地址中。',
+  warning: '警告',
+  confirm: '確認',
+  penalty_rule_1: '該賬戶下，您的違規行為導致了 3 筆訂單交易失敗，Router 已斷開您的所有的做市倉位。',
+  penalty_rule_2: '直到',
+  penalty_rule_3: '以後，您才能繼續使用該賬戶做市。'
 }
 
 export default messages

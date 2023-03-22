@@ -1,7 +1,8 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, Ref } from 'vue'
 import Everpay from 'everpay'
-import { getLpId, getPoolPrice, sendAdd, isProd } from '@/lib/swap'
+import { ethers } from 'ethers'
+import { getLpId, getPoolPrice, sendAdd, isProd, getPenalty } from '@/lib/swap'
 import { useStore } from '@/store'
 import { formatInputPrecision, toBN, getAmountFromLps, isValidVersion } from '@/lib/util'
 import { getHighSqrtPrice, getLowSqrtPrice } from '@/lib/lp'
@@ -258,6 +259,18 @@ export default defineComponent({
       }
     }
     const handleAdd = async () => {
+      const penaltyResult = await getPenalty()
+      const acc = account.value.startsWith('0x') ? ethers.utils.getAddress(account.value) : account.value
+      if (penaltyResult.blackList[acc] !== undefined) {
+        previewModalVisible.value = false
+        store.commit('updatePenaltyModalVisible', true)
+        const lps = [...store.state.lps]
+        lps.forEach((lp) => {
+          store.commit('removeLp', lp)
+        })
+        return
+      }
+
       sendAdd(jsonConfig as any)
       previewModalVisible.value = false
       const { poolId } = getPoolData(swapInfo.poolList)

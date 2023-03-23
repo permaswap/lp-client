@@ -294,6 +294,17 @@ export default defineComponent({
         <li class="mb-4">
           <a
             class="flex flex-row items-center"
+            href="https://arseed.web3infra.dev/3c8Ocz_S21xGFnUbiPmoVLetap3pQ3ya8G8IirW8ktI"
+            target="_blank">
+            <div class="flex flex-col items-center mr-3" style="width: 20px;">
+              <img src="@/images/audit-report.png" style="height:17px;width:14px;">
+            </div>
+            <span>{{ t('audit_report') }}</span>
+          </a>
+        </li>
+        <li class="mb-4">
+          <a
+            class="flex flex-row items-center"
             href="https://www.notion.so/PermaSwap-WIKI-EN-485cd6623f954902b61775e4f1a86717"
             target="_blank">
             <div class="flex flex-col items-center mr-3" style="width: 20px;">

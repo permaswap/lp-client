@@ -120,7 +120,8 @@ const messages = {
   confirm: '確認',
   penalty_rule_1: '該賬戶下，您的違規行為導致了 3 筆訂單交易失敗，Router 已斷開您的所有的做市倉位。',
   penalty_rule_2: '直到',
-  penalty_rule_3: '以後，您才能繼續使用該賬戶做市。'
+  penalty_rule_3: '以後，您才能繼續使用該賬戶做市。',
+  audit_report: '審計報告'
 }
 
 export default messages

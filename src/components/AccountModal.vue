@@ -294,7 +294,7 @@ export default defineComponent({
         <li class="mb-4">
           <a
             class="flex flex-row items-center"
-            href="https://arseed.web3infra.dev/3c8Ocz_S21xGFnUbiPmoVLetap3pQ3ya8G8IirW8ktI"
+            href="https://arseed.web3infra.dev/RGcaT5ZztAGF0k62CHPILNCT5_XMuJpeoDMb7nRwkqo"
             target="_blank">
             <div class="flex flex-col items-center mr-3" style="width: 20px;">
               <img src="@/images/audit-report.png" style="height:17px;width:14px;">

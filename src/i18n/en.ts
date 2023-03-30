@@ -121,6 +121,7 @@ const messages = {
   penalty_rule_1: 'In this account, your violation resulted in three failed order transactions and Router has disconnected all of your pool positions.',
   penalty_rule_2: 'You can continue to Add Position with this account after ',
   penalty_rule_3: '.',
+  penalty_market_rule: 'More Rules  ↗︎',
   audit_report: 'Audit Report'
 }
 

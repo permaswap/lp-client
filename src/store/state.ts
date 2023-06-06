@@ -4,6 +4,7 @@ export interface State {
   info: any
   downloadModalVisible: boolean
   accountModalVisible: boolean
+  miningModalVisible: boolean
   registerModalVisible: boolean
   addPoolModalVisible: boolean
   penaltyModalVisible: boolean
@@ -20,6 +21,7 @@ export const defaultState = {
   info: {},
   downloadModalVisible: false,
   accountModalVisible: false,
+  miningModalVisible: false,
   registerModalVisible: false,
   addPoolModalVisible: false,
   penaltyModalVisible: false,

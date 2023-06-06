@@ -5,7 +5,7 @@
     :class="miningModalVisible ? 'block' : 'hidden'">
     <div
       style="background: #242D2A;border-radius: 12px;right:64px;top: 0;width:440px;"
-      class="absolute p-6">
+      class="absolute p-6 mining-modal">
       <div
         class="flex flex-row items-center justify-between pb-4 mb-4"
         style="font-size: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);"
@@ -36,7 +36,7 @@
             />
           </div>
         </div>
-        <img class="cursor-pointer" src="@/images/close.png" @click="miningModalVisible = false">
+        <img class="cursor-pointer" src="@/images/close.png" @click="hideMiningModal">
       </div>
 
       <div :class="tab === 'liquidity' ? 'block' : 'hidden'">
@@ -141,18 +141,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useStore } from '@/store'
 import MiningRow from './MiningRow.vue'
+import { checkParentsHas } from '@/lib/util'
 
 export default defineComponent({
   components: { MiningRow },
   setup () {
-    const miningModalVisible = ref(true)
-    const tab = ref('trading')
+    const store = useStore()
+    const miningModalVisible = computed(() => store.state.miningModalVisible)
+    const tab = ref('liquidity')
     const { t } = useI18n()
+    const hideMiningModal = () => store.commit('updateMiningModalVisible', false)
+
+    const isMiningModal = checkParentsHas('mining-modal')
+    const isMiningModalTrigger = checkParentsHas('mining-modal-trigger')
+
+    onMounted(() => {
+      document.addEventListener('click', (e) => {
+        if (!isMiningModal(e.target as any) && !isMiningModalTrigger(e.target as any)) {
+          hideMiningModal()
+        }
+      })
+    })
+
     return {
       miningModalVisible,
+      hideMiningModal,
       tab,
       t
     }

@@ -30,6 +30,9 @@ export default createStore<State>({
     updateAccountModalVisible (state, visible) {
       state.accountModalVisible = visible
     },
+    updateMiningModalVisible (state, visible) {
+      state.miningModalVisible = visible
+    },
     updateRegisterModalVisible (state, visible) {
       state.registerModalVisible = visible
     },

@@ -19,11 +19,17 @@ export default defineComponent({
     })
     const showAccountModal = () => {
       store.commit('updateAccountModalVisible', true)
+      store.commit('updateMiningModalVisible', false)
+    }
+    const showMiningModal = () => {
+      store.commit('updateAccountModalVisible', false)
+      store.commit('updateMiningModalVisible', true)
     }
     return {
       t,
       isProd,
       account,
+      showMiningModal,
       showAccountModal
     }
   }
@@ -47,8 +53,9 @@ export default defineComponent({
       </div>
       <div class="flex flex-row items-center">
         <div
-          class="flex flex-row items-center py-2 px-3 rounded-lg cursor-pointer"
+          class="flex flex-row items-center py-2 px-3 rounded-lg cursor-pointer mining-modal-trigger"
           style="border: 1px solid rgba(121, 212, 131, 0.25);"
+          @click="showMiningModal"
         >
           <img src="@/images/trophy.png" class="w-6 h-6 mr-1">
           <span style="color:rgba(255, 255, 255, 0.85);" class="text-base">ANS</span>

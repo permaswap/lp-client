@@ -16,7 +16,7 @@
             :style="tab === 'liquidity' ? 'color: #79D483' : ''"
             @click="tab = 'liquidity'"
           >
-            Liquidity
+            {{ t('ans_mining.liquidity') }}
             <div
               v-if="tab === 'liquidity'"
               class="absolute w-full left-0"
@@ -28,7 +28,7 @@
             :style="tab === 'trading' ? 'color: #79D483' : ''"
             @click="tab = 'trading'"
           >
-            Trading
+            {{ t('ans_mining.trading') }}
             <div
               v-if="tab === 'trading'"
               class="absolute w-full left-0"
@@ -46,30 +46,30 @@
         >
           <mining-row
             class="mb-4"
-            label="TVL($)"
+            :label="t('ans_mining.tvl')"
             value="$1,000,000"
-            info-message="TVL for AR/ANS"
+            :info-message="t('ans_mining.tvl_tip')"
           />
           <mining-row
             class="mb-4"
-            label="Participating TVL($)"
+            :label="t('ans_mining.join_tvl')"
             value="$1,000,000"
-            info-message="Amount of TVL for AR/ANS actually participating in the event"
+            :info-message="t('ans_mining.join_tvl_tip')"
           />
           <mining-row
             class="mb-4"
-            label="Total Award"
+            :label="t('ans_mining.ans_total_reward')"
             value="300 ANS"
             :highlight="true"
           />
           <mining-row
             class="mb-4"
-            label="APR"
+            :label="t('ans_mining.apr')"
             value="11.21%"
           />
           <mining-row
-            label="Duration"
-            value="1 month"
+            :label="t('ans_mining.period')"
+            :value="t('ans_mining.1month')"
           />
         </div>
         <div
@@ -78,29 +78,29 @@
         >
           <mining-row
             class="mb-4"
-            label="My APR"
+            :label="t('ans_mining.my_apr')"
             value="10.2%"
           />
           <mining-row
             class="mb-4"
-            label="My Awarded Rewards"
+            :label="t('ans_mining.sent_reward')"
             value="11.82 ANS"
-            info-message="Total amount of rewards issued to your current address"
+            :info-message="t('ans_mining.sent_reward_tip')"
           />
           <mining-row
-            label="My Undistributed Est. rewards"
+            :label="t('ans_mining.single_day_est_reward')"
             value="10 ANS"
-            info-message="The actual rewards is obtained as the actual data changes. The actual rewards is given at the time of settlement"
+            :info-message="t('ans_mining.single_day_est_reward_tip')"
           />
         </div>
         <ul
           class="pt-4 text-xs list-disc pl-4"
           style="color: rgba(255, 255, 255, 0.45);border-top: 1px solid rgba(255, 255, 255, 0.08);line-height: 20px;"
         >
-          <li>The data is counted every 1 minute. Subject to end of activity data.</li>
-          <li>During Active, the data is dynamic and changes with the actual data.</li>
+          <li>{{ t('ans_mining.notice_tip_1') }}</li>
+          <li>{{ t('ans_mining.notice_tip_2') }}</li>
           <li style="color: #D3B078;">
-            <a href="#" target="_blank" style="color: #D3B078;">More Rules  ↗︎</a>
+            <a href="#" target="_blank" style="color: #D3B078;">{{ t('ans_mining.more_rule') }}</a>
           </li>
         </ul>
       </div>
@@ -111,28 +111,28 @@
         >
           <mining-row
             class="mb-4"
-            label="Total Rewards"
+            :label="t('ans_mining.total_rewards')"
             value="50AR"
             :highlight="true"
           />
           <mining-row
             class="mb-4"
-            label="ANS Total Volume ($)"
+            :label="t('ans_mining.ans_total_volume')"
             value="$1,000,000"
-            info-message="ANS-related cumulative transactions during the event"
+            :info-message="t('ans_mining.ans_total_volume_tip')"
           />
           <mining-row
-            label="Duration"
-            value="2 weeks"
+            :label="t('ans_mining.duration')"
+            :value="t('ans_mining.2weeks')"
           />
         </div>
         <div
           class="py-3 px-4"
           style="background: rgba(22, 30, 27, 0.45);border: 1px solid rgba(164, 224, 169, 0.25);border-radius: 12px;"
         >
-          💰Participate in ANS trading events and get more rewards !
+          💰{{ t('ans_mining.trading_tip_1') }}
           <a href="https://app.permaswap.network/ANS-USDC" target="_blank" style="color: #79D483;">
-            Go to swap  ↗︎
+            {{ t('ans_mining.trading_tip_2') }}
           </a>
         </div>
       </div>
@@ -142,6 +142,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MiningRow from './MiningRow.vue'
 
 export default defineComponent({
@@ -149,9 +150,11 @@ export default defineComponent({
   setup () {
     const miningModalVisible = ref(true)
     const tab = ref('trading')
+    const { t } = useI18n()
     return {
       miningModalVisible,
-      tab
+      tab,
+      t
     }
   }
 })

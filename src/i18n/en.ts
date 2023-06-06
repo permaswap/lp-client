@@ -122,7 +122,34 @@ const messages = {
   penalty_rule_2: 'You can continue to Add Position with this account after ',
   penalty_rule_3: '.',
   penalty_market_rule: 'More Rules  ↗︎',
-  audit_report: 'Audit Report'
+  audit_report: 'Audit Report',
+  ans_mining: {
+    liquidity: 'Liquidity',
+    trading: 'Trading',
+    tvl: 'TVL',
+    tvl_tip: 'TVL for AR/ANS',
+    join_tvl: 'Participating TVL',
+    join_tvl_tip: 'Amount of TVL for AR/ANS actually participating in the event',
+    ans_total_reward: 'Total Award',
+    apr: 'APR',
+    period: 'Duration',
+    '1month': '1 month',
+    my_apr: 'My APR',
+    sent_reward: 'Awarded Rewards',
+    sent_reward_tip: 'Total amount of rewards issued to your current address.',
+    single_day_est_reward: 'Undistributed Est. rewards',
+    single_day_est_reward_tip: 'The actual rewards is obtained as the actual data changes. The actual rewards is given at the time of settlement',
+    notice_tip_1: 'The data is counted every 1 minute. Subject to end of activity data.',
+    notice_tip_2: 'During the Activity, the data is dynamic and changes with the actual data.',
+    more_rule: 'More Rules  ↗︎',
+    total_rewards: 'Total Rewards',
+    ans_total_volume: 'ANS Total Volume ($)',
+    ans_total_volume_tip: 'ANS-related cumulative transactions during the event',
+    duration: 'Duration',
+    '2weeks': '2 weeks',
+    trading_tip_1: 'Participate in ANS trading events and earn more rewards!',
+    trading_tip_2: 'Go swap  ↗︎'
+  }
 }
 
 export default messages

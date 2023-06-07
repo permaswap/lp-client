@@ -105,7 +105,13 @@
           <li>{{ t('ans_mining.notice_tip_1') }}</li>
           <li>{{ t('ans_mining.notice_tip_2') }}</li>
           <li style="color: #D3B078;">
-            <a href="#" target="_blank" style="color: #D3B078;">{{ t('ans_mining.more_rule') }}</a>
+            <a
+              :href="locale === 'zh' ? 'https://permadao.notion.site/ANS-976f7a7c70444fa5a4f5e728917b0385?pvs=4' : 'https://permadao.notion.site/ANS-Campaign-08d2bb03d26e45f3b3bb73d54ea72069?pvs=4'"
+              target="_blank"
+              style="color: #D3B078;"
+            >
+              {{ t('ans_mining.more_rule') }}
+            </a>
           </li>
         </ul>
       </div>
@@ -141,7 +147,7 @@
           style="background: rgba(22, 30, 27, 0.45);border: 1px solid rgba(164, 224, 169, 0.25);border-radius: 12px;"
         >
           💰{{ t('ans_mining.trading_tip_1') }}
-          <a href="https://app.permaswap.network/ANS-USDC" target="_blank" style="color: #79D483;">
+          <a href="https://app.permaswap.network/USDC-ANS" target="_blank" style="color: #79D483;">
             {{ t('ans_mining.trading_tip_2') }}
           </a>
         </div>
@@ -178,7 +184,7 @@ export default defineComponent({
     const store = useStore()
     const miningModalVisible = computed(() => store.state.miningModalVisible)
     const tab = ref('liquidity')
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
     const hideMiningModal = () => store.commit('updateMiningModalVisible', false)
     const account = computed(() => store.state.account)
 
@@ -253,7 +259,11 @@ export default defineComponent({
     }
 
     updateMiningData()
-    watch([account, miningModalVisible], updateMiningData)
+    watch([account, miningModalVisible], () => {
+      if (miningModalVisible.value) {
+        updateMiningData()
+      }
+    })
 
     return {
       account,
@@ -261,6 +271,7 @@ export default defineComponent({
       hideMiningModal,
       tab,
       t,
+      locale,
       tvl,
       joinTvl,
       liquidityRewardTokenString,

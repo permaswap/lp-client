@@ -143,12 +143,13 @@ const messages = {
     notice_tip_2: '活動期間，數據是動態的，隨實際數據變化；',
     more_rule: '更多規則  ↗︎',
     total_rewards: '總獎勵',
-    ans_total_volume: 'ANS 總交易量 ($)',
+    ans_total_volume: 'ANS 總交易量',
     ans_total_volume_tip: '活動期間 ANS 相關的累計交易量',
     duration: '週期',
     '2weeks': '2 週',
     trading_tip_1: '參與ANS 交易活動，獲得更多獎勵！ ',
-    trading_tip_2: '去交易吧  ↗︎'
+    trading_tip_2: '去交易吧  ↗︎',
+    time: '時間'
   }
 }
 

@@ -143,12 +143,13 @@ const messages = {
     notice_tip_2: 'During the Activity, the data is dynamic and changes with the actual data.',
     more_rule: 'More Rules  ↗︎',
     total_rewards: 'Total Rewards',
-    ans_total_volume: 'ANS Total Volume ($)',
+    ans_total_volume: 'ANS Total Volume',
     ans_total_volume_tip: 'ANS-related cumulative transactions during the event',
     duration: 'Duration',
     '2weeks': '2 weeks',
     trading_tip_1: 'Participate in ANS trading events and earn more rewards!',
-    trading_tip_2: 'Go swap  ↗︎'
+    trading_tip_2: 'Go swap  ↗︎',
+    time: 'Time'
   }
 }
 

@@ -47,29 +47,34 @@
           <mining-row
             class="mb-4"
             :label="t('ans_mining.tvl')"
-            value="$1,000,000"
+            :value="tvl"
             :info-message="t('ans_mining.tvl_tip')"
           />
           <mining-row
             class="mb-4"
             :label="t('ans_mining.join_tvl')"
-            value="$1,000,000"
+            :value="joinTvl"
             :info-message="t('ans_mining.join_tvl_tip')"
           />
           <mining-row
             class="mb-4"
             :label="t('ans_mining.ans_total_reward')"
-            value="300 ANS"
+            :value="liquidityRewardTokenString"
             :highlight="true"
           />
           <mining-row
             class="mb-4"
             :label="t('ans_mining.apr')"
-            value="11.21%"
+            :value="liquidityAPR"
           />
           <mining-row
+            class="mb-4"
             :label="t('ans_mining.period')"
             :value="t('ans_mining.1month')"
+          />
+          <mining-row
+            :label="t('ans_mining.time')"
+            :value="liquidityTimeString"
           />
         </div>
         <div
@@ -79,17 +84,17 @@
           <mining-row
             class="mb-4"
             :label="t('ans_mining.my_apr')"
-            value="10.2%"
+            :value="liquidityMyAPR"
           />
           <mining-row
             class="mb-4"
             :label="t('ans_mining.sent_reward')"
-            value="11.82 ANS"
+            :value="liquidityMyReward"
             :info-message="t('ans_mining.sent_reward_tip')"
           />
           <mining-row
             :label="t('ans_mining.single_day_est_reward')"
-            value="10 ANS"
+            :value="liquidityMyEstReward"
             :info-message="t('ans_mining.single_day_est_reward_tip')"
           />
         </div>
@@ -112,18 +117,23 @@
           <mining-row
             class="mb-4"
             :label="t('ans_mining.total_rewards')"
-            value="50AR"
+            :value="tradingRewardTokenString"
             :highlight="true"
           />
           <mining-row
             class="mb-4"
             :label="t('ans_mining.ans_total_volume')"
-            value="$1,000,000"
+            :value="tradingTotalVolume"
             :info-message="t('ans_mining.ans_total_volume_tip')"
           />
           <mining-row
+            class="mb-4"
             :label="t('ans_mining.duration')"
             :value="t('ans_mining.2weeks')"
+          />
+          <mining-row
+            :label="t('ans_mining.time')"
+            :value="tradingTimeString"
           />
         </div>
         <div
@@ -141,11 +151,26 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '@/store'
 import MiningRow from './MiningRow.vue'
-import { checkParentsHas } from '@/lib/util'
+import { checkParentsHas, formatMoney, toBN } from '@/lib/util'
+import Everpay from 'everpay'
+import { ethers } from 'ethers'
+import { getMiningInfo, isProd } from '@/lib/swap'
+import { fromDecimalToUnit, getTokenByTag } from 'everpay/esm/utils/util'
+
+const toDouble = (num: number): string => {
+  return num < 10 ? `0${num}` : `${num}`
+}
+const getTimeDate = (timestamp: number): string => {
+  const oDate = new Date(timestamp * 1000)
+  return `${oDate.getFullYear()}.${toDouble(oDate.getMonth() + 1)}.${toDouble(oDate.getDate())}`
+}
+const getTimeString = (start: number, end: number): string => {
+  return `${getTimeDate(start)} ~ ${getTimeDate(end)}`
+}
 
 export default defineComponent({
   components: { MiningRow },
@@ -155,9 +180,22 @@ export default defineComponent({
     const tab = ref('liquidity')
     const { t } = useI18n()
     const hideMiningModal = () => store.commit('updateMiningModalVisible', false)
+    const account = computed(() => store.state.account)
 
     const isMiningModal = checkParentsHas('mining-modal')
     const isMiningModalTrigger = checkParentsHas('mining-modal-trigger')
+    const everpay = new Everpay({ debug: !isProd })
+    const tvl = ref('')
+    const joinTvl = ref('')
+    const liquidityRewardTokenString = ref('')
+    const liquidityAPR = ref('0.0%')
+    const liquidityMyAPR = ref('0.0%')
+    const liquidityMyReward = ref('')
+    const liquidityMyEstReward = ref('')
+    const liquidityTimeString = ref('')
+    const tradingRewardTokenString = ref('')
+    const tradingTotalVolume = ref('')
+    const tradingTimeString = ref('')
 
     onMounted(() => {
       document.addEventListener('click', (e) => {
@@ -167,11 +205,73 @@ export default defineComponent({
       })
     })
 
+    const updateMiningData = async () => {
+      const everpayInfo = await everpay.info()
+      const miningInfo = await getMiningInfo()
+      console.log(everpayInfo, miningInfo)
+      const liquidityRewardToken = getTokenByTag(miningInfo.liquidity_mining[1].rewardToken, everpayInfo.tokenList)
+      const liquidityRewardTokenDecimal = miningInfo.liquidity_mining[1].rewardTokenDecimals
+      // ------------------liquidity------------------
+      // TVL
+      tvl.value = `$${formatMoney(miningInfo.liquidity_mining[1].currentTVL, 2)}`
+      // 活动 TVL
+      joinTvl.value = `$${formatMoney(miningInfo.liquidity_mining[1].currentEffectiveTVL, 2)}`
+      // 总奖励
+      liquidityRewardTokenString.value = `${fromDecimalToUnit(miningInfo.liquidity_mining[1].rewardAmount, liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}`
+      // APR
+      liquidityAPR.value = `${toBN(miningInfo.liquidity_mining[1].currentAPY as any).times(100).toString()}%`
+
+      const addrKey = account.value && account.value.startsWith('0x') ? ethers.utils.getAddress(account.value) : account.value
+      const userAPY = miningInfo.liquidity_mining[1].userAPY ? miningInfo.liquidity_mining[1].userAPY : {}
+      // My APR
+      liquidityMyAPR.value = userAPY[addrKey] ? `${toBN(userAPY[addrKey] as any).times(100).toString()}%` : '0.0%'
+      const userReward = miningInfo.liquidity_mining[1].rewards ? miningInfo.liquidity_mining[1].rewards : {}
+      // 已发奖励
+      liquidityMyReward.value = userReward[addrKey] ? `${fromDecimalToUnit(userReward[addrKey], liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
+      const estReward = miningInfo.liquidity_mining[1].currentRewards ? miningInfo.liquidity_mining[1].currentRewards : {}
+      // 当日预估奖励
+      liquidityMyEstReward.value = estReward[addrKey] ? `${fromDecimalToUnit(estReward[addrKey].reward, liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
+      // 时间
+      liquidityTimeString.value = getTimeString(miningInfo.liquidity_mining[1].start, miningInfo.liquidity_mining[1].end)
+      // ------------------trading------------------
+      const tradingRewardToken = getTokenByTag(miningInfo.swap_mining[1].rewardToken, everpayInfo.tokenList)
+      const tradingRewardTokenDecimal = miningInfo.swap_mining[1].rewardTokenDecimals
+      // 总奖励
+      tradingRewardTokenString.value = `${fromDecimalToUnit(miningInfo.swap_mining[1].rewardAmount, tradingRewardTokenDecimal)} ${tradingRewardToken?.symbol.toUpperCase()}`
+      const tradingBaseToken = getTokenByTag(miningInfo.swap_mining[1].baseToken, everpayInfo.tokenList)
+      const userVolumeArr = Object.values(miningInfo.swap_mining[1].userVolume ? miningInfo.swap_mining[1].userVolume : {}) as any[]
+      const tradingVolumeDecimalAmount = userVolumeArr.length
+        ? userVolumeArr.reduce((memo: any, current: any) => {
+          return toBN(memo).plus(toBN(current)).toString()
+        }, '0') as any
+        : '0' as any
+      const tradingVolumeAmount = fromDecimalToUnit(tradingVolumeDecimalAmount, miningInfo.swap_mining[1].baseTokenDecimal)
+      // 总交易量
+      tradingTotalVolume.value = `${tradingVolumeAmount} ${tradingBaseToken?.symbol.toUpperCase()}`
+      // 时间
+      tradingTimeString.value = getTimeString(miningInfo.swap_mining[1].start, miningInfo.swap_mining[1].end)
+    }
+
+    updateMiningData()
+    watch([account, miningModalVisible], updateMiningData)
+
     return {
+      account,
       miningModalVisible,
       hideMiningModal,
       tab,
-      t
+      t,
+      tvl,
+      joinTvl,
+      liquidityRewardTokenString,
+      liquidityAPR,
+      liquidityMyAPR,
+      liquidityMyReward,
+      liquidityMyEstReward,
+      liquidityTimeString,
+      tradingRewardTokenString,
+      tradingTotalVolume,
+      tradingTimeString
     }
   }
 })

@@ -124,8 +124,8 @@ const messages = {
   penalty_market_rule: '參看規則  ↗︎',
   audit_report: '審計報告',
   ans_mining: {
-    liquidity: '流動性',
-    trading: '交易',
+    liquidity: '做市激勵',
+    trading: '交易激勵',
     tvl: 'TVL',
     tvl_tip: 'AR/ANS 的總鎖倉量',
     join_tvl: '活動 TVL',

@@ -228,9 +228,9 @@ export default defineComponent({
       liquidityAPR.value = `${toBN(miningInfo.liquidity_mining[1].currentAPY as any).times(100).toString()}%`
 
       const addrKey = account.value && account.value.startsWith('0x') ? ethers.utils.getAddress(account.value) : account.value
-      const userAPY = miningInfo.liquidity_mining[1].userAPY ? miningInfo.liquidity_mining[1].userAPY : {}
+      const lpAPY = miningInfo.liquidity_mining[1].lpAPY ? miningInfo.liquidity_mining[1].lpAPY : {}
       // My APR
-      liquidityMyAPR.value = userAPY[addrKey] ? `${toBN(userAPY[addrKey] as any).times(100).toString()}%` : '0.0%'
+      liquidityMyAPR.value = lpAPY[addrKey] ? `${toBN(lpAPY[addrKey] as any).times(100).toString()}%` : '0.0%'
       const userReward = miningInfo.liquidity_mining[1].rewards ? miningInfo.liquidity_mining[1].rewards : {}
       // 已发奖励
       liquidityMyReward.value = userReward[addrKey] ? `${fromDecimalToUnit(userReward[addrKey], liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`

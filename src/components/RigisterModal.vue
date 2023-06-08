@@ -157,6 +157,8 @@ export default defineComponent({
       }
       const holderToNFTs = store.state.holderToNFTs
       const whitelist = store.state.whitelist
+      // 是否需要白名单
+      const nftWhiteList = store.state.info.nftWhiteList
       let address = ''
       if (selectedFormat.value === 'Ethereum') {
         const wallet = new Wallet(privateKey.value)
@@ -165,14 +167,16 @@ export default defineComponent({
         address = arAddress
       }
 
-      if (!holderToNFTs[address] && !whitelist.includes(address)) {
-        permaMessage({
-          showClose: true,
-          message: t('need_nft'),
-          type: 'error',
-          duration: 3000
-        })
-        return
+      if (nftWhiteList) {
+        if (!holderToNFTs[address] && !whitelist.includes(address)) {
+          permaMessage({
+            showClose: true,
+            message: t('need_nft'),
+            type: 'error',
+            duration: 3000
+          })
+          return
+        }
       }
 
       importing.value = true

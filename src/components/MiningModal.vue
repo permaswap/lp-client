@@ -225,18 +225,18 @@ export default defineComponent({
       // 总奖励
       liquidityRewardTokenString.value = `${fromDecimalToUnit(miningInfo.liquidity_mining[1].rewardAmount, liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}`
       // APR
-      liquidityAPR.value = `${toBN(miningInfo.liquidity_mining[1].currentAPY as any).times(100).toString()}%`
+      liquidityAPR.value = `${toBN(miningInfo.liquidity_mining[1].currentAPY as any).times(100).toFixed(2)}%`
 
       const addrKey = account.value && account.value.startsWith('0x') ? ethers.utils.getAddress(account.value) : account.value
       const lpAPY = miningInfo.liquidity_mining[1].lpAPY ? miningInfo.liquidity_mining[1].lpAPY : {}
       // My APR
-      liquidityMyAPR.value = lpAPY[addrKey] ? `${toBN(lpAPY[addrKey] as any).times(100).toString()}%` : '0.0%'
+      liquidityMyAPR.value = lpAPY[addrKey] ? `${toBN(lpAPY[addrKey] as any).times(100).toFixed(2)}%` : '0.00%'
       const userReward = miningInfo.liquidity_mining[1].rewards ? miningInfo.liquidity_mining[1].rewards : {}
       // 已发奖励
-      liquidityMyReward.value = userReward[addrKey] ? `${fromDecimalToUnit(userReward[addrKey], liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
+      liquidityMyReward.value = userReward[addrKey] ? `${toBN(fromDecimalToUnit(userReward[addrKey], liquidityRewardTokenDecimal)).toFixed(6)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
       const estReward = miningInfo.liquidity_mining[1].currentRewards ? miningInfo.liquidity_mining[1].currentRewards : {}
       // 当日预估奖励
-      liquidityMyEstReward.value = estReward[addrKey] ? `${fromDecimalToUnit(estReward[addrKey].reward, liquidityRewardTokenDecimal)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
+      liquidityMyEstReward.value = estReward[addrKey] ? `${toBN(fromDecimalToUnit(estReward[addrKey].reward, liquidityRewardTokenDecimal)).toFixed(6)} ${liquidityRewardToken?.symbol.toUpperCase()}` : `0 ${liquidityRewardToken?.symbol.toUpperCase()}`
       // 时间
       liquidityTimeString.value = getTimeString(miningInfo.liquidity_mining[1].start, miningInfo.liquidity_mining[1].end)
       // ------------------trading------------------
@@ -251,7 +251,7 @@ export default defineComponent({
           return toBN(memo).plus(toBN(current)).toString()
         }, '0') as any
         : '0' as any
-      const tradingVolumeAmount = fromDecimalToUnit(tradingVolumeDecimalAmount, miningInfo.swap_mining[1].baseTokenDecimal)
+      const tradingVolumeAmount = toBN(fromDecimalToUnit(tradingVolumeDecimalAmount, miningInfo.swap_mining[1].baseTokenDecimal)).toFixed(6)
       // 总交易量
       tradingTotalVolume.value = `${tradingVolumeAmount} ${tradingBaseToken?.symbol.toUpperCase()}`
       // 时间

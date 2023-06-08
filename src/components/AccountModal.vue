@@ -302,7 +302,7 @@ export default defineComponent({
             <span>{{ t('audit_report') }}</span>
           </a>
         </li>
-        <li class="mb-4">
+        <li>
           <a
             class="flex flex-row items-center"
             href="https://www.notion.so/PermaSwap-WIKI-EN-485cd6623f954902b61775e4f1a86717"
@@ -313,7 +313,7 @@ export default defineComponent({
             <span>Wiki</span>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a
             class="flex flex-row items-center"
             href="https://permadao.com"
@@ -323,7 +323,7 @@ export default defineComponent({
             </div>
             <span>PermaDAO</span>
           </a>
-        </li>
+        </li> -->
       </ul>
       <div style="border-top: 1px solid rgba(255, 255, 255, 0.08);" class="p-6 flex flex-row items-center justify-between">
         <div class="flex flex-row items-center">

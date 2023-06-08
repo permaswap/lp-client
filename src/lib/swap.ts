@@ -101,6 +101,15 @@ export const getAggregate = async (account: string): Promise<any> => {
   return result.data
 }
 
+export const getMiningInfo = async (): Promise<any> => {
+  const url = `https://mining${isProd ? '' : '-dev'}.permaswap.network/info`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
 export const getPenalty = async (): Promise<any> => {
   const url = `https://${host}/penalty`
   const result = await sendRequest({

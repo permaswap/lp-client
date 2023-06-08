@@ -13,6 +13,10 @@ export default defineComponent({
     arrowLeft: {
       type: Number,
       default: 32
+    },
+    width: {
+      type: Number,
+      default: 320
     }
   }
 })
@@ -21,8 +25,8 @@ export default defineComponent({
 <template>
   <div
     class="p-3 absolute left-0 text-xs border-box"
-    style="background: #363F3B;border-radius: 12px;width:320px;color:#fff;z-index: 1;"
-    :style="`left:${left}px;bottom:${bottom}px;`">
+    style="background: #363F3B;border-radius: 12px;color:#fff;z-index: 1;"
+    :style="`left:${left}px;bottom:${bottom}px;width:${width}px;`">
     <slot />
     <img
       src="@/images/arrow-2.png"

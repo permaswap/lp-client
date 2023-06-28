@@ -32,7 +32,9 @@ const tokenListHasLogo = [
   'tusdc',
   'tardrive',
   'acnh',
-  'ans'
+  'ans',
+  'u',
+  'stamp'
 ]
 
 export default defineComponent({

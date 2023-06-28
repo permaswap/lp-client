@@ -37,11 +37,14 @@ export default defineComponent({
     transform: translateX(-50%);
     box-sizing: border-box;
     padding:32px;">
-      <div class="flex flex-row items-center justify-between pb-4 mb-6" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+      <div
+        class="flex flex-row items-center justify-between pb-4 mb-6"
+        style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);"
+      >
         <span style="font-size:20px;">{{ t('select_pair') }}</span>
         <img src="@/images/close.png" class="cursor-pointer" @click="$emit('closePairModal')">
       </div>
-      <div>
+      <div :class="pairs.length > 7 ? 'overflow-y-scroll' : ''" style="max-height:540px;">
         <div
           v-for="(pair, index) in pairs"
           :key="index"

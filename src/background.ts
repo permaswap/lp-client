@@ -10,6 +10,7 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 async function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -22,6 +23,7 @@ async function createWindow () {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
     }
   })
@@ -30,19 +32,23 @@ async function createWindow () {
     e.preventDefault()
   })
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
+  if (process.env.WEBPACK_DEV_SERVER_URL != null) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    if (process.env.IS_TEST == null) {
+      win.webContents.openDevTools()
+    }
   } else {
     createProtocol('app')
     // Load the index.html when not in development
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     win.loadURL('app://./index.html')
   }
 
-  win.webContents.on('new-window', function (e, url) {
-    e.preventDefault()
-    require('electron').shell.openExternal(url)
+  win.webContents.setWindowOpenHandler((details) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises, @typescript-eslint/no-var-requires
+    require('electron').shell.openExternal(details.url)
+    return { action: 'deny' }
   })
 }
 
@@ -58,14 +64,18 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  if (BrowserWindow.getAllWindows().length === 0) {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    createWindow()
+  }
 })
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
+  if (isDevelopment && (process.env.IS_TEST == null)) {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS3_DEVTOOLS)
@@ -73,6 +83,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   createWindow()
 })
 

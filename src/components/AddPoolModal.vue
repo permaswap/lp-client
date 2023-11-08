@@ -473,7 +473,7 @@ export default defineComponent({
               </div>
               <div class="text-xs cursor-pointer">
                 <span
-                  class="mr-.5"
+                  class="mr-0.5"
                   style="color: #5AAD67;"
                   @click="setMaxTokenXAmount"
                 >{{ t('max') }}</span>

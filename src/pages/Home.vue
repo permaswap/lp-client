@@ -38,6 +38,7 @@ store.commit('updateAccountModalVisible', false)
 store.commit('updateMiningModalVisible', false)
 store.commit('updateRegisterModalVisible', false)
 store.commit('updatePenaltyModalVisible', false)
+store.commit('updateDepositNoticeModalVisible', false)
 
 onMounted(async () => {
   const nftsResult = await getNfts()

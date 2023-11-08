@@ -57,6 +57,24 @@ export default defineComponent({
     const account = computed(() => store.state.account)
     const previewModalVisible = ref(false)
     const duplicateLpId = ref(false)
+    const tokenXNotEnough = computed(() => {
+      if (!account.value) {
+        return false
+      }
+      if (!+tokenXAmount.value || !+tokenYAmount.value || +tokenXAmount.value <= 0 || +tokenYAmount.value <= 0) {
+        return false
+      }
+      return +tokenXAmount.value > +tokenXBalance.value
+    })
+    const tokenYNotEnough = computed(() => {
+      if (!account.value) {
+        return false
+      }
+      if (!+tokenXAmount.value || !+tokenYAmount.value || +tokenXAmount.value <= 0 || +tokenYAmount.value <= 0) {
+        return false
+      }
+      return +tokenYAmount.value > +tokenYBalance.value
+    })
     const btnMessage = computed(() => {
       if (!account.value) {
         return 'sign_up'
@@ -329,6 +347,17 @@ export default defineComponent({
         store.commit('updateRegisterModalVisible', true)
       }
     }
+    const showDepositNoticeModal = () => {
+      const tokens = []
+      if (tokenXNotEnough.value) {
+        tokens.push(tokenX.value)
+      }
+      if (tokenYNotEnough.value) {
+        tokens.push(tokenY.value)
+      }
+      store.commit('updateDepositNoticeTokens', tokens as any)
+      store.commit('updateDepositNoticeModalVisible', true)
+    }
     const oppositePrice = computed(() => {
       return formatInputPrecision(toBN(1).dividedBy(currentPrice.value).toString(), 8)
     })
@@ -367,7 +396,10 @@ export default defineComponent({
       oppositePrice,
       t,
       duplicateLpId,
-      locale
+      locale,
+      showDepositNoticeModal,
+      tokenXNotEnough,
+      tokenYNotEnough
     }
   }
 })
@@ -439,8 +471,23 @@ export default defineComponent({
                 <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
                 {{ tokenX && tokenX.symbol }}
               </div>
-              <div class="text-xs cursor-pointer" @click="setMaxTokenXAmount">
-                <span style="color: #5AAD67;">{{ t('max') }}</span> <span style="color:rgba(255, 255, 255, 0.65)">{{ tokenXBalance }}</span>
+              <div class="text-xs cursor-pointer">
+                <span
+                  class="mr-.5"
+                  style="color: #5AAD67;"
+                  @click="setMaxTokenXAmount"
+                >{{ t('max') }}</span>
+                <span
+                  style="color:rgba(255, 255, 255, 0.65)"
+                  @click="setMaxTokenXAmount"
+                >{{ tokenXBalance }}</span>
+                <span
+                  v-if="tokenXNotEnough"
+                  class="ml-2"
+                  style="color: #D3B078;"
+                  @click="showDepositNoticeModal">
+                  {{ t('deposit_2') }}
+                </span>
               </div>
             </div>
             <InputArea
@@ -463,8 +510,25 @@ export default defineComponent({
                 <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
                 {{ tokenY && tokenY.symbol }}
               </div>
-              <div class="text-xs cursor-pointer" @click="setMaxTokenYAmount">
-                <span style="color: #5AAD67;">{{ t('max') }}</span> <span style="color:rgba(255, 255, 255, 0.65)">{{ tokenYBalance }}</span>
+              <div class="text-xs cursor-pointer">
+                <span
+                  class="mr-0.5"
+                  style="color: #5AAD67;"
+                  @click="setMaxTokenYAmount"
+                >
+                  {{ t('max') }}
+                </span>
+                <span
+                  style="color:rgba(255, 255, 255, 0.65)"
+                  @click="setMaxTokenYAmount"
+                >{{ tokenYBalance }}</span>
+                <span
+                  v-if="tokenYNotEnough"
+                  class="ml-2"
+                  style="color: #D3B078;"
+                  @click="showDepositNoticeModal">
+                  {{ t('deposit_2') }}
+                </span>
               </div>
             </div>
             <InputArea
@@ -601,6 +665,15 @@ export default defineComponent({
           {{ t('full_range') }}
         </div>
         <div
+          v-if="btnMessage !== 'sign_up' && btnMessage !== 'preview' && btnMessage !== 'enter_amount'"
+          class="py-3 text-center block"
+          style="background: #79D483;color:#000;cursor:pointer;border-radius: 8px;"
+          @click="showDepositNoticeModal"
+        >
+          {{ t('deposit') }}
+        </div>
+        <div
+          v-else
           class="py-3 text-center"
           style="border-radius: 8px;"
           :style="(btnMessage === 'preview' && !invalidRange) || btnMessage === 'sign_up' ?
@@ -610,12 +683,12 @@ export default defineComponent({
         >
           {{ t(btnMessage) }}
         </div>
-        <div
+        <!-- <div
           v-if="btnMessage !== 'sign_up' && btnMessage !== 'preview' && btnMessage !== 'enter_amount'"
           class="text-right text-xs mt-1"
         >
           <a href="https://app.everpay.io/deposit" target="_blank" style="color: #D3B078;">{{ t('deposit_2') }}</a>
-        </div>
+        </div> -->
       </div>
     </div>
     <PairModal

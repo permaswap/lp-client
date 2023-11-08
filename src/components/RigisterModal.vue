@@ -461,6 +461,16 @@ export default defineComponent({
 
       tryConnect(false)
       checkSocket()
+
+      // 检测余额
+      const everpay = new Everpay({ debug: !isProd })
+      const balances = await everpay.balances({ account: address })
+      if (balances.every(balanceItem => {
+        return !+balanceItem.balance
+      })) {
+        store.commit('updateDepositNoticeTokens', [])
+        store.commit('updateDepositNoticeModalVisible', true)
+      }
     }
     return {
       t,

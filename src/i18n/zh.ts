@@ -150,6 +150,17 @@ const messages = {
     trading_tip_1: '參與ANS 交易活動，獲得更多獎勵！ ',
     trading_tip_2: '去交易吧  ↗︎',
     time: '時間'
+  },
+  deposit_notice_modal: {
+    title_1: '你的账户未存入任何资产。',
+    title_with_symbol: '{symbol} 余额不足',
+    title_with_2_symbol: '{symbol1} 和 {symbol2} 余额不足',
+    notice_1: '你可以先前往 everPay 的充值页面：',
+    notice_detail: '可将多链资产存入 everPay，再来提供流动性！',
+    deposit: '去充值',
+    deposit_symbol: '充值 {symbol}',
+    cancel_1: '逛一逛',
+    cancel_2: '取消'
   }
 }
 

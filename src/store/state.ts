@@ -1,3 +1,5 @@
+import { Token } from 'everpay'
+
 export interface State {
   account: string
   privateKey: string
@@ -8,6 +10,8 @@ export interface State {
   registerModalVisible: boolean
   addPoolModalVisible: boolean
   penaltyModalVisible: boolean
+  depositNoticeModalVisible: boolean
+  depositNoticeTokens: Token[]
   lps: any[]
   holderToNFTs: any
   whitelist: string[]
@@ -25,6 +29,8 @@ export const defaultState = {
   registerModalVisible: false,
   addPoolModalVisible: false,
   penaltyModalVisible: false,
+  depositNoticeModalVisible: false,
+  depositNoticeTokens: [],
   lps: [],
   holderToNFTs: {},
   whitelist: [],

@@ -150,6 +150,17 @@ const messages = {
     trading_tip_1: 'Participate in ANS trading events and earn more rewards!',
     trading_tip_2: 'Go swap  ↗︎',
     time: 'Time'
+  },
+  deposit_notice_modal: {
+    title_1: 'Your account has no assets deposited.',
+    title_with_symbol: '{symbol} balance is insufficient.',
+    title_with_2_symbol: '{symbol1} and {symbol2} balance are insufficient.',
+    notice_1: 'You can first visit the everPay deposit page:',
+    notice_detail: 'Deposit multi-chain assets into everPay, then provide liquidity!',
+    deposit: 'Deposit',
+    deposit_symbol: 'Deposit {symbol}',
+    cancel_1: 'Cancel',
+    cancel_2: 'Cancel'
   }
 }
 

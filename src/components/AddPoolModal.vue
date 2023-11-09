@@ -57,6 +57,8 @@ export default defineComponent({
     const account = computed(() => store.state.account)
     const previewModalVisible = ref(false)
     const duplicateLpId = ref(false)
+    const tokenXBalanceFormat = computed(() => formatInputPrecision(tokenXBalance.value, 6))
+    const tokenYBalanceFormat = computed(() => formatInputPrecision(tokenYBalance.value, 6))
     const tokenXNotEnough = computed(() => {
       if (!account.value) {
         return false
@@ -399,7 +401,9 @@ export default defineComponent({
       locale,
       showDepositNoticeModal,
       tokenXNotEnough,
-      tokenYNotEnough
+      tokenYNotEnough,
+      tokenXBalanceFormat,
+      tokenYBalanceFormat
     }
   }
 })
@@ -480,7 +484,7 @@ export default defineComponent({
                 <span
                   style="color:rgba(255, 255, 255, 0.65)"
                   @click="setMaxTokenXAmount"
-                >{{ tokenXBalance }}</span>
+                >{{ tokenXBalanceFormat }}</span>
                 <span
                   v-if="tokenXNotEnough"
                   class="ml-2"
@@ -521,7 +525,7 @@ export default defineComponent({
                 <span
                   style="color:rgba(255, 255, 255, 0.65)"
                   @click="setMaxTokenYAmount"
-                >{{ tokenYBalance }}</span>
+                >{{ tokenYBalanceFormat }}</span>
                 <span
                   v-if="tokenYNotEnough"
                   class="ml-2"

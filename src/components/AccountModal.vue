@@ -199,7 +199,7 @@ export default defineComponent({
           <div
             class="rounded-lg h-8 text-center text-sm border-box leading-8 cursor-pointer relative clipboard-modal-account"
             :data-clipboard-text="account"
-            style="width:188px; border: 1px solid #183B21;">
+            style="width:188px; border: 1px solid rgba(121, 212, 131, 0.25);">
             {{ t('copy') }}
             <div
               v-if="copyedNoticeVisible"

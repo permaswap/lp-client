@@ -468,82 +468,82 @@ export default defineComponent({
         </div>
         <div>
           <div
-            class="px-4 pt-4 pb-3 flex flex-row items-center justify-between mb-2"
+            class="px-4 pt-4 pb-3 mb-2"
             style="background: #000A06;border-radius: 12px;">
-            <div>
-              <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
+            <div class="flex flex-row items-center justify-between">
+              <div class="px-2 py-1" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
                 <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
                 {{ tokenX && tokenX.symbol }}
               </div>
-              <div class="text-xs cursor-pointer">
-                <span
-                  class="mr-0.5"
-                  style="color: #5AAD67;"
-                  @click="setMaxTokenXAmount"
-                >{{ t('max') }}</span>
-                <span
-                  style="color:rgba(255, 255, 255, 0.65)"
-                  @click="setMaxTokenXAmount"
-                >{{ tokenXBalanceFormat }}</span>
-                <span
-                  v-if="tokenXNotEnough"
-                  class="ml-2"
-                  style="color: #D3B078;"
-                  @click="showDepositNoticeModal">
-                  {{ t('deposit_2') }}
-                </span>
-              </div>
+              <InputArea
+                class="amount-input"
+                :input-text="tokenXAmount"
+                :input-text-modifiers="{ precise: true }"
+                placeholder="0.0"
+                :precision="tokenX ? tokenX.decimals : 8"
+                :text-right="true"
+                style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+                @update:inputText="handleAmountXInput" />
             </div>
-            <InputArea
-              class="amount-input"
-              :input-text="tokenXAmount"
-              :input-text-modifiers="{ precise: true }"
-              placeholder="0.0"
-              :precision="tokenX ? tokenX.decimals : 8"
-              :text-right="true"
-              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
-              @update:inputText="handleAmountXInput" />
+            <div class="text-xs cursor-pointer">
+              <span
+                class="mr-0.5"
+                style="color: #5AAD67;"
+                @click="setMaxTokenXAmount"
+              >{{ t('max') }}</span>
+              <span
+                style="color:rgba(255, 255, 255, 0.65)"
+                @click="setMaxTokenXAmount"
+              >{{ tokenXBalanceFormat }}</span>
+              <span
+                v-if="tokenXNotEnough"
+                class="ml-2"
+                style="color: #D3B078;"
+                @click="showDepositNoticeModal">
+                {{ t('deposit_2') }}
+              </span>
+            </div>
           </div>
 
           <div
-            class="px-4 pt-4 pb-3 flex flex-row items-center justify-between relative"
+            class="px-4 pt-4 pb-3 relative"
             style="background: #000A06;border-radius: 12px;">
             <img class="absolute w-6 h-6" src="@/images/deposit-amount-plus.png" style="left:50%;transform:translateX(-50%);top:-16px;">
-            <div>
-              <div class="px-2 py-1 mb-2" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
+            <div class="flex flex-row items-center justify-between">
+              <div class="px-2 py-1" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
                 <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
                 {{ tokenY && tokenY.symbol }}
               </div>
-              <div class="text-xs cursor-pointer">
-                <span
-                  class="mr-0.5"
-                  style="color: #5AAD67;"
-                  @click="setMaxTokenYAmount"
-                >
-                  {{ t('max') }}
-                </span>
-                <span
-                  style="color:rgba(255, 255, 255, 0.65)"
-                  @click="setMaxTokenYAmount"
-                >{{ tokenYBalanceFormat }}</span>
-                <span
-                  v-if="tokenYNotEnough"
-                  class="ml-2"
-                  style="color: #D3B078;"
-                  @click="showDepositNoticeModal">
-                  {{ t('deposit_2') }}
-                </span>
-              </div>
+              <InputArea
+                class="amount-input"
+                :input-text="tokenYAmount"
+                :input-text-modifiers="{ precise: true }"
+                placeholder="0.0"
+                :precision="tokenY ? tokenY.decimals : 8"
+                :text-right="true"
+                style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
+                @update:inputText="handleAmountYInput" />
             </div>
-            <InputArea
-              class="amount-input"
-              :input-text="tokenYAmount"
-              :input-text-modifiers="{ precise: true }"
-              placeholder="0.0"
-              :precision="tokenY ? tokenY.decimals : 8"
-              :text-right="true"
-              style="width:200px;background:transparent;outline:none;text-align:right;font-size: 30px;"
-              @update:inputText="handleAmountYInput" />
+            <div class="text-xs cursor-pointer">
+              <span
+                class="mr-0.5"
+                style="color: #5AAD67;"
+                @click="setMaxTokenYAmount"
+              >
+                {{ t('max') }}
+              </span>
+              <span
+                style="color:rgba(255, 255, 255, 0.65)"
+                @click="setMaxTokenYAmount"
+              >{{ tokenYBalanceFormat }}</span>
+              <span
+                v-if="tokenYNotEnough"
+                class="ml-2"
+                style="color: #D3B078;"
+                @click="showDepositNoticeModal">
+                {{ t('deposit_2') }}
+              </span>
+            </div>
           </div>
         </div>
       </div>

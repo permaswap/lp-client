@@ -9,7 +9,7 @@ export interface CurrencyPriceItem {
   price: string
 }
 
-export const isProd = false
+export const isProd = true
 
 const host = isProd ? 'router.permaswap.network' : 'router0-dev.permaswap.network'
 

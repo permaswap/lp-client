@@ -14,6 +14,7 @@ import PenaltyModal from '../components/PenaltyModal.vue'
 import { getNfts } from '@/lib/swap'
 import DownloadModal from '@/components/DownloadModal.vue'
 import SystemCloseModal from '@/components/SystemCloseModal.vue'
+import DepositNoticeModal from '@/components/DepositNoticeModal.vue'
 // import MiningModal from '@/components/MiningModal.vue'
 
 const store = useStore()
@@ -37,6 +38,7 @@ store.commit('updateAccountModalVisible', false)
 store.commit('updateMiningModalVisible', false)
 store.commit('updateRegisterModalVisible', false)
 store.commit('updatePenaltyModalVisible', false)
+store.commit('updateDepositNoticeModalVisible', false)
 
 onMounted(async () => {
   const nftsResult = await getNfts()
@@ -75,6 +77,7 @@ watch(account, () => {
     </div>
     <SystemCloseModal />
     <penalty-modal />
+    <deposit-notice-modal />
     <!-- <Footer /> -->
   </div>
 </template>

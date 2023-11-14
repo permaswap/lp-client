@@ -39,6 +39,12 @@ export default createStore<State>({
     updateAddPoolModalVisible (state, visible) {
       state.addPoolModalVisible = visible
     },
+    updateDepositNoticeModalVisible (state, visible) {
+      state.depositNoticeModalVisible = visible
+    },
+    updateDepositNoticeTokens (state, tokens) {
+      state.depositNoticeTokens = tokens
+    },
     updateHolderToNFTs (state, holderToNFTs: any) {
       if (holderToNFTs != null) {
         state.holderToNFTs = holderToNFTs

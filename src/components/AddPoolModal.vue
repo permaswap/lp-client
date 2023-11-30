@@ -137,8 +137,8 @@ export default defineComponent({
       })
     }
     const updateBalances = async () => {
-      const totalBalanceX = await everpay.balance({ account: account.value, symbol: (tokenX.value as any).symbol })
-      const totalBalanceY = await everpay.balance({ account: account.value, symbol: (tokenY.value as any).symbol })
+      const totalBalanceX = await everpay.balance({ account: account.value, tag: (tokenX.value as any).tag })
+      const totalBalanceY = await everpay.balance({ account: account.value, tag: (tokenY.value as any).tag })
       tokenXBalance.value = toBN(totalBalanceX).minus(getAmountFromLps(store.state.lps, tokenX.value)).toString()
       tokenYBalance.value = toBN(totalBalanceY).minus(getAmountFromLps(store.state.lps, tokenY.value)).toString()
     }

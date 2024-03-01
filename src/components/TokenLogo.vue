@@ -34,7 +34,9 @@ const tokenListHasLogo = [
   'acnh',
   'ans',
   'u',
-  'stamp'
+  'stamp',
+  'map',
+  'mapo'
 ]
 
 export default defineComponent({

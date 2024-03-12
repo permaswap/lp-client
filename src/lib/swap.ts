@@ -11,7 +11,7 @@ export interface CurrencyPriceItem {
 
 export const isProd = true
 
-const host = isProd ? 'router.permaswap.network' : 'router0-dev.permaswap.network'
+const host = isProd ? 'router.permaswap.network' : 'router-dev.permaswap.network'
 
 export const getMarketPrices = async (currency: string, symbols: string[]): Promise<CurrencyPriceItem[]> => {
   const priceStack = await redstone.getPrice(symbols)

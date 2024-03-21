@@ -5,7 +5,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 
-const tokenListHasLogo = [
+const tokenListHasLogoPng = [
   'wbtc',
   'vrt',
   'usdt',
@@ -38,6 +38,9 @@ const tokenListHasLogo = [
   'map',
   'mapo'
 ]
+const tokenListHasLogoSvg = [
+  'aocred'
+]
 
 export default defineComponent({
   props: {
@@ -48,7 +51,9 @@ export default defineComponent({
   },
   setup (props) {
     const logoName = computed(() => {
-      if (props.symbol && tokenListHasLogo.some(name => name === props.symbol.toLowerCase())) {
+      if (props.symbol && tokenListHasLogoSvg.some(name => name === props.symbol.toLowerCase())) {
+        return `${props.symbol.toLowerCase()}.svg`
+      } else if (props.symbol && tokenListHasLogoPng.some(name => name === props.symbol.toLowerCase())) {
         return `${props.symbol.toLowerCase()}.png`
       } else {
         return 'default.svg'

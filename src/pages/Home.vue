@@ -15,7 +15,7 @@ import { getNfts } from '@/lib/swap'
 import DownloadModal from '@/components/DownloadModal.vue'
 import SystemCloseModal from '@/components/SystemCloseModal.vue'
 import DepositNoticeModal from '@/components/DepositNoticeModal.vue'
-// import MiningModal from '@/components/MiningModal.vue'
+import MiningModalSimple from '@/components/MiningModalSimple.vue'
 
 const store = useStore()
 const account = computed(() => store.state.account)
@@ -61,7 +61,7 @@ watch(account, () => {
     <NoticeBoard v-if="noticeBoardVisible" :duration="15" @close="noticeBoardVisible = false">
       The connection address is the same as the LP node address, transaction is prohibited, please switch account！
     </NoticeBoard>
-    <!-- <MiningModal /> -->
+    <MiningModalSimple />
     <AccountModal />
     <RigisterModal />
     <div style="min-height:700px;">

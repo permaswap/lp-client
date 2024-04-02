@@ -119,6 +119,50 @@ export const getPenalty = async (): Promise<any> => {
   return result.data
 }
 
+export const getPoolIdVolumeData = async (poolId: string): Promise<any> => {
+  const url = `https://${host}/stats?poolid=${poolId}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
+export const getLiquidityMingInfo = async (contractId: string): Promise<any> => {
+  const url = `https://${host}/halo/proposal/${contractId}`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  return result.data
+}
+
+export const defaultSwapRouterAddress = isProd ? '0xD110107aDb30BCe6C0646EAF77cC1C815012331d' : '0x1DF611aec4065801f416c67d2c3bC9466228Ea57'
+export const getNodeHaloInfo = async (): Promise<any> => {
+  const url = `https://${host}/halo/info`
+  const result = await sendRequest({
+    url,
+    method: 'GET'
+  })
+  result.data.routerState[defaultSwapRouterAddress] = {
+    ...result.data.routerState[defaultSwapRouterAddress],
+    name: 'Permaswap',
+    domain: host,
+    ip: ''
+  }
+  const routers = result.data.routers.filter((key: string) => {
+    const routerState: any = result.data.routerState[key]
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (routerState.ip) {
+      routerState.pools = {}
+    }
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    return routerState && (routerState.domain || routerState.ip)
+  })
+  result.data.routers = routers
+  return result.data
+}
+
 export interface InitSocketParams {
   handleError: any
   handleSalt: any

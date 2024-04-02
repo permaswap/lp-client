@@ -151,6 +151,15 @@ const messages = {
     trading_tip_2: 'Go swap  ↗︎',
     time: 'Time'
   },
+  simple_mining: {
+    liquidity: 'Liquidity',
+    liquidity_symbol: 'Pooled {symbol}',
+    lp_total_rewards: 'Total Award',
+    lp_my_est_rewards: 'My Rewards',
+    duration: 'Duration',
+    lp_rules_tips1: 'Data is updated every minute.',
+    lp_rules_tips2: 'Rewards evenly disperse over time; LPs split rewards by transaction volume.'
+  },
   deposit_notice_modal: {
     title_1: 'Your account has no assets deposited.',
     title_with_symbol: '{symbol} balance is insufficient.',

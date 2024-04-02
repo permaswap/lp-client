@@ -151,6 +151,15 @@ const messages = {
     trading_tip_2: '去交易吧  ↗︎',
     time: '時間'
   },
+  simple_mining: {
+    liquidity: '做市激勵',
+    liquidity_symbol: '{symbol} 的仓位',
+    lp_total_rewards: '總獎勵',
+    lp_my_est_rewards: '我的獎勵',
+    duration: '週期',
+    lp_rules_tips1: '數據每 1 分鐘統計一次。',
+    lp_rules_tips2: '獎勵隨時間流逝均勻釋放， 流動性提供者（LP）依照成交額瓜分獎勵。'
+  },
   deposit_notice_modal: {
     title_1: '你的账户未存入任何资产。',
     title_with_symbol: '{symbol} 余额不足',

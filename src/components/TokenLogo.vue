@@ -39,7 +39,10 @@ const tokenListHasLogoPng = [
   'mapo'
 ]
 const tokenListHasLogoSvg = [
-  'aocred'
+  'aocred',
+  '0rbt',
+  'halo',
+  'trunk'
 ]
 
 export default defineComponent({

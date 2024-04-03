@@ -169,7 +169,7 @@ export default defineComponent({
         <img class="cursor-pointer" src="@/images/close.png" @click="hidenAccountModal">
       </div>
       <div v-if="account" style="background:rgba(24, 59, 33, 0.3)" class="py-6 px-5">
-        <div class="flex flex-row mb-4 relative" style="background: #161E1B;height:126px;border-radius: 12px;">
+        <div v-if="false" class="flex flex-row mb-4 relative" style="background: #161E1B;height:126px;border-radius: 12px;">
           <div class="flex flex-col items-center" style="margin:24px 70px 14px;">
             <div style="font-size:24px;" class="mb-2">
               -

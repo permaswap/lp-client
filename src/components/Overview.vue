@@ -6,11 +6,11 @@ import Range from './Range2.vue'
 import { toBN, isSqrtInRange, isValidVersion } from '@/lib/util'
 import { useI18n } from 'vue-i18n'
 import { getStats } from '@/lib/swap'
-import Dashboard from './Dashboard.vue'
+// import Dashboard from './Dashboard.vue'
 // import TradeOverview from './TradeOverview.vue'
 
 export default defineComponent({
-  components: { TokenLogo, Range, Dashboard },
+  components: { TokenLogo, Range },
   emits: ['selectLp'],
   setup () {
     const store = useStore()
@@ -70,8 +70,8 @@ export default defineComponent({
 
 <template>
   <!-- <TradeOverview /> -->
-  <Dashboard />
-  <div style="width:864px;" class="mx-auto">
+  <!-- <Dashboard /> -->
+  <div style="width:864px;" class="mx-auto mt-16">
     <div style="font-size: 20px;" class="mb-6 flex flex-row items-center justify-between">
       <div>{{ t('pool_overview_2') }}</div>
 

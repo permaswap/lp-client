@@ -13,14 +13,33 @@
         <div class="flex flex-row items-center">
           <div
             class="relative cursor-pointer mr-3"
+            :style="tab === 'AOCRED' ? 'color: #79D483' : ''"
+            @click="tab = 'AOCRED'"
           >
-            {{ t('simple_mining.liquidity') }}
+            AOCRED/AR
+            <div
+              v-if="tab === 'AOCRED'"
+              class="absolute w-full left-0"
+              style="height:2px;background: #79D483; bottom:-17px"
+            />
+          </div>
+          <div
+            class="relative cursor-pointer"
+            :style="tab === 'TRUNK' ? 'color: #79D483' : ''"
+            @click="tab = 'TRUNK'"
+          >
+            TRUNK/AR
+            <div
+              v-if="tab === 'TRUNK'"
+              class="absolute w-full left-0"
+              style="height:2px;background: #79D483; bottom:-17px"
+            />
           </div>
         </div>
         <img class="cursor-pointer" src="@/images/close.png" @click="hideMiningModal">
       </div>
 
-      <div>
+      <div :class="tab === 'AOCRED' ? 'block' : 'hidden'">
         <div
           class="p-4 mb-4"
           style="background: rgba(22, 30, 27, 0.45);border-radius: 12px;"
@@ -60,6 +79,47 @@
           </ul>
         </div>
       </div>
+
+      <div :class="tab === 'TRUNK' ? 'block' : 'hidden'">
+        <div
+          class="p-4 mb-4"
+          style="background: rgba(22, 30, 27, 0.45);border-radius: 12px;"
+        >
+          <mining-row
+            class="mb-4"
+            :label="t('simple_mining.liquidity_symbol', { symbol: poolTRUNKTokenObj.xToken })"
+            :value="poolTRUNKTokenObj.xTokenTvl"
+          />
+          <mining-row
+            class="mb-4"
+            :label="t('simple_mining.liquidity_symbol', { symbol: poolTRUNKTokenObj.yToken })"
+            :value="poolTRUNKTokenObj.yTokenTvl"
+          />
+          <mining-row
+            class="mb-4"
+            :label="t('simple_mining.lp_total_rewards')"
+            :value="totalTUNNKReward"
+            :highlight="true"
+          />
+          <mining-row
+            :label="t('simple_mining.duration')"
+            :value="liquidityTRUNKTimeString"
+          />
+        </div>
+        <div
+          class="p-4 mb-4"
+          style="background: rgba(22, 30, 27, 0.45);border-radius: 12px;"
+        >
+          <mining-row
+            :label="t('simple_mining.lp_my_est_rewards')"
+            :value="myTRUNKHALOReward"
+          />
+          <ul class="list-disc text-xs mt-3 pt-4 pl-3" style="border-top: 1px solid rgba(255, 255, 255, 0.08);color:rgba(255, 255, 255, 0.45);">
+            <li>{{ t('simple_mining.lp_rules_tips1') }}</li>
+            <li>{{ t('simple_mining.lp_rules_tips2') }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -89,9 +149,10 @@ export default defineComponent({
   components: { MiningRow },
   setup () {
     const liquidityMingId = isProd ? '0xed81bf40f5cbaf1acc8751fb4c06f6751bc225d1af94fd4b8350ead6ca28189e' : '0x41a886484bb899af5dd5d038e690a31068493d4ad4e20f5e3e9a65a509d21efb'
+    const liquidityMingTRUNKId = isProd ? '0xfbfa820dad906a4aad304fdd1580a30cc0c6fe7d356dd351bb2e8766d72d7271' : '0xbd1080987ad09a1aa8608fda4b9d749714d0401b5b4bf8e1ac55c8a6218c8d9d'
     const store = useStore()
     const miningModalVisible = computed(() => store.state.miningModalVisible)
-    const tab = ref('liquidity')
+    const tab = ref('AOCRED')
     const { t, locale } = useI18n()
     const hideMiningModal = () => store.commit('updateMiningModalVisible', false)
     const account = computed(() => store.state.account)
@@ -117,6 +178,11 @@ export default defineComponent({
       decimals: 18
     }
 
+    const liquidityMingTRUNKInfo = ref<any>(null)
+    const poolTRUNKTokenObj = ref<any>({})
+    const totalTUNNKReward = ref('')
+    const liquidityTRUNKTimeString = ref('')
+
     const myHALOReward = computed(() => {
       if (liquidityMingInfo.value) {
         try {
@@ -125,6 +191,26 @@ export default defineComponent({
           }
           const localState = JSON.parse(liquidityMingInfo.value.executor.localState)
           console.log(localState.mined[account.value])
+          const reward = localState.mined[account.value]
+          if (reward) {
+            return `${toBN(fromDecimalToUnit(reward, liquidityMingBaseToken.decimals)).toFixed(2)} ${liquidityMingBaseToken.symbol}`
+          } else {
+            return '0 HALO'
+          }
+        } catch (e) {
+          return '-'
+        }
+      }
+      return '-'
+    })
+
+    const myTRUNKHALOReward = computed(() => {
+      if (liquidityMingTRUNKInfo.value) {
+        try {
+          if (!account.value) {
+            return '-'
+          }
+          const localState = JSON.parse(liquidityMingTRUNKInfo.value.executor.localState)
           const reward = localState.mined[account.value]
           if (reward) {
             return `${toBN(fromDecimalToUnit(reward, liquidityMingBaseToken.decimals)).toFixed(2)} ${liquidityMingBaseToken.symbol}`
@@ -179,10 +265,53 @@ export default defineComponent({
       }
     }
 
+    const initLiquidityTRUNKMingInfoInfo = async () => {
+      const everpayInfo = await everpay.info()
+      const data = await getLiquidityMingInfo(liquidityMingTRUNKId)
+      console.log(data)
+      liquidityMingTRUNKInfo.value = data
+      let initData: any = null
+      try {
+        initData = JSON.parse(data.initData)
+      } catch {
+        initData = null
+      }
+      if (initData) {
+        // 获取 X Y 锁仓量
+        const haloNodeInfo = await getNodeHaloInfo()
+        const routerState = haloNodeInfo.routerState[initData.router]
+        if (routerState.pools && Object.keys(routerState.pools).length) {
+          if (Object.keys(routerState.pools).includes(initData.pool)) {
+            const pool = routerState.pools[initData.pool]
+            const data1 = await getPoolIdVolumeData(initData.pool)
+            const xToken = getTokenByTag(pool.tokenXTag, everpayInfo.tokenList)
+            const yToken = getTokenByTag(pool.tokenYTag, everpayInfo.tokenList)
+            const xTokenTvl = toBN(data1.tvl.tokenXTVL).toFixed(2)
+            const yTokenTvl = toBN(data1.tvl.tokenYTVL).toFixed(2)
+            if (xToken && yToken) {
+              poolTRUNKTokenObj.value.xToken = xToken.symbol
+              poolTRUNKTokenObj.value.yToken = yToken.symbol
+              poolTRUNKTokenObj.value.xTokenTvl = xTokenTvl
+              poolTRUNKTokenObj.value.yTokenTvl = yTokenTvl
+            }
+          }
+        }
+        // 时间
+        liquidityTRUNKTimeString.value = getTimeString(initData.start, initData.end)
+        // 所有收益定死 HALO
+        if (liquidityMingBaseToken) {
+          totalTUNNKReward.value = `${toBN(fromDecimalToUnit(initData.totalSupply, liquidityMingBaseToken.decimals)).toFixed(2)} ${liquidityMingBaseToken.symbol}`
+          console.log(totalTUNNKReward.value)
+        }
+      }
+    }
+
     initLiquidityMingInfoInfo()
+    initLiquidityTRUNKMingInfoInfo()
     watch([account, miningModalVisible], () => {
       if (miningModalVisible.value) {
         initLiquidityMingInfoInfo()
+        initLiquidityTRUNKMingInfoInfo()
       }
     })
 
@@ -196,7 +325,12 @@ export default defineComponent({
       liquidityTimeString,
       totalReward,
       myHALOReward,
-      poolTokenObj
+      poolTokenObj,
+
+      poolTRUNKTokenObj,
+      liquidityTRUNKTimeString,
+      totalTUNNKReward,
+      myTRUNKHALOReward
     }
   }
 })

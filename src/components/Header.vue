@@ -58,7 +58,7 @@ export default defineComponent({
           @click="showMiningModal"
         >
           <img src="@/images/trophy.png" class="w-6 h-6 mr-1">
-          <span style="color:rgba(255, 255, 255, 0.85);" class="text-base">AOCRED</span>
+          <span style="color:rgba(255, 255, 255, 0.85);" class="text-base">HALO</span>
         </div>
         <div style="height:28px;width:1px;background: rgba(121, 212, 131, 0.25);" class="mx-3" />
         <div

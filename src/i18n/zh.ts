@@ -3,6 +3,7 @@ const messages = {
   contribution_value: '交易貢獻值',
   coming_soon: '敬請期待',
   volume: '交易量',
+  setting: '設定',
   out_of_range: '超出範圍',
   liquidity: '流動性',
   pool_overview: '流動性池',

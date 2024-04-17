@@ -3,6 +3,7 @@ const messages = {
   contribution_value: 'Contribution Value',
   coming_soon: 'Coming Soon',
   volume: 'Volume',
+  setting: 'Setting',
   out_of_range: 'Out of range',
   liquidity: 'Liquidity',
   pool_overview: 'Pool',

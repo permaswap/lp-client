@@ -164,11 +164,11 @@ export default defineComponent({
       class="absolute account-modal">
       <div class="flex flex-row items-center justify-between pt-6 px-6 pb-4">
         <div style="font-size:20px;">
-          {{ t('balance_on_everpay') }}
+          {{ t('setting') }}
         </div>
         <img class="cursor-pointer" src="@/images/close.png" @click="hidenAccountModal">
       </div>
-      <div v-if="account" style="background:rgba(24, 59, 33, 0.3)" class="py-6 px-5">
+      <div v-if="account && false" style="background:rgba(24, 59, 33, 0.3)" class="py-6 px-5">
         <div v-if="false" class="flex flex-row mb-4 relative" style="background: #161E1B;height:126px;border-radius: 12px;">
           <div class="flex flex-col items-center" style="margin:24px 70px 14px;">
             <div style="font-size:24px;" class="mb-2">
@@ -195,7 +195,7 @@ export default defineComponent({
           </div>
           <img class="absolute right-0 top-0" style="height:126px;" src="@/images/background.png">
         </div>
-        <div class="flex flex-row items-center justify-between">
+        <div v-if="false" class="flex flex-row items-center justify-between">
           <div
             class="rounded-lg h-8 text-center text-sm border-box leading-8 cursor-pointer relative clipboard-modal-account"
             :data-clipboard-text="account"
@@ -229,7 +229,7 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div v-else style="background:rgba(24, 59, 33, 0.3)" class="p-6">
+      <div v-else-if="!account" style="background:rgba(24, 59, 33, 0.3)" class="p-6">
         <div
           class="h-12 text-center rounded-lg text-black cursor-pointer"
           style="background: #79D483;border: 1px solid rgba(121, 212, 131, 0.08);line-height: 48px;"

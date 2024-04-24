@@ -2,4 +2,4 @@ export const savedI18nStorageKey = 'saved-i18n'
 
 export const lpClientName = 'lp-javascript'
 
-export const lpClientVerison = 'v0.1.31'
+export const lpClientVerison = 'v0.1.32'

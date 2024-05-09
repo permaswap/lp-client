@@ -149,7 +149,7 @@ export default defineComponent({
   components: { MiningRow },
   setup () {
     const liquidityMingId = isProd ? '0x2399ac9b5224c82ade490e9a39808a386e4c877e436df5204f071340a8258cbb' : '0x41a886484bb899af5dd5d038e690a31068493d4ad4e20f5e3e9a65a509d21efb'
-    const liquidityMingTRUNKId = isProd ? '0xfbfa820dad906a4aad304fdd1580a30cc0c6fe7d356dd351bb2e8766d72d7271' : '0xbd1080987ad09a1aa8608fda4b9d749714d0401b5b4bf8e1ac55c8a6218c8d9d'
+    const liquidityMingTRUNKId = isProd ? '0xfbfa820dad906a4aad304fdd1580a30cc0c6fe7d356dd351bb2e8766d72d7271' : '0x15b7b36a4c4f5b8c23514c508d74a21784d851fbf2913f18e6eca4acd75d3381'
     const store = useStore()
     const miningModalVisible = computed(() => store.state.miningModalVisible)
     const tab = ref('AOCRED')

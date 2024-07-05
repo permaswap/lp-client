@@ -85,8 +85,8 @@ export default defineComponent({
       </ul>
       <div class="mb-4 flex flex-row items-center justify-between" style="font-size:20px;">
         <div class="flex flex-row items-center">
-          <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-6 h-6 -mr-2" />
-          <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-6 h-6 mr-2" />
+          <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-6 h-6 -mr-2" :chain-type="tokenX ? tokenX.chainType : ''" />
+          <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-6 h-6 mr-2" :chain-type="tokenY ? tokenY.chainType : ''" />
           {{ tokenX && tokenX.symbol }}/{{ tokenY && tokenY.symbol }}
         </div>
         <Range :in-range="inRange" />
@@ -94,14 +94,14 @@ export default defineComponent({
       <div class="p-4 mb-6" style="background: rgba(22, 30, 27, 0.85);border-radius: 12px;">
         <div class="flex flex-row items-center justify-between">
           <div class="flex flex-row items-center">
-            <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-4 h-4 mr-2" />
+            <TokenLogo :symbol="tokenX ? tokenX.symbol : ''" class="w-4 h-4 mr-2" :chain-type="tokenX ? tokenX.chainType : ''" />
             <span>Pooled {{ tokenX && tokenX.symbol }}</span>
           </div>
           <span>{{ tokenXAmount }}</span>
         </div>
         <div class="flex flex-row items-center justify-between">
           <div class="flex flex-row items-center">
-            <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-4 h-4 mr-2" />
+            <TokenLogo :symbol="tokenY ? tokenY.symbol : ''" class="w-4 h-4 mr-2" :chain-type="tokenY ? tokenY.chainType : ''" />
             <span>Pooled {{ tokenY && tokenY.symbol }}</span>
           </div>
           <span>{{ tokenYAmount }}</span>

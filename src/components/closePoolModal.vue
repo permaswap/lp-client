@@ -110,8 +110,8 @@ export default defineComponent({
     </div>
     <div class="flex flex-row items-center justify-between mb-4">
       <div class="flex flex-row items-center">
-        <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6 -mr-2" />
-        <TokenLogo :symbol="lp.tokenYSymbol" class="w-6 h-6 mr-2" />
+        <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6 -mr-2" :chain-type="lp.tokenXChainType" />
+        <TokenLogo :symbol="lp.tokenYSymbol" class="w-6 h-6 mr-2" :chain-type="lp.tokenYChainType" />
         <div style="font-size:20px;">
           {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
         </div>
@@ -157,14 +157,22 @@ export default defineComponent({
           </div>
           <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenXSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <TokenLogo
+                :symbol="lp.tokenXSymbol"
+                class="mr-2"
+                style="width:18px;height:18px;"
+                :chain-type="lp.tokenXChainType" />
               <span>Pooled {{ lp.tokenXSymbol }}</span>
             </div>
             <span>{{ amountX ? amountX : '-' }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenYSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <TokenLogo
+                :symbol="lp.tokenYSymbol"
+                class="mr-2"
+                style="width:18px;height:18px;"
+                :chain-type="lp.tokenYChainType" />
               <span>Pooled {{ lp.tokenYSymbol }}</span>
             </div>
             <span>{{ amountY ? amountY : '-' }}</span>
@@ -186,14 +194,22 @@ export default defineComponent({
           </div>
           <div class="flex flex-row items-center justify-between text-sm" style="color: rgba(255, 255, 255, 0.85);margin-bottom:22px;">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenXSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <TokenLogo
+                :symbol="lp.tokenXSymbol"
+                class="mr-2"
+                style="width:18px;height:18px;"
+                :chain-type="lp.tokenXChainType" />
               <span>{{ lp.tokenXSymbol }}</span>
             </div>
             <span>{{ rewardX ? rewardX : '-' }}</span>
           </div>
           <div class="flex flex-row items-center justify-between text-sm mb-5" style="color: rgba(255, 255, 255, 0.85);">
             <div class="flex flex-row items-center">
-              <TokenLogo :symbol="lp.tokenYSymbol" class="mr-2" style="width:18px;height:18px;" />
+              <TokenLogo
+                :symbol="lp.tokenYSymbol"
+                class="mr-2"
+                style="width:18px;height:18px;"
+                :chain-type="lp.tokenYChainType" />
               <span>{{ lp.tokenYSymbol }}</span>
             </div>
             <span>{{ rewardY ? rewardY : '-' }}</span>

@@ -52,7 +52,7 @@ export default defineComponent({
         {{ t('pool_overview') }}
       </div>
       <div class="flex flex-row items-center">
-        <div
+        <!-- <div
           class="flex flex-row items-center py-2 px-3 rounded-lg cursor-pointer mining-modal-trigger"
           style="border: 1px solid rgba(121, 212, 131, 0.25);"
           @click="showMiningModal"
@@ -60,7 +60,7 @@ export default defineComponent({
           <img src="@/images/trophy.png" class="w-6 h-6 mr-1">
           <span style="color:rgba(255, 255, 255, 0.85);" class="text-base">HALO</span>
         </div>
-        <div style="height:28px;width:1px;background: rgba(121, 212, 131, 0.25);" class="mx-3" />
+        <div style="height:28px;width:1px;background: rgba(121, 212, 131, 0.25);" class="mx-3" /> -->
         <div
           class="flex flex-row items-center py-2 px-5 rounded-lg cursor-pointer account-modal-trigger"
           style="background: #183B21;border: 1px solid rgba(121, 212, 131, 0.25);"

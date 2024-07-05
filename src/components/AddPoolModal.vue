@@ -303,6 +303,8 @@ export default defineComponent({
         tokenYSymbol: tokenY.value.symbol,
         tokenXDecimal: tokenX.value.decimals,
         tokenYDecimal: tokenY.value.decimals,
+        tokenXChainType: tokenX.value.chainType,
+        tokenYChainType: tokenY.value.chainType,
         lowPrice: lowPrice.value,
         highPrice: highPrice.value
       })
@@ -441,7 +443,7 @@ export default defineComponent({
             @click="pairModalVisible = true"
           >
             <div class="flex flex-row items-center">
-              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenX ? tokenX.symbol : ''" />
+              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenX ? tokenX.symbol : ''" :chain-type="tokenX ? tokenX.chainType : ''" />
               {{ tokenX && tokenX.symbol }}
             </div>
             <img src="@/images/arrow-top.png" class="transform rotate-180 w-5">
@@ -452,7 +454,7 @@ export default defineComponent({
             @click="pairModalVisible = true"
           >
             <div class="flex flex-row items-center">
-              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenY ? tokenY.symbol : ''" />
+              <TokenLogo class="w-5 h-5 mr-1" :symbol="tokenY ? tokenY.symbol : ''" :chain-type="tokenY ? tokenY.chainType : ''" />
               {{ tokenY && tokenY.symbol }}
             </div>
             <img src="@/images/arrow-top.png" class="transform rotate-180 w-5">
@@ -472,7 +474,7 @@ export default defineComponent({
             style="background: #000A06;border-radius: 12px;">
             <div class="flex flex-row items-center justify-between">
               <div class="px-2 py-1" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" />
+                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenX ? tokenX.symbol : ''" :chain-type="tokenX ? tokenX.chainType : ''" />
                 {{ tokenX && tokenX.symbol }}
               </div>
               <InputArea
@@ -511,7 +513,7 @@ export default defineComponent({
             <img class="absolute w-6 h-6" src="@/images/deposit-amount-plus.png" style="left:50%;transform:translateX(-50%);top:-16px;">
             <div class="flex flex-row items-center justify-between">
               <div class="px-2 py-1" style="display:inline-block;background: rgba(24, 59, 33, 0.65);border-radius: 8px;">
-                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" />
+                <TokenLogo class="w-4 h-4 mr-0.5 inline relative -top-0.5" :symbol="tokenY ? tokenY.symbol : ''" :chain-type="tokenY ? tokenY.chainType : ''" />
                 {{ tokenY && tokenY.symbol }}
               </div>
               <InputArea

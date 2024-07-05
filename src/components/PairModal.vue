@@ -52,12 +52,12 @@ export default defineComponent({
           style="background: rgba(22, 30, 27, 0.45);border-radius: 12px;font-size: 20px;"
           @click="$emit('selectPair', pair)">
           <div class="flex flex-row items-center" style="width:200px">
-            <TokenLogo :symbol="pair.tokenX.symbol" class="w-5 h-5 mr-2" />
+            <TokenLogo :symbol="pair.tokenX.symbol" class="w-5 h-5 mr-2" :chain-type="pair.tokenX.chainType" />
             {{ pair.tokenX.symbol }}
           </div>
           <img src="@/images/arrow-right.png">
           <div class="flex flex-row items-center justify-end" style="width:200px">
-            <TokenLogo :symbol="pair.tokenY.symbol" class="w-5 h-5 mr-2" />
+            <TokenLogo :symbol="pair.tokenY.symbol" class="w-5 h-5 mr-2" :chain-type="pair.tokenY.chainType" />
             {{ pair.tokenY.symbol }}
           </div>
         </div>

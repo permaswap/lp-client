@@ -51,14 +51,14 @@ export default defineComponent({
       </div>
       <div class="flex flex-row items-center justify-between mb-4 text-sm" style="color: rgba(255, 255, 255, 0.85);">
         <div class="flex flex-row items-center">
-          <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" />
+          <TokenLogo :symbol="lp.tokenXSymbol" class="w-4 h-4 mr-2" :chain-type="lp.tokenXChainType" />
           <span>Pooled {{ lp.tokenXSymbol }}</span>
         </div>
         <span>{{ amountX ? amountX : '-' }}</span>
       </div>
       <div class="flex flex-row items-center justify-between text-sm mb-6" style="color: rgba(255, 255, 255, 0.85);">
         <div class="flex flex-row items-center">
-          <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" />
+          <TokenLogo :symbol="lp.tokenYSymbol" class="w-4 h-4 mr-2" :chain-type="lp.tokenYChainType" />
           <span>Pooled {{ lp.tokenYSymbol }}</span>
         </div>
         <span>{{ amountY ? amountY : '-' }}</span>

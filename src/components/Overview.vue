@@ -156,8 +156,8 @@ export default defineComponent({
           >
             <div class="text-white flex flex-row items-center py-3 text-sm oneline" style="width: 160px;font-weight: 500;">
               <div style="width:32px;height:32px;" class="relative mr-2">
-                <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6" />
-                <TokenLogo :symbol="lp.tokenYSymbol" class="w-5 h-5 absolute bottom-0 right-0" />
+                <TokenLogo :symbol="lp.tokenXSymbol" class="w-6 h-6" :chain-type="lp.tokenXChainType" />
+                <TokenLogo :symbol="lp.tokenYSymbol" class="w-5 h-5 absolute bottom-0 right-0" :chain-type="lp.tokenYChainType" />
               </div>
               {{ lp.tokenXSymbol }}/{{ lp.tokenYSymbol }}
             </div>

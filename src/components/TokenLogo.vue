@@ -36,13 +36,15 @@ const tokenListHasLogoPng = [
   'u',
   'stamp',
   'map',
-  'mapo'
+  'mapo',
+  'bp'
 ]
 const tokenListHasLogoSvg = [
   'aocred',
   '0rbt',
   'halo',
-  'trunk'
+  'trunk',
+  'exp(ario)'
 ]
 
 export default defineComponent({
@@ -50,10 +52,17 @@ export default defineComponent({
     symbol: {
       type: String,
       default: ''
+    },
+    chainType: {
+      type: String,
+      default: ''
     }
   },
   setup (props) {
     const logoName = computed(() => {
+      if (props.chainType.includes('aostest') && props.symbol.toUpperCase() === 'AR') {
+        return 'war.png'
+      }
       if (props.symbol && tokenListHasLogoSvg.some(name => name === props.symbol.toLowerCase())) {
         return `${props.symbol.toLowerCase()}.svg`
       } else if (props.symbol && tokenListHasLogoPng.some(name => name === props.symbol.toLowerCase())) {
